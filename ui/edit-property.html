@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Welcome to Property Pro</title>
+    <link rel="stylesheet" href="./css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="brand">
+          <h1>ProperyPro</h1>
+        </div>
+        <nav>
+          <ul>
+            <ul>
+              <li><a href="dashboard.html">Dashboard</a></li>
+              <li><a href="edit-profile.html">Update Profile</a></li>
+              <li><a href="add-property.html">New Property</a></li>
+              <li><a href="signin.html">Sign Out</a></li>
+            </ul>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="m-20">
+      <div class="container">
+        <h1 class="large text-primary">
+          Edit:- Property Listing
+        </h1>
+        <p class="lead">
+          <i class="fas fa-user"></i> Please provide accurate information about
+          the property
+        </p>
+        <small>* = required field</small>
+        <form class="form">
+          <div class="form-group">
+            <input type="text" placeholder="Title" name="title" />
+          </div>
+          <div class="form-group pr-0">
+            <select name="status">
+              <option disabled selected>Property Type</option>
+              <option value="Developer">2 Bedroom</option>
+              <option value="Junior Developer">3 Bedroom</option>
+            </select>
+          </div>
+          <div class="form-group pr-0">
+            <select name="status">
+              <option disabled selected>Deal type</option>
+              <option value="rent">For Rent</option>
+              <option value="sale">For Sale</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <input type="text" placeholder="State" name="state" />
+          </div>
+          <div class="form-group">
+            <input type="text" placeholder="City" name="city" />
+          </div>
+          <div class="form-group">
+            <textarea placeholder="Address" name="address"></textarea>
+          </div>
+          <div class="form-group">
+            <input type="text" placeholder="Price" name="price" />
+          </div>
+          <div class="form-group">
+            <img src="" id="img_preview" alt="Image Preview" width="200" />
+            <input type="file" id="property_image" name="property_image" />
+            <small class="form-text"
+              >Select one or more image(s) to upload</small
+            >
+          </div>
+          <div class="form-group">
+            <textarea
+              placeholder="Please provide details of the property"
+              name="address"
+              rows="7"
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label>
+              <input type="checkbox" name="status" /> Mark this property as sold
+            </label>
+          </div>
+          <input type="submit" class="btn btn-primary my-1" />
+        </form>
+      </div>
+    </main>
+    <footer>
+      <p>All right reserved ProperyPro &copy; 2019</p>
+    </footer>
+    <script src="./js/main.js"></script>
+  </body>
+</html>

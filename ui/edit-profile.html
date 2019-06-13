@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Welcome to Property Pro</title>
+    <link rel="stylesheet" href="./css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="brand">
+          <h1>ProperyPro</h1>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="edit-profile.html">Update Profile</a></li>
+            <li><a href="add-property.html">New Property</a></li>
+            <li><a href="signin.html">Sign Out</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="m-20">
+      <div class="container">
+        <h1 class="large text-primary">
+          Edit Your Profile
+        </h1>
+        <p class="lead">
+          <i class="fas fa-user"></i> Let's get some information to make your
+          profile stand out
+        </p>
+        <small>* = required field</small>
+        <form class="form">
+          <div class="form-group">
+            <input type="text" placeholder="Email" name="email" />
+          </div>
+          <div class="form-group">
+            <input type="text" placeholder="First Name" name="first_name" />
+          </div>
+          <div class="form-group">
+            <input type="text" placeholder="Last Name" name="last_name" />
+          </div>
+          <div class="form-group">
+            <input type="text" placeholder="Phone Number" name="phone_number" />
+          </div>
+          <div class="form-group">
+            <textarea placeholder="Address" name="address"></textarea>
+          </div>
+
+          <input type="submit" class="btn btn-primary my-1" />
+          <a class="btn btn-light my-1" href="dashboard.html">Go Back</a>
+        </form>
+      </div>
+    </main>
+    <footer>
+      <p>All right reserved ProperyPro &copy; 2019</p>
+    </footer>
+    <script src="./js/main.js"></script>
+  </body>
+</html>
