@@ -1,0 +1,504 @@
+html,
+body,
+ul,
+h1,
+h2 {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font: 15px/ 1.5 Arial, Helvetica, sans-serif;
+  position: relative;
+}
+
+header {
+  background: #35424a;
+  color: #fff;
+  padding-top: 35px;
+  min-height: 70px;
+  border-bottom: 2px solid #0f4;
+}
+/* header section */
+header a {
+  color: #fff;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 16px;
+}
+
+header ul {
+  margin-top: 15px;
+}
+header li {
+  display: inline-block;
+  padding: 0 5px;
+}
+
+header .brand {
+  float: left;
+}
+header nav {
+  float: right;
+}
+
+.breadcum {
+  min-height: 500px;
+  color: #fff;
+  background: url("../img/breadcrum.jpg") no-repeat 0 -100px;
+  text-align: center;
+  position: relative;
+}
+.dark-overlay {
+  background-color: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.breadcum h2 {
+  margin-top: 270px;
+  font-size: 36px;
+}
+
+.breadcum p {
+  font-size: 18px;
+}
+
+/*  filter property section */
+.filter-property {
+  padding: 5px;
+  background: #35424a;
+  color: #fff;
+}
+
+.search-fields input[type="text"],
+.search-fields select {
+  float: left;
+  padding: 6px;
+  width: 26%;
+  margin-bottom: 10px;
+  margin-top: 8px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+}
+/* Properties Listing */
+.property {
+  padding: 0 5px;
+  float: left;
+  width: 24%;
+  margin-bottom: 15px;
+}
+.property-detail {
+  border: 1px solid #ccc;
+}
+
+.property-detail:hover {
+  border: 1px solid #777;
+}
+
+.property-detail img {
+  width: 100%;
+  height: 200px;
+}
+.property-detail .price-type {
+  padding: 5px;
+}
+
+.property .description {
+  font-size: 12px;
+}
+.property-type {
+  font-size: 16px;
+  font-weight: bold;
+}
+.property-location {
+  color: #868e96;
+  font-size: 16px;
+}
+
+.property-price {
+  color: #f00549;
+  font-size: 16px;
+  font-weight: bold;
+}
+/* Forms */
+.btn {
+  display: inline-block;
+  background: #17a2b8;
+  color: #333;
+  padding: 0.4rem 1.3rem;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  transition: opacity 0.2s ease-in;
+  outline: none;
+}
+
+.btn-primary {
+  background: #17a2b8;
+  color: #fff;
+}
+
+.btn-light {
+  background: #f4f4f4;
+  color: #333;
+}
+
+.btn-dark {
+  background: #343a40;
+  color: #fff;
+}
+
+.btn-danger {
+  background: #dc3545;
+  color: #fff;
+}
+
+.btn-success {
+  background: #28a745;
+  color: #fff;
+}
+
+.btn-white {
+  background: #fff;
+  color: #333;
+  border: #ccc solid 1px;
+}
+
+.btn:hover {
+  opacity: 0.8;
+}
+
+.bg-light {
+  border: #ccc solid 1px;
+}
+
+.form .form-group {
+  margin: 1.2rem 0;
+  padding-right: 15px;
+}
+
+.form .form-text {
+  display: block;
+  margin-top: 0.3rem;
+  color: #888;
+}
+
+.form input[type="text"],
+.form input[type="email"],
+.form input[type="password"],
+.form input[type="date"],
+.form input[type="file"],
+.form select,
+.form textarea {
+  display: block;
+  width: 100%;
+  padding: 0.4rem;
+  font-size: 1.2rem;
+  border: 1px solid #ccc;
+}
+
+.form input[type="submit"],
+button {
+  font: inherit;
+}
+
+/* Pagination */
+.pagination {
+  display: inline-block;
+  margin-left: 20px;
+}
+
+.pagination a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+  border: 1px solid #ddd;
+}
+
+.pagination a.active {
+  background-color: #4caf50;
+  color: white;
+  border: 1px solid #4caf50;
+}
+
+.pagination a:hover:not(.active) {
+  background-color: #ddd;
+}
+/*table */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+th {
+  background-color: #17a2b8;
+  color: white;
+}
+
+/*  Footer */
+footer {
+  text-align: center;
+  padding: 15px 0;
+  color: #fff;
+  background: #35424a;
+  margin-top: 180px;
+}
+
+/* Padding */
+.p {
+  padding: 0.5rem;
+}
+.p-1 {
+  padding: 1rem;
+}
+.p-2 {
+  padding: 2rem;
+}
+.p-3 {
+  padding: 3rem;
+}
+.py {
+  padding: 0.5rem 0;
+}
+.py-1 {
+  padding: 1rem 0;
+}
+.py-2 {
+  padding: 2rem 0;
+}
+.py-3 {
+  padding: 3rem 0;
+}
+
+/* Margin */
+.m {
+  margin: 0.5rem;
+}
+.m-1 {
+  margin: 1rem;
+}
+.m-2 {
+  margin: 2rem;
+}
+.m-3 {
+  margin: 3rem;
+}
+.my {
+  margin: 0.5rem 0;
+}
+.my-1 {
+  margin: 1rem 0;
+}
+.my-2 {
+  margin: 2rem 0;
+}
+.my-3 {
+  margin: 3rem 0;
+}
+.pr-0 {
+  padding: 0 !important;
+}
+.m-10 {
+  margin: 10px !important;
+}
+.m-15 {
+  margin: 15px !important;
+}
+.m-20 {
+  margin: 20px !important;
+}
+.m-25 {
+  margin: 25px !important;
+}
+.m-30 {
+  margin: 30px !important;
+}
+.mt-5 {
+  margin-top: 5px !important;
+}
+.mt-7 {
+  margin-top: 7px !important;
+}
+.mt-10 {
+  margin-top: 10px !important;
+}
+.mt-15 {
+  margin-top: 15px !important;
+}
+.mt-20 {
+  margin-top: 20px;
+}
+.mt-25 {
+  margin-top: 25px;
+}
+.mt-30 {
+  margin-top: 30px;
+}
+.mr-5 {
+  margin-right: 5px !important;
+}
+.mr-10 {
+  margin-right: 10px !important;
+}
+.mr-15 {
+  margin-right: 15px !important;
+}
+.mr-20 {
+  margin-right: 20px !important;
+}
+.mr-25 {
+  margin-right: 25px !important;
+}
+.mr-30 {
+  margin-right: 30px !important;
+}
+.mb-10 {
+  margin-bottom: 20px !important;
+}
+.mb-15 {
+  margin-bottom: 15px;
+}
+.mb-20 {
+  margin-bottom: 20px !important;
+}
+/* Text Styles*/
+.x-large {
+  font-size: 4rem;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.large {
+  font-size: 2rem;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.lead {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-primary {
+  color: #17a2b8;
+}
+.text-success {
+  color: #058527;
+}
+.text-dark {
+  color: #343a40;
+}
+.container {
+  width: 90%;
+  margin: auto;
+  overflow: hidden;
+}
+.center {
+  text-align: center;
+}
+
+.inline-block {
+  display: block;
+}
+@media only screen and (max-width: 1150px) {
+  .property {
+    width: 32%;
+    margin: 6px 0;
+  }
+}
+@media only screen and (max-width: 872px) {
+  .property {
+    width: 48%;
+    margin: 6px 0;
+  }
+  .search-fields input[type="text"],
+  .search-fields select {
+    width: 24%;
+  }
+}
+@media only screen and (max-width: 680px) {
+  header {
+    padding-top: 0;
+    padding-left: 15px;
+  }
+  header nav {
+    float: none;
+    display: block;
+    margin-bottom: 10px;
+  }
+  header .brand {
+    margin: 7px;
+  }
+  header li {
+    width: 100%;
+    margin-top: 4px;
+  }
+  .container {
+    width: 100%;
+  }
+
+  .search-fields,
+  .filter-property h2 {
+    padding-left: 0;
+  }
+  .search-fields input[type="text"],
+  .search-fields select {
+    float: none;
+    display: block;
+    text-align: left;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 14px;
+  }
+
+  .search-fields input[type="text"],
+  .search-fields select {
+    border: 1px solid #ccc;
+  }
+  .pagination {
+    margin-left: 20px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .breadcum {
+    background: url("../img/breadcrum.jpg") no-repeat -200px -90px;
+  }
+
+  .breadcum h2 {
+    margin-top: 300px;
+    font-size: 28px;
+  }
+  .breadcum p {
+    font-size: 14px;
+  }
+  .property {
+    width: 100%;
+    margin: 6px 0;
+  }
+  .hide-sm {
+    display: none;
+  }
+}
