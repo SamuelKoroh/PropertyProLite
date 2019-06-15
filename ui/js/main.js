@@ -7,8 +7,8 @@ const myMap = address => {
       let center = new google.maps.LatLng(lat(), lng());
       let mapProp = {
         center,
-        zoom: 13,
-        mapTypeId: google.maps.MapTypeId.TERRAIN
+        zoom: 16,
+        mapTypeId: google.maps.MapTypeId.HYBRID
       };
 
       let map = new google.maps.Map(
@@ -21,4 +21,18 @@ const myMap = address => {
       marker.setMap(map);
     }
   });
+};
+const useModal = (modal, trigerButton, closeButton) => {
+  trigerButton.onclick = e => {
+    e.preventDefault();
+    modal.style.display = "block";
+  };
+
+  closeButton.onclick = e => {
+    modal.style.display = "none";
+  };
+
+  window.onclick = ({ target }) => {
+    if (target == modal) modal.style.display = "none";
+  };
 };

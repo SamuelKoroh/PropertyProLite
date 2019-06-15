@@ -6,6 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Welcome to Property Pro</title>
     <link rel="stylesheet" href="./css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+    />
   </head>
   <body>
     <header>
@@ -29,11 +33,24 @@
           3 Bed Duplex for Rent in Soteria Haven Estate , Chisco Bus-Stop, Ikate
           Elegushi
         </h2>
-        <div class="property-image">
-          <img src="./img/prop.jpg" />
+        <div class="property-images">
+          <div class="mySlides fade">
+            <div class="numbertext">1/2</div>
+            <img src="./img/prop.jpg" />
+          </div>
+          <div class="mySlides fade">
+            <div class="numbertext">2/2</div>
+            <img src="./img/breadcrum.jpg" />
+          </div>
+          <div style="text-align:center" class="control">
+            <i class="fa fa-camera"></i> 20
+          </div>
+
+          <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+          <a class="next" onclick="plusSlides(1)">&#10095;</a>
         </div>
       </div>
-      <div class="container">
+      <div class="container clearfix">
         <div class="property-details">
           <h2 class="text-primary">Description</h2>
           <p>
@@ -44,27 +61,121 @@
           </p>
         </div>
         <div class="property-agent ">
-          <h2 class="text-primary">Agent</h2>
-          <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tenetur
-            quasi veniam nemo, earum ut dolores voluptatem ab. Id ipsa, animi
-            ullam blanditiis itaque temporibus perferendis amet, impedit,
-            ratione laudantium consequuntur.
-          </p>
+          <h2 class="text-primary">Contact Agent</h2>
+          <div class="mt-10">
+            <a href="#" title="View Profile" class="agent-name">John Doe</a>
+          </div>
+          <div class="mt-10 text-primary agent-contact">
+            <span
+              ><i class="fa fa-phone" style="transform: rotate(90deg)"></i
+              >+234803*******</span
+            >
+            <a
+              href="https://api.whatsapp.com/send?phone=2348037909699&text=%22I%27m%20interested%20in%20this%20property%22"
+              target="_blank"
+              ><span class="whatsapp"> <i class="fab fa-whatsapp"></i> </span
+            ></a>
+          </div>
+          <div class="mt-15">
+            <a href="" id="invoke-modal"
+              ><i class="fas fa-exclamation-triangle text-danger"></i>
+              <span class="text-danger">Report this Ads to Admin</span></a
+            >
+          </div>
         </div>
       </div>
       <div class="container ">
-        <div id="googleMap" class="mt-20"></div>
+        <p class="text-primary lead mt-15">
+          Simply find the location of the property on the map mark with red
+          balloon
+        </p>
+        <div id="googleMap" class="mt-10"></div>
       </div>
     </main>
+    <!-- Report Ads Modal-->
+    <div class="modal" id="report-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="close">&times; </span>
+          <h3>
+            <span><i class="fas fa-exclamation-triangle text-danger"></i></span>
+            Report Ads
+          </h3>
+        </div>
+        <div class="modal-body">
+          <form class="form">
+            <div class="form-group">
+              <input type="text" placeholder="Your name" name="name" />
+            </div>
+            <div class="form-group">
+              <input
+                type="text"
+                placeholder="Your email address"
+                name="address"
+              />
+            </div>
+            <div class="form-group pr-0">
+              <select name="reason">
+                <option disabled selected>Reason</option>
+                <option value="pricing">Pricing</option>
+                <option value="weird">Wierd demand</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <textarea
+                name="description"
+                placeholder="Detail description"
+                rows="5"
+              ></textarea>
+            </div>
+            <span class="modal-button">
+              <button class="btn btn-danger">
+                <i class="fa fa-paper-plane"></i> Send
+              </button>
+            </span>
+          </form>
+        </div>
+      </div>
+    </div>
     <footer>
       <p>All right reserved ProperyPro &copy; 2019</p>
     </footer>
-
     <script src="./js/main.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBHdgVoSE1Ut89RigJmo9F3LWDPcXT2ZJ8"></script>
     <script>
-      myMap("Corpers lodge Adekunle fajuyi cantonment ibadan");
+      let modal = document.querySelector("#report-modal");
+      let btn = document.querySelector("#invoke-modal");
+      let span = document.querySelector("span.close");
+
+      var slideIndex = 1;
+      showSlides(slideIndex);
+
+      function plusSlides(n) {
+        showSlides((slideIndex += n));
+      }
+
+      function currentSlide(n) {
+        showSlides((slideIndex = n));
+      }
+
+      function showSlides(n) {
+        var i;
+        var slides = document.querySelectorAll(".mySlides");
+
+        if (n > slides.length) {
+          slideIndex = 1;
+        }
+        if (n < 1) {
+          slideIndex = slides.length;
+        }
+        for (i = 0; i < slides.length; i++) {
+          slides[i].style.display = "none";
+        }
+
+        slides[slideIndex - 1].style.display = "block";
+      }
+      useModal(modal, btn, span);
+      myMap("Andela, Epic Tower 235 Ikorodu Rd Ilupeju Lagos Nigeria");
     </script>
   </body>
 </html>

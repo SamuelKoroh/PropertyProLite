@@ -11,7 +11,9 @@ body {
   font: 15px/ 1.5 Arial, Helvetica, sans-serif;
   position: relative;
 }
-
+a {
+  text-decoration: none;
+}
 header {
   background: #35424a;
   color: #fff;
@@ -127,20 +129,23 @@ header nav {
 }
 
 /* Property Details*/
-.property-image,
+.property-images,
 #googleMap {
   width: 100%;
+  position: relative;
+  margin: auto;
+  height: auto;
 }
 #googleMap {
-  min-height: 400px;
+  min-height: 500px;
   border: 2px solid #ddd;
 }
-.property-image img {
+.property-images img {
   width: 100%;
   height: 350px;
 }
 .property-details {
-  width: 60%;
+  width: 70%;
   float: left;
   border: 1px solid #ddd;
   border-radius: 3px;
@@ -151,14 +156,111 @@ header nav {
 
 .property-agent {
   float: left;
-  width: 33.5%;
+  width: 23.5%;
   border: 1px solid #ddd;
   border-radius: 3px;
   background: #fff;
   padding: 15px;
   margin-top: 15px;
 }
+.property-agent .agent-name {
+  font-size: 22px;
+  font-weight: bold;
+}
 
+.property-agent .whatsapp {
+  padding: 5px;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  background: #17a2b8;
+  text-align: center;
+  margin-left: 15px;
+  color: #fff;
+}
+.property-agent a {
+  color: #69737b;
+}
+/* Next & previous buttons */
+.prev,
+.next {
+  cursor: pointer;
+  position: absolute;
+  bottom: 5px;
+  width: auto;
+  padding: 16px;
+  margin-top: -22px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover,
+.next:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+.control {
+  color: #f2f2f2;
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  text-align: center;
+}
+.active,
+.dot:hover {
+  background-color: #717171;
+}
+
+/* Fading animation */
+.fade {
+  -webkit-animation-name: fade;
+  -webkit-animation-duration: 1.5s;
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+@-webkit-keyframes fade {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* On smaller screens, decrease text size */
+@media only screen and (max-width: 300px) {
+  .prev,
+  .next,
+  .text {
+    font-size: 11px;
+  }
+}
 /* Forms */
 .btn {
   display: inline-block;
@@ -233,7 +335,7 @@ header nav {
   display: block;
   width: 100%;
   padding: 0.4rem;
-  font-size: 1.2rem;
+  font-size: 1rem;
   border: 1px solid #ccc;
 }
 
@@ -286,7 +388,63 @@ th {
   background-color: #17a2b8;
   color: white;
 }
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding-top: 70px;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  background: rgb(0, 0, 0);
+  background: rgba(0, 0, 0, 0.4);
+  overflow: auto;
+  -webkit-animation-name: fadeIn;
+  -webkit-animation-duration: 0.4s;
+  animation-name: fadeIn;
+  animation-duration: 0.4s;
+}
 
+.modal-content {
+  margin: auto;
+  background: #fefefe;
+  width: 50%;
+  -webkit-animation-name: slideIn;
+  -webkit-animation-duration: 0.4s;
+  animation-name: slideIn;
+  animation-duration: 0.4s;
+}
+.close {
+  color: white;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+.close:hover,
+.close:focus {
+  color: #f00;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-header {
+  padding: 5px 16px;
+  background-color: #001000;
+  color: white;
+}
+.modal-body {
+  padding: 2px 16px;
+}
+.modal-body .modal-button {
+  width: 70%;
+  margin: 15px auto;
+  display: block;
+}
+.modal-button button {
+  width: 100%;
+}
 /*  Footer */
 footer {
   text-align: center;
@@ -439,11 +597,15 @@ footer {
   color: #17a2b8;
 }
 .text-success {
-  color: #058527;
+  color: #058527 !important;
+}
+.text-danger {
+  color: #f00;
 }
 .text-dark {
   color: #343a40;
 }
+
 .container {
   width: 90%;
   margin: auto;
@@ -456,21 +618,25 @@ footer {
 .inline-block {
   display: block;
 }
-
+.clearfix {
+  content: "";
+  clear: both;
+  display: table;
+}
 @media only screen and (max-width: 1304px) {
   .property-details {
-    width: 60%;
+    width: 70%;
   }
   .property-agent {
-    width: 33%;
+    width: 23%;
   }
 }
 @media only screen and (max-width: 1214px) {
   .property-details {
-    width: 60%;
+    width: 70%;
   }
   .property-agent {
-    width: 32%;
+    width: 22%;
   }
 }
 @media only screen and (max-width: 1150px) {
@@ -479,18 +645,18 @@ footer {
     margin: 6px 0;
   }
   .property-details {
-    width: 60%;
+    width: 67%;
   }
   .property-agent {
-    width: 31%;
+    width: 24%;
   }
 }
 @media only screen and (max-width: 953px) {
   .property-details {
-    width: 59%;
+    width: 64%;
   }
   .property-agent {
-    width: 31%;
+    width: 25%;
   }
 }
 @media only screen and (max-width: 872px) {
@@ -499,17 +665,23 @@ footer {
     margin: 6px 0;
   }
   .property-details {
-    width: 57%;
+    width: 54%;
   }
   .property-agent {
-    width: 30%;
+    width: auto;
   }
   .search-fields input[type="text"],
   .search-fields select {
     width: 24%;
   }
+  .lead {
+    font-size: 1rem;
+  }
 }
 @media only screen and (max-width: 680px) {
+  body {
+    font-size: 13px;
+  }
   header {
     padding-top: 0;
     padding-left: 15px;
@@ -527,14 +699,10 @@ footer {
     margin-top: 4px;
   }
   .property-details {
-    width: auto;
-    display: block;
-    padding: 30px;
+    width: 57%;
   }
   .property-agent {
     width: auto;
-    display: block;
-    padding: 20px;
   }
   .container {
     width: 100%;
@@ -579,7 +747,17 @@ footer {
     width: 100%;
     margin: 6px 0;
   }
-
+  .property-details {
+    float: none;
+    width: auto;
+    display: block;
+    margin-right: 0;
+  }
+  .property-agent {
+    float: none;
+    width: auto;
+    display: block;
+  }
   .hide-sm {
     display: none;
   }
