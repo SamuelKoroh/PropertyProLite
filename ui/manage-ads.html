@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="Editport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Welcome to Property Pro</title>
     <link rel="stylesheet" href="./css/style.css" />
@@ -26,9 +26,9 @@
             <li class="dropdown">
               <a href="javascript:void(0)" class="dropbtn">Admin</a>
               <div class="dropdown-content">
-                <a href="#">Manage Ads type</a>
+                <a href="#">Manage Ads Types</a>
                 <a href="#">Manage Users Ads</a>
-                <a href="#">Manage Users</a>
+                <a href="manage-user.html">Manage Users</a>
                 <a href="#">Reported Issues</a>
               </div>
             </li>
@@ -41,94 +41,114 @@
     <main class="m-20">
       <div class="container">
         <p class=" lead text-success">
-          <i class="fas fa-user"></i> Welcome John Doe
+          <i class="fas fa-user"></i> <span class="hide-sm"></span> Welcome John
+          Doe
         </p>
 
-        <h2 class="my-2 lead text-primary">Manage Advert Type</h2>
-        <button class="btn btn-success" id="btnAddType">
-          <i class="fas fa-plus"></i> Add new advert type
-        </button>
-        <table class="table mt-20">
+        <div class="mb-20">
+          <span class="my-2 lead text-primary">Manage Uploaded Ads</span>
+          <div class="search-container">
+            <input type="text" placeholder="Search..." />
+            <button>
+              <i class="fa fa-search"></i> <span class="hide-sm"></span>
+            </button>
+          </div>
+        </div>
+        <table class="table">
           <thead>
             <tr>
-              <th>Types</th>
-              <th class="hide-sm">Description</th>
+              <th>Ads Title</th>
+              <th class="hide-sm">Users</th>
+              <th class="hide-sm">Type</th>
+              <th class="hide-sm">Date Added</th>
+              <th class="hide-sm">Price</th>
+              <th></th>
               <th></th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>2 Bedroom</td>
-              <td class="hide-sm">2 Bedroom apartments</td>
+              <td>2 bedroom in Yaba</td>
+              <td class="hide-sm">Clark Kent</td>
+              <td class="hide-sm">
+                2 bedroom
+              </td>
+              <td class="hide-sm">
+                20-10-2018
+              </td>
+              <td class="hide-sm">N300, 000 per year</td>
               <td>
-                <a href="property-details.html" class="btn btn-primary"
-                  ><i class="far fa-edit"></i> Edit</a
-                >
+                <a href="property-details.html" class="btn btn-success btn-sm"
+                  ><i class="fa fa-eye"></i> <span class="hide-sm">View</span>
+                </a>
               </td>
               <td>
-                <button class="btn btn-danger">
-                  <i class="far fa-trash-alt"></i> Remove
+                <a href="property-details.html" class="btn btn-warning btn-sm"
+                  ><i class="fas fa-user-alt-slash"></i>
+                  <span class="hide-sm">Activate</span>
+                </a>
+              </td>
+              <td>
+                <button class="btn btn-danger btn-sm">
+                  <i class="far fa-trash-alt"></i>
+                  <span class="hide-sm">Remove</span>
                 </button>
               </td>
             </tr>
             <tr>
-              <td>3 Bedroom</td>
-              <td class="hide-sm">3 Bedroom apartments</td>
+              <td>3 bedroom in Ilupeju</td>
+              <td class="hide-sm">James Bond</td>
+              <td class="hide-sm">
+                2 bedroom
+              </td>
+              <td class="hide-sm">
+                20-10-2018
+              </td>
+              <td class="hide-sm">N500, 000 per year</td>
               <td>
-                <a href="property-details.html" class="btn btn-primary"
-                  ><i class="far fa-edit"></i> Edit</a
-                >
+                <a href="property-details.html" class="btn btn-success btn-sm"
+                  ><i class="fa fa-eye"></i> <span class="hide-sm">View</span>
+                </a>
               </td>
               <td>
-                <button class="btn btn-danger">
-                  <i class="far fa-trash-alt"></i> Remove
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <hr class="text-success mt-30" style="border: 2px  solid #ddd" />
-
-        <h2 class="my-2 lead text-primary">Manage Deals</h2>
-        <button class="btn btn-success" id="btnAddDeal">
-          <i class="fas fa-plus"></i> Add new deal
-        </button>
-        <table class="table mt-20">
-          <thead>
-            <tr>
-              <th>Deal</th>
-              <th class="hide-sm">Description</th>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>For Rent</td>
-              <td class="hide-sm">Properties placed for rent</td>
-              <td>
-                <a href="property-details.html" class="btn btn-primary"
-                  ><i class="far fa-edit"></i> Edit</a
-                >
+                <a href="property-details.html" class="btn btn-primary btn-sm"
+                  ><i class="far fa-user"></i>
+                  <span class="hide-sm">Deactivate</span>
+                </a>
               </td>
               <td>
-                <button class="btn btn-danger">
-                  <i class="far fa-trash-alt"></i> Remove
+                <button class="btn btn-danger btn-sm">
+                  <i class="far fa-trash-alt"></i>
+                  <span class="hide-sm">Remove</span>
                 </button>
               </td>
             </tr>
             <tr>
-              <td>For Sale</td>
-              <td class="hide-sm">Properties placed for sale</td>
+              <td>2 bedroom in Ikeja</td>
+              <td class="hide-sm">Clark Kent</td>
+              <td class="hide-sm">
+                5 bedroom
+              </td>
+              <td class="hide-sm">
+                20-10-2019
+              </td>
+              <td class="hide-sm">N700, 000 per year</td>
               <td>
-                <a href="property-details.html" class="btn btn-primary"
-                  ><i class="far fa-edit"></i> Edit</a
-                >
+                <a href="property-details.html" class="btn btn-success btn-sm"
+                  ><i class="fa fa-eye"></i> <span class="hide-sm">View</span>
+                </a>
               </td>
               <td>
-                <button class="btn btn-danger">
-                  <i class="far fa-trash-alt"></i> Remove
+                <a href="property-details.html" class="btn btn-warning btn-sm"
+                  ><i class="fas fa-user-alt-slash"></i>
+                  <span class="hide-sm">Activate</span>
+                </a>
+              </td>
+              <td>
+                <button class="btn btn-danger btn-sm">
+                  <i class="far fa-trash-alt"></i>
+                  <span class="hide-sm">Remove</span>
                 </button>
               </td>
             </tr>
@@ -136,92 +156,33 @@
         </table>
       </div>
     </main>
-    <div class="modal" id="type-modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <span class="close">&times; </span>
-          <h3>
-            <span><i class="fas fa-plus"></i></span>
-            New Advert Type
-          </h3>
-        </div>
-        <div class="modal-body">
-          <form class="form">
-            <div class="form-group">
-              <input type="text" placeholder="Ads type" name="name" />
-            </div>
-            <div class="form-group">
-              <textarea
-                name="description"
-                placeholder="Detail description"
-                rows="5"
-              ></textarea>
-            </div>
-            <span class="modal-button">
-              <button class="btn btn-primary">
-                <i class="fa fa-paper-plane"></i> Submit
-              </button>
-            </span>
-          </form>
-        </div>
-      </div>
-    </div>
-    <div class="modal" id="deal-modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <span class="close">&times; </span>
-          <h3>
-            <span><i class="fas fa-plus"></i></span>
-            New Deal
-          </h3>
-        </div>
-        <div class="modal-body">
-          <form class="form">
-            <div class="form-group">
-              <input type="text" placeholder="Deal" name="name" />
-            </div>
-            <div class="form-group">
-              <textarea
-                name="description"
-                placeholder="Detail description"
-                rows="5"
-              ></textarea>
-            </div>
-            <span class="modal-button">
-              <button class="btn btn-primary">
-                <i class="fa fa-paper-plane"></i> Submit
-              </button>
-            </span>
-          </form>
-        </div>
-      </div>
-    </div>
 
-    <footer>
-      <p>All right reserved ProperyPro &copy; 2019</p>
-    </footer>
-    <script src="./js/main.js"></script>
+    <div class="container center">
+      <div class="pagination">
+        <a href="#">&laquo;</a>
+        <a href="#">1</a>
+        <a href="#" class="active">2</a>
+        <a href="#">3</a>
+        <a href="#">4</a>
+        <a href="#">5</a>
+        <a href="#">6</a>
+        <a href="#">&raquo;</a>
+      </div>
+    </div>
     <script>
       let buttons = document.querySelectorAll(".btn-danger");
-      let typeModal = document.querySelector("#type-modal");
-      let dealModal = document.querySelector("#deal-modal");
-
-      let btnType = document.querySelector("#btnAddType");
-      let btnDeal = document.querySelector("#btnAddDeal");
-
-      let closeTypeModal = document.querySelector("#type-modal span.close");
-      let closeDealModal = document.querySelector("#deal-modal span.close");
-
-      useModal(typeModal, btnType, closeTypeModal);
-      useModal(dealModal, btnDeal, closeDealModal);
-
+      console.log(buttons);
       buttons.forEach(button => {
         button.addEventListener("click", ({ target }) => {
-          if (confirm("Do you want to remove this property")) {
+          if (confirm("Do you want to remove this Ads")) {
             document.removeChild(button.parentNode.parentNode.remove());
           }
         });
       });
     </script>
+    <footer>
+      <p>All right reserved ProperyPro &copy; 2019</p>
+    </footer>
+    <script src="./js/main.js"></script>
   </body>
 </html>

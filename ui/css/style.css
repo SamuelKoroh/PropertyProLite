@@ -6,10 +6,14 @@ h2 {
   margin: 0;
   padding: 0;
 }
-
+html {
+  font: 1em/ 1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
 body {
-  font: 15px/ 1.5 Arial, Helvetica, sans-serif;
   position: relative;
+}
+h2 {
+  font-size: 1.5em;
 }
 a {
   text-decoration: none;
@@ -26,7 +30,6 @@ header a {
   color: #fff;
   text-decoration: none;
   text-transform: uppercase;
-  font-size: 16px;
 }
 
 header ul {
@@ -56,7 +59,6 @@ li.dropdown {
 
 .dropdown-content {
   display: none;
-
   position: absolute;
   background-color: #35424a;
   min-width: 160px;
@@ -117,10 +119,30 @@ li.dropdown {
   float: left;
   padding: 6px;
   width: 26%;
+  font-size: inherit;
   margin-bottom: 10px;
   margin-top: 8px;
   margin-right: 10px;
   border: 1px solid #ccc;
+}
+.search-container {
+  float: right;
+  width: 60%;
+  text-align: right;
+}
+.search-container button {
+  float: right;
+  padding: 4px 10px;
+  background: #ddd;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+.search-container input[type="text"] {
+  padding: 6px;
+  font-size: 16px;
+  width: 70%;
+  border: 1px solid #ddd;
 }
 /* Properties Listing */
 .property {
@@ -144,22 +166,15 @@ li.dropdown {
 .property-detail .price-type {
   padding: 5px;
 }
-
-.property .description {
-  font-size: 12px;
-}
 .property-type {
-  font-size: 16px;
   font-weight: bold;
 }
 .property-location {
   color: #868e96;
-  font-size: 16px;
 }
 
 .property-price {
   color: #f00549;
-  font-size: 16px;
   font-weight: bold;
 }
 
@@ -199,7 +214,7 @@ li.dropdown {
   margin-top: 15px;
 }
 .property-agent .agent-name {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: bold;
 }
 
@@ -212,7 +227,7 @@ li.dropdown {
   color: #fff;
 }
 .property-agent a {
-  color: #69737b;
+  color: #003;
 }
 /* Next & previous buttons */
 .prev,
@@ -298,15 +313,20 @@ li.dropdown {
 /* Forms */
 .btn {
   display: inline-block;
-  background: #17a2b8;
-  color: #333;
-  padding: 0.4rem 1.3rem;
-  font-size: 1rem;
-  border: none;
+  padding: 9px 12px;
+  padding-top: 7px;
+  margin-bottom: 0;
+  line-height: 20px;
+  color: #5e5e5e;
+  text-align: center;
+  vertical-align: middle;
   cursor: pointer;
-  margin-right: 0.5rem;
-  transition: opacity 0.2s ease-in;
-  outline: none;
+  background-color: #d1dade;
+  background-image: none !important;
+  border: none;
+  text-shadow: none;
+  box-shadow: none;
+  transition: all 0.12s linear 0s !important;
 }
 
 .btn-primary {
@@ -340,6 +360,16 @@ li.dropdown {
   border: #ccc solid 1px;
 }
 
+.btn-info {
+  color: #fff;
+  background-color: #5bc0de;
+  border-color: #46b8da;
+}
+.btn-warning {
+  color: #fff;
+  background-color: #f0ad4e;
+  border-color: #eea236;
+}
 .btn:hover {
   opacity: 0.8;
 }
@@ -369,7 +399,7 @@ li.dropdown {
   display: block;
   width: 100%;
   padding: 0.4rem;
-  font-size: 1rem;
+  font-size: 15px;
   border: 1px solid #ccc;
 }
 
@@ -444,7 +474,7 @@ th {
 .modal-content {
   margin: auto;
   background: #fefefe;
-  width: 50%;
+  width: 70%;
   -webkit-animation-name: slideIn;
   -webkit-animation-duration: 0.4s;
   animation-name: slideIn;
@@ -597,30 +627,22 @@ footer {
   margin-right: 30px !important;
 }
 .mb-10 {
-  margin-bottom: 20px !important;
+  margin-bottom: 10px !important;
 }
 .mb-15 {
-  margin-bottom: 15px;
+  margin-bottom: 15px !important;
 }
 .mb-20 {
   margin-bottom: 20px !important;
 }
+.mb-30 {
+  margin-bottom: 30px !important;
+}
 /* Text Styles*/
-.x-large {
-  font-size: 4rem;
-  line-height: 1.2;
-  margin-bottom: 1rem;
-}
-
-.large {
-  font-size: 2rem;
-  line-height: 1.2;
-  margin-bottom: 1rem;
-}
 
 .lead {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  margin-bottom: 15px;
 }
 
 .text-center {
@@ -708,14 +730,8 @@ footer {
   .search-fields select {
     width: 24%;
   }
-  .lead {
-    font-size: 1rem;
-  }
 }
 @media only screen and (max-width: 680px) {
-  body {
-    font-size: 13px;
-  }
   header {
     padding-top: 0;
     padding-left: 15px;
@@ -760,18 +776,23 @@ footer {
   .search-fields select {
     border: 1px solid #ccc;
   }
+  .search-fields input[type="submit"] {
+    display: block;
+    width: 100%;
+    float: none;
+  }
   .pagination {
     margin-left: 20px;
   }
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 624px) {
   .breadcum {
     background: url("../img/breadcrum.jpg") no-repeat -200px -90px;
   }
 
   .breadcum h2 {
-    margin-top: 300px;
+    margin-top: 200px;
     font-size: 28px;
   }
   .breadcum p {
@@ -792,7 +813,42 @@ footer {
     width: auto;
     display: block;
   }
+  .search-container {
+    float: none;
+    display: block;
+    width: 98%;
+  }
+  .search-container button {
+    float: none;
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+  .search-container input[type="text"] {
+    float: none;
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 6px 0;
+  }
+  .btn-block {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+  }
+
   .hide-sm {
     display: none;
+  }
+}
+@media only screen and (max-width: 400px) {
+  header .brand {
+    margin: 0;
+  }
+  header li {
+    padding: 0;
+  }
+  .pagination a {
+    padding: 4px 6px;
   }
 }
