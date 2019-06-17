@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta
+      name="description"
+      content="Property Pro Lite is a platform where people can create and/or
+    search properties for sale or rent."
+    />
     <title>Welcome to Property Pro</title>
     <link rel="stylesheet" href="./css/style.css" />
     <link
@@ -15,16 +20,24 @@
     <header>
       <div class="container">
         <div class="brand">
-          <h1>ProperyPro</h1>
+          <h1><a href="/">PropertyPro</a></h1>
         </div>
         <nav>
           <ul>
-            <ul>
-              <li><a href="dashboard.html">Dashboard</a></li>
-              <li><a href="edit-profile.html">Update Profile</a></li>
-              <li><a href="add-property.html">New Property</a></li>
-              <li><a href="signin.html">Sign Out</a></li>
-            </ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="add-property.html">New Ads</a></li>
+            <li><a href="favourite.html">My Favourite</a></li>
+            <li><a href="edit-profile.html">Update Profile</a></li>
+            <li class="dropdown">
+              <a href="javascript:void(0)" class="dropbtn">Admin</a>
+              <div class="dropdown-content">
+                <a href="manage-dealtype.html">Ads Types/Deals</a>
+                <a href="manage-ads.html">Manage Ads</a>
+                <a href="manage-user.html">Manage Users</a>
+                <a href="manage-report.html">Reported Issues</a>
+              </div>
+            </li>
+            <li><a href="signin.html">Sign Out</a></li>
           </ul>
         </nav>
       </div>
@@ -71,8 +84,12 @@
             <input type="text" placeholder="Price" name="price" />
           </div>
           <div class="form-group">
-            <img src="" id="img_preview" alt="Image Preview" width="200" />
-            <input type="file" id="property_image" name="property_image" />
+            <input
+              type="file"
+              id="property_image"
+              name="property_image"
+              multiple
+            />
             <small class="form-text"
               >Select one or more image(s) to upload</small
             >
@@ -94,7 +111,7 @@
       </div>
     </main>
     <footer>
-      <p>All right reserved ProperyPro &copy; 2019</p>
+      <p>All right reserved PropertyPro &copy; 2019</p>
     </footer>
     <script src="./js/main.js"></script>
   </body>

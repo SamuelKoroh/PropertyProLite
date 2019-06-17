@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta
+      name="description"
+      content="Property Pro Lite is a platform where people can create and/or
+    search properties for sale or rent."
+    />
     <title>Welcome to Property Pro</title>
     <link rel="stylesheet" href="./css/style.css" />
     <link
@@ -15,21 +20,21 @@
     <header>
       <div class="container">
         <div class="brand">
-          <a href="/"><h1>ProperyPro</h1></a>
+          <h1><a href="/">PropertyPro</a></h1>
         </div>
         <nav>
           <ul>
             <li><a href="dashboard.html">Dashboard</a></li>
             <li><a href="add-property.html">New Ads</a></li>
-            <li><a href="favourite">My Favourite</a></li>
+            <li><a href="favourite.html">My Favourite</a></li>
             <li><a href="edit-profile.html">Update Profile</a></li>
             <li class="dropdown">
               <a href="javascript:void(0)" class="dropbtn">Admin</a>
               <div class="dropdown-content">
-                <a href="#">Manage Ads Types</a>
-                <a href="#">Manage Users Ads</a>
+                <a href="manage-dealtype.html">Ads Types/Deals</a>
+                <a href="manage-ads.html">Manage Ads</a>
                 <a href="manage-user.html">Manage Users</a>
-                <a href="#">Reported Issues</a>
+                <a href="manage-report.html">Reported Issues</a>
               </div>
             </li>
             <li><a href="signin.html">Sign Out</a></li>
@@ -40,12 +45,12 @@
 
     <main class="m-20">
       <div class="container">
-        <p class=" lead text-success">
+        <p class=" lead text-success mb-30">
           <i class="fas fa-user"></i> Welcome John Doe
         </p>
 
         <div class="mb-20">
-          <span class="my-2 lead text-primary">Manage Users</span>
+          <span class="lead text-primary">Manage Users</span>
           <div class="search-container">
             <input type="text" placeholder="Search..." />
             <button><i class="fa fa-search"></i></button>
@@ -74,20 +79,31 @@
               <td class="hide-sm">
                 No 23 address of clark kent
               </td>
-              <td>Regular</td>
+              <td class="hide-sm">Regular</td>
               <td>
-                <a href="property-details.html" class="btn btn-success"
-                  ><i class="fa fa-eye"></i> View</a
-                >
+                <a
+                  href="user-profile.html"
+                  class="btn btn-success"
+                  title="View this user profile"
+                  ><i class="fa fa-eye"></i> <span class="hide-sm">View </span>
+                </a>
               </td>
               <td>
-                <a href="property-details.html" class="btn btn-warning"
-                  ><i class="fas fa-user-alt-slash"></i> Activate</a
-                >
+                <a
+                  href="#"
+                  class="btn btn-warning"
+                  title="Activate or deactive this user profile"
+                  ><i class="fas fa-user-alt-slash"></i
+                  ><span class="hide-sm">Activate</span>
+                </a>
               </td>
               <td>
-                <button class="btn btn-danger">
-                  <i class="far fa-trash-alt"></i> Remove
+                <button
+                  class="btn btn-danger"
+                  title="Remove this user permanently"
+                >
+                  <i class="far fa-trash-alt"></i>
+                  <span class="hide-sm">Remove</span>
                 </button>
               </td>
             </tr>
@@ -100,20 +116,28 @@
               <td class="hide-sm">
                 No 23 address of clark kent
               </td>
-              <td>Agent</td>
+              <td class="hide-sm">Agent</td>
               <td>
-                <a href="property-details.html" class="btn btn-success"
-                  ><i class="fa fa-eye"></i> View</a
+                <a
+                  href="user-profile.html"
+                  class="btn btn-success"
+                  title="View this user profile"
+                  ><i class="fa fa-eye"></i> <span class="hide-sm"> View </span>
+                </a>
+              </td>
+              <td>
+                <a href="#" class="btn btn-primary"
+                  ><i class="far fa-user"></i>
+                  <span class="hide-sm">Deactivate</span></a
                 >
               </td>
               <td>
-                <a href="property-details.html" class="btn btn-primary"
-                  ><i class="far fa-user"></i> Deactivate</a
+                <button
+                  class="btn btn-danger"
+                  title="Remove this user permanently"
                 >
-              </td>
-              <td>
-                <button class="btn btn-danger">
-                  <i class="far fa-trash-alt"></i> Remove
+                  <i class="far fa-trash-alt"></i
+                  ><span class="hide-sm">Remove</span>
                 </button>
               </td>
             </tr>
@@ -126,20 +150,31 @@
               <td class="hide-sm">
                 No 23 address of clark kent
               </td>
-              <td>Regular</td>
+              <td class="hide-sm">Regular</td>
               <td>
-                <a href="property-details.html" class="btn btn-success"
-                  ><i class="fa fa-eye"></i> View</a
+                <a
+                  href="user-profile.html"
+                  class="btn btn-success"
+                  title="View this user profile"
+                  ><i class="fa fa-eye"></i> <span class="hide-sm">View </span>
+                </a>
+              </td>
+              <td>
+                <a
+                  href="#"
+                  class="btn btn-warning"
+                  title="Activate or deactive this user profile"
+                  ><i class="fas fa-user-alt-slash"></i>
+                  <span class="hide-sm">Activate</span></a
                 >
               </td>
               <td>
-                <a href="property-details.html" class="btn btn-warning"
-                  ><i class="fas fa-user-alt-slash"></i> Activate</a
+                <button
+                  class="btn btn-danger"
+                  title="Remove this user permanently"
                 >
-              </td>
-              <td>
-                <button class="btn btn-danger">
-                  <i class="far fa-trash-alt"></i> Remove
+                  <i class="far fa-trash-alt"></i
+                  ><span class="hide-sm">Remove</span>
                 </button>
               </td>
             </tr>
@@ -172,7 +207,7 @@
       });
     </script>
     <footer>
-      <p>All right reserved ProperyPro &copy; 2019</p>
+      <p>All right reserved PropertyPro &copy; 2019</p>
     </footer>
     <script src="./js/main.js"></script>
   </body>

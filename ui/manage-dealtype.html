@@ -2,8 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="Editport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta
+      name="description"
+      content="Property Pro Lite is a platform where people can create and/or
+    search properties for sale or rent."
+    />
     <title>Welcome to Property Pro</title>
     <link rel="stylesheet" href="./css/style.css" />
     <link
@@ -15,21 +20,21 @@
     <header>
       <div class="container">
         <div class="brand">
-          <a href="/"><h1>ProperyPro</h1></a>
+          <h1><a href="/">PropertyPro</a></h1>
         </div>
         <nav>
           <ul>
             <li><a href="dashboard.html">Dashboard</a></li>
             <li><a href="add-property.html">New Ads</a></li>
-            <li><a href="favourite">My Favourite</a></li>
+            <li><a href="favourite.html">My Favourite</a></li>
             <li><a href="edit-profile.html">Update Profile</a></li>
             <li class="dropdown">
               <a href="javascript:void(0)" class="dropbtn">Admin</a>
               <div class="dropdown-content">
-                <a href="manage-dealtype.html">Manage Ads type</a>
+                <a href="manage-dealtype.html">Ads Types/Deals</a>
                 <a href="manage-ads.html">Manage Ads</a>
                 <a href="manage-user.html">Manage Users</a>
-                <a href="#">Reported Issues</a>
+                <a href="manage-report.html">Reported Issues</a>
               </div>
             </li>
             <li><a href="signin.html">Sign Out</a></li>
@@ -41,17 +46,22 @@
     <main class="m-20">
       <div class="container">
         <p class=" lead text-success">
-          <i class="fas fa-user"></i> Welcome John Doe
+          <i class="fas fa-user"></i> <span class="hide-sm"></span> Welcome John
+          Doe
         </p>
 
-        <h2 class="my-2 lead text-primary">Manage Advert Type</h2>
-        <button class="btn btn-success" id="btnAddType">
-          <i class="fas fa-plus"></i> Add new advert type
-        </button>
-        <table class="table mt-20">
+        <div class="mb-20">
+          <div class="mb-20 mt-30">
+            <span class="lead text-primary">Manage Ads Types</span>
+          </div>
+          <button class="btn btn-success" id="btnAddType">
+            <i class="fas fa-plus"></i> Add new advert type
+          </button>
+        </div>
+        <table class="table">
           <thead>
             <tr>
-              <th>Types</th>
+              <th>Ads Type</th>
               <th class="hide-sm">Description</th>
               <th></th>
               <th></th>
@@ -59,45 +69,60 @@
           </thead>
           <tbody>
             <tr>
-              <td>2 Bedroom</td>
-              <td class="hide-sm">2 Bedroom apartments</td>
+              <td>2 bedroom</td>
+              <td class="hide-sm">2 bedroom apartments</td>
               <td>
-                <a href="property-details.html" class="btn btn-primary"
-                  ><i class="far fa-edit"></i> Edit</a
-                >
+                <a
+                  href="property-details.html"
+                  title="Click to edit"
+                  class="btn btn-primary btn-sm"
+                  ><i class="fa fa-edit"></i>
+                  <span class="hide-sm">Edit</span>
+                </a>
               </td>
               <td>
-                <button class="btn btn-danger">
-                  <i class="far fa-trash-alt"></i> Remove
+                <button title="Remove this item" class="btn btn-danger btn-sm">
+                  <i class="far fa-trash-alt"></i>
+                  <span class="hide-sm">Remove</span>
                 </button>
               </td>
             </tr>
             <tr>
-              <td>3 Bedroom</td>
-              <td class="hide-sm">3 Bedroom apartments</td>
+              <td>3 bedroom</td>
+              <td class="hide-sm">3 bedroom apartments</td>
               <td>
-                <a href="property-details.html" class="btn btn-primary"
-                  ><i class="far fa-edit"></i> Edit</a
-                >
+                <a
+                  href="property-details.html"
+                  title="Click to edit"
+                  class="btn btn-primary btn-sm"
+                  ><i class="fa fa-edit"></i>
+                  <span class="hide-sm">Edit </span>
+                </a>
               </td>
               <td>
-                <button class="btn btn-danger">
-                  <i class="far fa-trash-alt"></i> Remove
+                <button title="Remove this item" class="btn btn-danger btn-sm">
+                  <i class="far fa-trash-alt"></i>
+                  <span class="hide-sm">Remove</span>
                 </button>
               </td>
             </tr>
           </tbody>
         </table>
-        <hr class="text-success mt-30" style="border: 2px  solid #ddd" />
-
-        <h2 class="my-2 lead text-primary">Manage Deals</h2>
-        <button class="btn btn-success" id="btnAddDeal">
-          <i class="fas fa-plus"></i> Add new deal
-        </button>
-        <table class="table mt-20">
+      </div>
+      <hr class="mt-30" />
+      <div class="container">
+        <div class="mb-20">
+          <div class="mb-20 mt-30">
+            <span class="lead text-primary">Manage Ads Deals</span>
+          </div>
+          <button class="btn btn-success" id="btnAddDeal">
+            <i class="fas fa-plus"></i> Add new deals
+          </button>
+        </div>
+        <table class="table">
           <thead>
             <tr>
-              <th>Deal</th>
+              <th>Deal Type</th>
               <th class="hide-sm">Description</th>
               <th></th>
               <th></th>
@@ -105,30 +130,37 @@
           </thead>
           <tbody>
             <tr>
-              <td>For Rent</td>
-              <td class="hide-sm">Properties placed for rent</td>
+              <td>For rent</td>
+              <td class="hide-sm">Properties for rent</td>
               <td>
-                <a href="property-details.html" class="btn btn-primary"
-                  ><i class="far fa-edit"></i> Edit</a
-                >
+                <a href="#" title="Click to edit" class="btn btn-primary btn-sm"
+                  ><i class="fa fa-edit"></i>
+                  <span class="hide-sm">Edit</span>
+                </a>
               </td>
               <td>
-                <button class="btn btn-danger">
-                  <i class="far fa-trash-alt"></i> Remove
+                <button title="Remove this item" class="btn btn-danger btn-sm">
+                  <i class="far fa-trash-alt"></i>
+                  <span class="hide-sm">Remove</span>
                 </button>
               </td>
             </tr>
             <tr>
-              <td>For Sale</td>
-              <td class="hide-sm">Properties placed for sale</td>
+              <td>For</td>
+              <td class="hide-sm">Properties for sale</td>
               <td>
-                <a href="property-details.html" class="btn btn-primary"
-                  ><i class="far fa-edit"></i> Edit</a
-                >
+                <a
+                  href="property-details.html"
+                  title="Click to edit"
+                  class="btn btn-primary btn-sm"
+                  ><i class="fa fa-edit"></i>
+                  <span class="hide-sm">Edit</span>
+                </a>
               </td>
               <td>
-                <button class="btn btn-danger">
-                  <i class="far fa-trash-alt"></i> Remove
+                <button title="Remove this item" class="btn btn-danger btn-sm">
+                  <i class="far fa-trash-alt"></i>
+                  <span class="hide-sm">Remove</span>
                 </button>
               </td>
             </tr>
@@ -198,7 +230,7 @@
     </div>
 
     <footer>
-      <p>All right reserved ProperyPro &copy; 2019</p>
+      <p>All right reserved PropertyPro &copy; 2019</p>
     </footer>
     <script src="./js/main.js"></script>
     <script>
@@ -217,7 +249,7 @@
 
       buttons.forEach(button => {
         button.addEventListener("click", ({ target }) => {
-          if (confirm("Do you want to remove this property")) {
+          if (confirm("Do you want to remove this item")) {
             document.removeChild(button.parentNode.parentNode.remove());
           }
         });

@@ -17,6 +17,7 @@ h2 {
 }
 a {
   text-decoration: none;
+  padding: 10px;
 }
 header {
   background: #35424a;
@@ -24,6 +25,9 @@ header {
   padding-top: 35px;
   min-height: 70px;
   border-bottom: 2px solid #0f4;
+}
+header h1 {
+  font-size: 1.7em;
 }
 /* header section */
 header a {
@@ -33,7 +37,7 @@ header a {
 }
 
 header ul {
-  margin-top: 15px;
+  margin-top: 12px;
 }
 header li {
   display: inline-block;
@@ -47,7 +51,6 @@ header nav {
   float: right;
 }
 li a:hover,
-a:hover,
 .dropdown:hover .dropbtn {
   color: rgb(8, 41, 39);
   font-weight: bold;
@@ -108,38 +111,49 @@ li.dropdown {
 }
 
 /*  filter property section */
+.search-fields {
+  float: left;
+  width: 100%;
+}
 .filter-property {
   padding: 5px;
   background: #35424a;
   color: #fff;
 }
 
-.search-fields input[type="text"],
-.search-fields select {
-  float: left;
+.filter-property input[type="text"],
+.filter-property select {
   padding: 6px;
-  width: 26%;
   font-size: inherit;
   margin-bottom: 10px;
-  margin-top: 8px;
   margin-right: 10px;
   border: 1px solid #ccc;
+}
+.filter-property .top input[type="text"] {
+  width: 65%;
+}
+.filter-property .bottom input[type="text"] {
+  width: 58%;
+}
+.filter-property select {
+  width: 30%;
 }
 .search-container {
   float: right;
   width: 60%;
   text-align: right;
+  padding: 10px;
 }
 .search-container button {
   float: right;
-  padding: 4px 10px;
+  padding: 6px 10px;
   background: #ddd;
   font-size: 16px;
   border: none;
   cursor: pointer;
 }
 .search-container input[type="text"] {
-  padding: 6px;
+  padding: 8px;
   font-size: 16px;
   width: 70%;
   border: 1px solid #ddd;
@@ -397,7 +411,7 @@ li.dropdown {
 .form select,
 .form textarea {
   display: block;
-  width: 100%;
+  width: 60%;
   padding: 0.4rem;
   font-size: 15px;
   border: 1px solid #ccc;
@@ -407,7 +421,15 @@ li.dropdown {
 button {
   font: inherit;
 }
-
+.modal-body .form input[type="text"],
+.modal-body .form input[type="email"],
+.modal-body .form input[type="password"],
+.modal-body .form input[type="date"],
+.modal-body .form input[type="file"],
+.modal-body .form select,
+.modal-body .form textarea {
+  width: 100%;
+}
 /* Pagination */
 .pagination {
   display: inline-block;
@@ -474,7 +496,7 @@ th {
 .modal-content {
   margin: auto;
   background: #fefefe;
-  width: 70%;
+  width: 50%;
   -webkit-animation-name: slideIn;
   -webkit-animation-duration: 0.4s;
   animation-name: slideIn;
@@ -641,8 +663,8 @@ footer {
 /* Text Styles*/
 
 .lead {
-  font-size: 1.3rem;
-  margin-bottom: 15px;
+  font-size: 1.6rem;
+  margin-bottom: 8px;
 }
 
 .text-center {
@@ -674,10 +696,14 @@ footer {
 .inline-block {
   display: block;
 }
-.clearfix {
-  content: "";
-  clear: both;
-  display: table;
+.icon-90deg {
+  transform: rotate(90deg);
+}
+.icon-20 {
+  font-size: 1.28rem;
+}
+.icon-19 {
+  font-size: 19px;
 }
 @media only screen and (max-width: 1304px) {
   .property-details {
@@ -694,6 +720,9 @@ footer {
   .property-agent {
     width: 22%;
   }
+  .filter-property .bottom input[type="text"] {
+    width: 57%;
+  }
 }
 @media only screen and (max-width: 1150px) {
   .property {
@@ -708,6 +737,21 @@ footer {
   }
 }
 @media only screen and (max-width: 953px) {
+  .filter-property .bottom input[type="text"] {
+    width: 55.5%;
+  }
+  .form input[type="text"],
+  .form input[type="email"],
+  .form input[type="password"],
+  .form input[type="date"],
+  .form input[type="file"],
+  .form select,
+  .form textarea {
+    width: 100%;
+  }
+  .modal-content {
+    width: 80%;
+  }
   .property-details {
     width: 64%;
   }
@@ -721,20 +765,22 @@ footer {
     margin: 6px 0;
   }
   .property-details {
-    width: 54%;
+    width: 52%;
   }
   .property-agent {
     width: auto;
   }
-  .search-fields input[type="text"],
-  .search-fields select {
-    width: 24%;
+  .filter-property .bottom input[type="text"] {
+    width: 54%;
+  }
+  .filter-property input[type="text"],
+  .filter-property select {
+    width: 27%;
   }
 }
 @media only screen and (max-width: 680px) {
   header {
     padding-top: 0;
-    padding-left: 15px;
   }
   header nav {
     float: none;
@@ -749,34 +795,32 @@ footer {
     margin-top: 4px;
   }
   .property-details {
-    width: 57%;
+    width: 51.5%;
   }
   .property-agent {
     width: auto;
   }
-  .container {
-    width: 100%;
-  }
-
-  .search-fields,
+  .filter-property,
   .filter-property h2 {
     padding-left: 0;
   }
-  .search-fields input[type="text"],
-  .search-fields select {
+  .filter-property .top input[type="text"],
+  .filter-property .bottom input[type="text"],
+  .filter-property select {
     float: none;
     display: block;
     text-align: left;
     width: 100%;
+    margin-right: 10px;
     margin-bottom: 10px;
     padding: 14px;
   }
 
-  .search-fields input[type="text"],
-  .search-fields select {
+  .filter-property input[type="text"],
+  .filter-property select {
     border: 1px solid #ccc;
   }
-  .search-fields input[type="submit"] {
+  .filter-property input[type="submit"] {
     display: block;
     width: 100%;
     float: none;
@@ -786,7 +830,7 @@ footer {
   }
 }
 
-@media only screen and (max-width: 624px) {
+@media only screen and (max-width: 670px) {
   .breadcum {
     background: url("../img/breadcrum.jpg") no-repeat -200px -90px;
   }
@@ -849,6 +893,6 @@ footer {
     padding: 0;
   }
   .pagination a {
-    padding: 4px 6px;
+    padding: 4px 8px;
   }
 }
