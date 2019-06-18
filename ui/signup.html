@@ -43,7 +43,17 @@
           profile stand out
         </p>
         <small>* = required field</small>
-        <form class="form">
+        <form class="form mt-30">
+          <div class="form">
+            <small class="form-text">Profile photo</small>
+            <img
+              class="image-preview"
+              width="200"
+              src="./img/placeholder-person.jpg"
+              alt="your image"
+            />
+            <input type="file" onchange="readURL(this);" />
+          </div>
           <div class="form-group">
             <input type="text" placeholder="Email" name="email" />
           </div>
