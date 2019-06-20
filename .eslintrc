@@ -1,0 +1,18 @@
+{
+  "extends": ["airbnb"],
+  "env": {
+    "node": true,
+    "browser": true,
+    "es6": true,
+    "jasmine": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 6
+  },
+  "rules": {
+    "linebreak-style": "off",
+    "class-methods-use-this": "off",
+    "comma-dangle": ["error", "never"],
+    "arrow-body-style": "off"
+  }
+}

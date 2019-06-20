@@ -1,0 +1,44 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "v1",
+    "title": "Property-Pro-Lite API",
+    "description": "This is the API Documentation for Property Pro Lite - Property Pro Lite is a platform where people can create and/or search properties for sale or rent.",
+    "contact": {
+      "name": "Samuel Koroh",
+      "email": "samuelkoroh@gmail.com"
+    }
+  },
+  "schemes": ["http"],
+  "host": "localhost:3500",
+  "basePath": "/api/v1",
+  "paths": {
+    "/users": {
+      "get": {
+        "summary": "Get all users",
+        "description": "It return all the users of the system",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "required": ["id", "name"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "John Doe"
+                  },
+                  "id": {
+                    "type": "number",
+                    "example": "1"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
