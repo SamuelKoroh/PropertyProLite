@@ -4,8 +4,5 @@ node_js:
 cache:
   directories:
     - 'node_modules'
-jobs:
-  include:
-    - stage: Produce Coverage
-      node_js: node
-      script: istanbul cover jasmine-node --captureExceptions spec/ && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
+after_success:
+  - coveralls
