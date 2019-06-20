@@ -20,7 +20,7 @@
     <header>
       <div class="container">
         <div class="brand">
-          <h1><a href="/">PropertyPro</a></h1>
+          <h1><a href="index.html">PropertyPro</a></h1>
         </div>
         <nav>
           <ul>
@@ -120,11 +120,11 @@
     </footer>
     <script src="./js/main.js"></script>
     <script>
-      let imgPreview = document.querySelector("#img_preview");
-      let propertyImage = document.querySelector("#property_image");
-      propertyImage.addEventListener("change", async ({ target }) => {
+      let imgPreview = document.querySelector('#img_preview');
+      let propertyImage = document.querySelector('#property_image');
+      propertyImage.addEventListener('change', async ({ target }) => {
         console.log(target.files[0]);
-        await imgPreview.setAttribute("src", target.files[0]);
+        await imgPreview.setAttribute('src', target.files[0]);
       });
     </script>
   </body>

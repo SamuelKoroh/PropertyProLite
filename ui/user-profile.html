@@ -20,7 +20,7 @@
     <header>
       <div class="container">
         <div class="brand">
-          <h1><a href="/">PropertyPro</a></h1>
+          <h1><a href="index.html">PropertyPro</a></h1>
         </div>
         <nav>
           <ul>
@@ -45,6 +45,16 @@
             </tr>
           </thead>
           <tbody>
+            <tr>
+              <td colspan="2">
+                <img
+                  class="image-preview"
+                  height="120"
+                  src="./img/placeholder-person.jpg"
+                  alt="your image"
+                />
+              </td>
+            </tr>
             <tr>
               <td>Names</td>
               <td>Clark Kent</td>
@@ -155,11 +165,11 @@
     </main>
 
     <script>
-      let buttons = document.querySelectorAll(".btn-danger");
+      let buttons = document.querySelectorAll('.btn-danger');
       console.log(buttons);
       buttons.forEach(button => {
-        button.addEventListener("click", ({ target }) => {
-          if (confirm("Do you want to remove this user")) {
+        button.addEventListener('click', ({ target }) => {
+          if (confirm('Do you want to remove this user')) {
             document.removeChild(button.parentNode.parentNode.remove());
           }
         });

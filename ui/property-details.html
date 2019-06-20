@@ -20,7 +20,7 @@
     <header>
       <div class="container">
         <div class="brand">
-          <h1><a href="/">PropertyPro</a></h1>
+          <h1><a href="index.html">PropertyPro</a></h1>
         </div>
         <nav>
           <ul>
@@ -70,15 +70,17 @@
         <div class="property-agent ">
           <h2 class="text-success">Contact Agent</h2>
           <div class="mt-10">
-            <a href="#" title="View Profile" class="agent-name">John Doe</a>
+            <a href="user-profile.html" title="View Profile" class="agent-name"
+              >John Doe</a
+            >
           </div>
           <div class="mt-10 text-primary agent-contact">
-            <span
-              ><i class="fa fa-phone icon-90deg icon-19"></i
+            <span title="Click to reveal number" class="contact-number"
+              ><i class="fa fa-phone icon-90deg icon-19 "></i
               >+234803*******</span
             >
             <a
-              href="https://api.whatsapp.com/send?phone=2348037909699&text=%22I%27m%20interested%20in%20this%20property%22"
+              href="https://api.whatsapp.com/send?phone=2348037909699&text=I%27m%20interested%20in%20this%20property"
               target="_blank"
               rel="noreferrer"
               ><span class="whatsapp"> <i class="fab fa-whatsapp"></i> </span
@@ -165,7 +167,7 @@
 
       function showSlides(n) {
         var i;
-        var slides = document.querySelectorAll(".mySlides");
+        var slides = document.querySelectorAll('.mySlides');
 
         if (n > slides.length) {
           slideIndex = 1;
@@ -174,16 +176,22 @@
           slideIndex = slides.length;
         }
         for (i = 0; i < slides.length; i++) {
-          slides[i].style.display = "none";
+          slides[i].style.display = 'none';
         }
 
-        slides[slideIndex - 1].style.display = "block";
+        slides[slideIndex - 1].style.display = 'block';
       }
-      let modal = document.querySelector("#report-modal");
-      let btn = document.querySelector("#invoke-modal");
-      let span = document.querySelector("span.close");
+      let modal = document.querySelector('#report-modal');
+      let btn = document.querySelector('#invoke-modal');
+      let span = document.querySelector('span.close');
       useModal(modal, btn, span);
-      myMap("Andela, Epic Tower 235 Ikorodu Rd Ilupeju Lagos Nigeria");
+      myMap('Andela, Epic Tower 235 Ikorodu Rd Ilupeju Lagos Nigeria');
+
+      let contactNumber = document.querySelector('span.contact-number');
+      contactNumber.addEventListener('click', ({ target }) => {
+        target.innerHTML =
+          '<i class="fa fa-phone icon-90deg icon-19 "></i>+2348037890083';
+      });
     </script>
   </body>
 </html>

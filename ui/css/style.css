@@ -7,7 +7,7 @@ h2 {
   padding: 0;
 }
 html {
-  font: 1em/ 1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font: 1em/ 1.5 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 body {
   position: relative;
@@ -87,7 +87,7 @@ li.dropdown {
 .breadcum {
   min-height: 500px;
   color: #fff;
-  background: url("../img/breadcrum.jpg") no-repeat 0 -100px;
+  background: url('../img/breadcrum.jpg') no-repeat 0 -100px;
   text-align: center;
   position: relative;
 }
@@ -121,7 +121,7 @@ li.dropdown {
   color: #fff;
 }
 
-.filter-property input[type="text"],
+.filter-property input[type='text'],
 .filter-property select {
   padding: 6px;
   font-size: inherit;
@@ -129,10 +129,10 @@ li.dropdown {
   margin-right: 10px;
   border: 1px solid #ccc;
 }
-.filter-property .top input[type="text"] {
+.filter-property .top input[type='text'] {
   width: 65%;
 }
-.filter-property .bottom input[type="text"] {
+.filter-property .bottom input[type='text'] {
   width: 58%;
 }
 .filter-property select {
@@ -152,7 +152,7 @@ li.dropdown {
   border: none;
   cursor: pointer;
 }
-.search-container input[type="text"] {
+.search-container input[type='text'] {
   padding: 8px;
   font-size: 16px;
   width: 70%;
@@ -230,6 +230,7 @@ li.dropdown {
 .property-agent .agent-name {
   font-size: 20px;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .whatsapp {
@@ -403,11 +404,11 @@ li.dropdown {
   color: #888;
 }
 
-.form input[type="text"],
-.form input[type="email"],
-.form input[type="password"],
-.form input[type="date"],
-.form input[type="file"],
+.form input[type='text'],
+.form input[type='email'],
+.form input[type='password'],
+.form input[type='date'],
+.form input[type='file'],
 .form select,
 .form textarea {
   display: block;
@@ -417,15 +418,15 @@ li.dropdown {
   border: 1px solid #ccc;
 }
 
-.form input[type="submit"],
+.form input[type='submit'],
 button {
   font: inherit;
 }
-.modal-body .form input[type="text"],
-.modal-body .form input[type="email"],
-.modal-body .form input[type="password"],
-.modal-body .form input[type="date"],
-.modal-body .form input[type="file"],
+.modal-body .form input[type='text'],
+.modal-body .form input[type='email'],
+.modal-body .form input[type='password'],
+.modal-body .form input[type='date'],
+.modal-body .form input[type='file'],
 .modal-body .form select,
 .modal-body .form textarea {
   width: 100%;
@@ -720,7 +721,7 @@ footer {
   .property-agent {
     width: 22%;
   }
-  .filter-property .bottom input[type="text"] {
+  .filter-property .bottom input[type='text'] {
     width: 57%;
   }
 }
@@ -737,14 +738,14 @@ footer {
   }
 }
 @media only screen and (max-width: 953px) {
-  .filter-property .bottom input[type="text"] {
+  .filter-property .bottom input[type='text'] {
     width: 55.5%;
   }
-  .form input[type="text"],
-  .form input[type="email"],
-  .form input[type="password"],
-  .form input[type="date"],
-  .form input[type="file"],
+  .form input[type='text'],
+  .form input[type='email'],
+  .form input[type='password'],
+  .form input[type='date'],
+  .form input[type='file'],
   .form select,
   .form textarea {
     width: 100%;
@@ -768,12 +769,13 @@ footer {
     width: 52%;
   }
   .property-agent {
+    padding: 5px;
     width: auto;
   }
-  .filter-property .bottom input[type="text"] {
+  .filter-property .bottom input[type='text'] {
     width: 54%;
   }
-  .filter-property input[type="text"],
+  .filter-property input[type='text'],
   .filter-property select {
     width: 27%;
   }
@@ -795,17 +797,18 @@ footer {
     margin-top: 4px;
   }
   .property-details {
-    width: 51.5%;
+    width: 49%;
   }
   .property-agent {
+    padding: 5px;
     width: auto;
   }
   .filter-property,
   .filter-property h2 {
     padding-left: 0;
   }
-  .filter-property .top input[type="text"],
-  .filter-property .bottom input[type="text"],
+  .filter-property .top input[type='text'],
+  .filter-property .bottom input[type='text'],
   .filter-property select {
     float: none;
     display: block;
@@ -816,11 +819,11 @@ footer {
     padding: 14px;
   }
 
-  .filter-property input[type="text"],
+  .filter-property input[type='text'],
   .filter-property select {
     border: 1px solid #ccc;
   }
-  .filter-property input[type="submit"] {
+  .filter-property input[type='submit'] {
     display: block;
     width: 100%;
     float: none;
@@ -832,7 +835,7 @@ footer {
 
 @media only screen and (max-width: 670px) {
   .breadcum {
-    background: url("../img/breadcrum.jpg") no-repeat -200px -90px;
+    background: url('../img/breadcrum.jpg') no-repeat -200px -90px;
   }
 
   .breadcum h2 {
@@ -868,7 +871,7 @@ footer {
     width: 100%;
     text-align: left;
   }
-  .search-container input[type="text"] {
+  .search-container input[type='text'] {
     float: none;
     display: block;
     width: 100%;
