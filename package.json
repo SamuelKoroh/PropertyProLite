@@ -7,7 +7,6 @@
     "start": "node ./build-server/app.js",
     "build": "babel -d ./build-server ./server",
     "dev": "nodemon --watch server --exec babel-node ./server/app.js",
-    "test-init": "node ./node_modules/jasmine/bin/jasmine.js init",
     "test:server": "./node_modules/.bin/mocha --require @babel/register server/test/*",
     "test": "nyc npm run test:server && nyc report --reporter=lcov --reporter=text-lcov | coveralls"
   },
