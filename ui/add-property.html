@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta
+      name="description"
+      content="Property Pro Lite is a platform where people can create and/or
+    search properties for sale or rent."
+    />
     <title>Welcome to Property Pro</title>
     <link rel="stylesheet" href="./css/style.css" />
     <link
@@ -15,16 +20,24 @@
     <header>
       <div class="container">
         <div class="brand">
-          <h1>ProperyPro</h1>
+          <h1><a href="index.html">PropertyPro</a></h1>
         </div>
         <nav>
           <ul>
-            <ul>
-              <li><a href="dashboard.html">Dashboard</a></li>
-              <li><a href="edit-profile.html">Update Profile</a></li>
-              <li><a href="add-property.html">New Property</a></li>
-              <li><a href="signin.html">Sign Out</a></li>
-            </ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="add-property.html">New Ads</a></li>
+            <li><a href="favourite.html">My Favourite</a></li>
+            <li><a href="edit-profile.html">Update Profile</a></li>
+            <li class="dropdown">
+              <a href="javascript:void(0)" class="dropbtn">Admin</a>
+              <div class="dropdown-content">
+                <a href="manage-dealtype.html">Ads Types/Deals</a>
+                <a href="manage-ads.html">Manage Ads</a>
+                <a href="manage-user.html">Manage Users</a>
+                <a href="manage-report.html">Reported Issues</a>
+              </div>
+            </li>
+            <li><a href="signin.html">Sign Out</a></li>
           </ul>
         </nav>
       </div>
@@ -32,9 +45,9 @@
 
     <main class="m-20">
       <div class="container">
-        <h1 class="large text-primary">
+        <h2 class="lead text-primary">
           New:- Property Listing
-        </h1>
+        </h2>
         <p class="lead">
           <i class="fas fa-user"></i> Please provide accurate information about
           the property
@@ -47,8 +60,8 @@
           <div class="form-group pr-0">
             <select name="status">
               <option disabled selected>Property Type</option>
-              <option value="Developer">2 Bedroom</option>
-              <option value="Junior Developer">3 Bedroom</option>
+              <option value="2bedroom">2 Bedroom</option>
+              <option value="3bedroom">3 Bedroom</option>
             </select>
           </div>
           <div class="form-group pr-0">
@@ -70,9 +83,22 @@
           <div class="form-group">
             <input type="text" placeholder="Price" name="price" />
           </div>
+          <div class="form-group pr-0">
+            <select name="status">
+              <option disabled selected>Billing Type</option>
+              <option value="rent">per month</option>
+              <option value="rent">per quarterly</option>
+              <option value="rent">per year</option>
+              <option value="sale">one time payment</option>
+            </select>
+          </div>
           <div class="form-group">
-            <img src="" id="img_preview" alt="Image Preview" width="200" />
-            <input type="file" id="property_image" name="property_image" />
+            <input
+              type="file"
+              id="property_image"
+              name="property_image"
+              multiple
+            />
             <small class="form-text"
               >Select one or more image(s) to upload</small
             >
@@ -84,21 +110,21 @@
               rows="7"
             ></textarea>
           </div>
-          <input type="submit" class="btn btn-primary my-1" />
-          <a class="btn btn-light my-1" href="dashboard.html">Go Back</a>
+          <input type="submit" class="btn btn-primary btn-block mr-10" />
+          <a class="btn btn-link btn-block" href="dashboard.html">Go Back</a>
         </form>
       </div>
     </main>
     <footer>
-      <p>All right reserved ProperyPro &copy; 2019</p>
+      <p>All right reserved PropertyPro &copy; 2019</p>
     </footer>
     <script src="./js/main.js"></script>
     <script>
-      let imgPreview = document.querySelector("#img_preview");
-      let propertyImage = document.querySelector("#property_image");
-      propertyImage.addEventListener("change", async ({ target }) => {
+      let imgPreview = document.querySelector('#img_preview');
+      let propertyImage = document.querySelector('#property_image');
+      propertyImage.addEventListener('change', async ({ target }) => {
         console.log(target.files[0]);
-        await imgPreview.setAttribute("src", target.files[0]);
+        await imgPreview.setAttribute('src', target.files[0]);
       });
     </script>
   </body>

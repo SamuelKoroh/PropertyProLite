@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta
+      name="description"
+      content="Property Pro Lite is a platform where people can create and/or
+    search properties for sale or rent."
+    />
     <title>Welcome to Property Pro</title>
     <link rel="stylesheet" href="./css/style.css" />
     <link
@@ -15,7 +20,7 @@
     <header>
       <div class="container">
         <div class="brand">
-          <h1>ProperyPro</h1>
+          <h1><a href="index.html">PropertyPro</a></h1>
         </div>
         <nav>
           <ul>
@@ -38,7 +43,17 @@
           profile stand out
         </p>
         <small>* = required field</small>
-        <form class="form">
+        <form class="form mt-30">
+          <div class="form">
+            <small class="form-text">Profile photo</small>
+            <img
+              class="image-preview"
+              width="200"
+              src="./img/placeholder-person.jpg"
+              alt="your image"
+            />
+            <input type="file" onchange="readURL(this);" />
+          </div>
           <div class="form-group">
             <input type="text" placeholder="Email" name="email" />
           </div>
@@ -70,13 +85,24 @@
             />
           </div>
 
-          <input type="submit" class="btn btn-primary my-1" />
+          <input
+            type="submit"
+            id="btnSignUp"
+            class="btn btn-primary btn-block"
+          />
         </form>
       </div>
     </main>
     <footer>
-      <p>All right reserved ProperyPro &copy; 2019</p>
+      <p>All right reserved PropertyPro &copy; 2019</p>
     </footer>
     <script src="./js/main.js"></script>
+    <script>
+      let btn = document.querySelector("#btnSignUp");
+      btnSignUp.addEventListener("click", e => {
+        e.preventDefault();
+        window.location.href = "signin.html";
+      });
+    </script>
   </body>
 </html>

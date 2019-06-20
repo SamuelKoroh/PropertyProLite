@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta
+      name="description"
+      content="Property Pro Lite is a platform where people can create and/or
+    search properties for sale or rent."
+    />
     <title>Welcome to Property Pro</title>
     <link rel="stylesheet" href="./css/style.css" />
   </head>
@@ -11,7 +16,7 @@
     <header>
       <div class="container">
         <div class="brand">
-          <h1>ProperyPro</h1>
+          <h1><a href="index.html">PropertyPro</a></h1>
         </div>
         <nav>
           <ul>
@@ -36,30 +41,37 @@
     </section>
     <section class="filter-property">
       <div class="container">
-        <h2 class="text-primary">Search Properties</h2>
-        <div class="search-fields">
-          <input
-            type="text"
-            placeholder="Enter location e.g state, city"
-            name="location"
-          />
+        <h2>Search Properties</h2>
+        <div class="search-fields top">
           <select name="status">
             <option value="0">Filter by deals</option>
             <option value="sale">For Sale</option>
             <option value="rent">For Rent</option>
           </select>
+          <input
+            type="text"
+            placeholder="Enter location e.g state, city"
+            name="location"
+          />
+        </div>
+        <div class="search-fields bottom">
           <select name="status">
             <option disabled selected>Filtered by type</option>
             <option value="2bedroom">2 Bedroom</option>
             <option value="3bedroom">3 Bedroom</option>
           </select>
-          <input type="submit" class="btn btn-success mt-7 mb-20" />
+          <input type="text" placeholder="Max price" name="price" />
+          <input
+            id="btnSearch"
+            type="submit"
+            class="btn btn-success mt-7 mb-10"
+          />
         </div>
       </div>
     </section>
     <main class="m-20">
       <div class="container">
-        <h2 class="mt-20 mb-20 text-primary">For Rent</h2>
+        <h1 class="mt-20 text-primary">For Rent</h1>
         <div class="property">
           <div class="property-detail">
             <a href="property-details.html">
@@ -165,7 +177,7 @@
         </div>
       </div>
       <div class="container">
-        <h2 class="mt-20 mb-20 text-primary">For Sale</h2>
+        <h1 class="mt-20 text-primary">For Sale</h1>
         <div class="property">
           <div class="property-detail">
             <a href="property-details.html">
@@ -271,7 +283,7 @@
       </div>
     </main>
     <footer>
-      <p>All right reserved ProperyPro &copy; 2019</p>
+      <p>All right reserved PropertyPro &copy;2019</p>
     </footer>
     <script src="./js/main.js"></script>
   </body>
