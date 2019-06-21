@@ -5,7 +5,6 @@
     "title": "Property-Pro-Lite API",
     "description": "This is the API Documentation for Property Pro Lite - Property Pro Lite is a platform where people can create and/or search properties for sale or rent.",
     "contact": {
-      "name": "Samuel Koroh",
       "email": "samuelkoroh@gmail.com"
     }
   },
@@ -13,6 +12,124 @@
   "host": "localhost:3500",
   "basePath": "/api/v1",
   "paths": {
+    "/auth/signup": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Create new user",
+        "description": "Create new user by sending profile data (e.g image optional, user details ). most fields are reuired",
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "formData",
+            "required": true
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "required": true
+          },
+          {
+            "name": "first_name",
+            "in": "formData",
+            "required": true
+          },
+          {
+            "name": "last_name",
+            "in": "formData",
+            "required": true
+          },
+          {
+            "name": "phone_number",
+            "in": "formData",
+            "required": true
+          },
+          {
+            "name": "address",
+            "in": "formData",
+            "required": true
+          },
+          {
+            "name": "user_type",
+            "in": "formData",
+            "required": true
+          },
+          {
+            "name": "image",
+            "in": "formData",
+            "type": "file",
+            "required": false
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+                    },
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "username@email.com"
+                    },
+                    "first_name": {
+                      "type": "string"
+                    },
+                    "last_name": {
+                      "type": "string"
+                    },
+                    "phone_number": {
+                      "type": "string"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "image": {
+                      "type": "string"
+                    },
+                    "user_type": {
+                      "type": "string"
+                    },
+                    "is_admin": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "error": {
+                  "type": "string",
+                  "example": "This email has been registered already"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/users": {
       "get": {
         "summary": "Get all users",

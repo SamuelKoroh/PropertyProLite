@@ -1,0 +1,11 @@
+swagger: 2.0
+
+info:
+  version: 1.0.0
+  title: Simple API
+  description: A simple API to learn how to write OpenAPI Specification
+
+schemes:
+  - http
+host: localhost:3500
+basePath: /api/v1/

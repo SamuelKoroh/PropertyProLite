@@ -9,8 +9,7 @@ export const signupSchema = {
   last_name: Joi.string().required(),
   phone_number: Joi.string().required(),
   address: Joi.string().required(),
-  user_type: Joi.string(),
-  is_admin: Joi.boolean(),
+  user_type: Joi.string().required(),
   image: Joi.optional()
 };
 
