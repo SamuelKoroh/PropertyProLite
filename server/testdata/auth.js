@@ -1,5 +1,3 @@
-// import userImage from './solution2.png';
-
 export const validUser = {
   email: 'steve@gmail.com',
   password: 'secret',

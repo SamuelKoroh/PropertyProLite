@@ -26,7 +26,7 @@ describe('Auth', () => {
         expect(result.body.error).to.equal('This email has been registered already');
       });
     });
-    describe('Sign up without image been uploaded', () => {
+    describe('Sign up without profile image', () => {
       it('it should return status "success"', async () => {
         let result = await request(app)
           .post('/api/v1/auth/signup')
