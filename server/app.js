@@ -9,12 +9,15 @@ import './config/cloudinary';
 
 const app = express();
 
+app.use(helmet());
+if (app.get('env') === 'development') {
+  app.use(morgan('dev'));
+}
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(helmet());
-app.use(morgan('dev'));
+
 app.use('/api/v1', routes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-const port = process.env.PORT || 3500;
-app.listen(port, () => console.log(`Server listening on ${port}`));
+export default app;

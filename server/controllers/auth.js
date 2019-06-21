@@ -21,7 +21,7 @@ class Auth {
         .json({ status: 'error', error: errors.error.details[0].message });
     }
 
-    let user = Users.find(u => u.email === body.email);
+    let user = Users.find((u) => u.email === body.email);
     if (user) {
       return res.status(400).json({
         status: 'error',
@@ -46,7 +46,7 @@ class Auth {
 
       return res.status(201).json({ status: 'success', data });
     } catch (error) {
-      return res.send(error);
+      return res.status(500).json({ status: 'error', error: 'server error' });
     }
   }
 }
