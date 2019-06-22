@@ -8,7 +8,7 @@ chai.use(chaiHttp);
 
 describe('/api/v1/auth', () => {
   let user = '';
-  beforeEach(async () => {
+  before(async () => {
     user = await chai
       .request(app)
       .post('/api/v1/auth/signup')
