@@ -9,12 +9,15 @@
   "parserOptions": {
     "ecmaVersion": 6,
     "ecmaFeatures": {
-      "experimentalObjectRestSpread": true
+      "experimentalObjectRestSpread": true,
+      "arrowFunctions": true
     }
   },
+  "parser": "babel-eslint",
   "rules": {
     "linebreak-style": "off",
+    "class-methods-use-this": "off",
     "comma-dangle": ["error", "never"],
-    "no-undef": "off"
+    "arrow-body-style": "off"
   }
 }
