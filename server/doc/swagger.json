@@ -65,66 +65,64 @@
           "201": {
             "description": "Created",
             "schema": {
-              "properties": {
-                "status": {
-                  "type": "string",
-                  "example": "success"
-                },
-                "data": {
-                  "type": "object",
-                  "properties": {
-                    "token": {
-                      "type": "string",
-                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
-                    },
-                    "id": {
-                      "type": "integer",
-                      "example": 1
-                    },
-                    "email": {
-                      "type": "string",
-                      "example": "username@email.com"
-                    },
-                    "first_name": {
-                      "type": "string"
-                    },
-                    "last_name": {
-                      "type": "string"
-                    },
-                    "phone_number": {
-                      "type": "string"
-                    },
-                    "address": {
-                      "type": "string"
-                    },
-                    "image": {
-                      "type": "string"
-                    },
-                    "user_type": {
-                      "type": "string"
-                    },
-                    "is_admin": {
-                      "type": "boolean",
-                      "example": false
-                    }
-                  }
-                }
-              }
+              "$ref": "#definitions/Authenticated"
             }
           },
           "400": {
             "description": "Bad Request",
             "schema": {
+              "$ref": "#definitions/BadRequest"
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "schema": {
+              "$ref": "#definitions/BadRequest"
+            }
+          }
+        }
+      }
+    },
+    "/auth/signin": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Login a user",
+        "description": "Login using valid credential to gain access to your profile",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "valid login credentials",
+            "schema": {
               "properties": {
-                "status": {
-                  "type": "string",
-                  "example": "error"
+                "email": {
+                  "type": "string"
                 },
-                "error": {
-                  "type": "string",
-                  "example": "This email has been registered already"
+                "password": {
+                  "type": "string"
                 }
               }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "login successful",
+            "schema": {
+              "$ref": "#definitions/Authenticated"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#definitions/BadRequest"
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "schema": {
+              "$ref": "#definitions/BadRequest"
             }
           }
         }
@@ -154,6 +152,100 @@
               }
             }
           }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "properties": {
+        "id": {
+          "type": "integer",
+          "example": 1
+        },
+        "email": {
+          "type": "string",
+          "example": "username@email.com"
+        },
+        "first_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "phone_number": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string"
+        },
+        "user_type": {
+          "type": "string"
+        },
+        "is_admin": {
+          "type": "boolean",
+          "example": false
+        }
+      }
+    },
+    "Authenticated": {
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string",
+              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+            },
+            "id": {
+              "type": "integer",
+              "example": 1
+            },
+            "email": {
+              "type": "string",
+              "example": "username@email.com"
+            },
+            "first_name": {
+              "type": "string"
+            },
+            "last_name": {
+              "type": "string"
+            },
+            "phone_number": {
+              "type": "string"
+            },
+            "address": {
+              "type": "string"
+            },
+            "image": {
+              "type": "string"
+            },
+            "user_type": {
+              "type": "string"
+            },
+            "is_admin": {
+              "type": "boolean",
+              "example": false
+            }
+          }
+        }
+      }
+    },
+    "BadRequest": {
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "error"
+        },
+        "error": {
+          "type": "string"
         }
       }
     }
