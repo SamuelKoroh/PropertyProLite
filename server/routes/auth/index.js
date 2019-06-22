@@ -1,11 +1,10 @@
 import express from 'express';
-import Auth from '../../controllers/auth';
+import { signIn, signUp } from '../../controllers/auth';
 import multer from '../../middleware/multer';
 
-const auth = new Auth();
 const router = express.Router();
 
-router.post('/signup', multer.single('image'), auth.signUp);
-router.post('/signin', auth.signIn);
+router.post('/signup', multer.single('image'), signUp);
+router.post('/signin', signIn);
 
 export default router;
