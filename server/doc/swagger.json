@@ -238,6 +238,61 @@
         }
       }
     },
+    "Property": {
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "string"
+        },
+        "price": {
+          "type": "float"
+        },
+        "state": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "deal_type": {
+          "type": "string"
+        },
+        "billing_type": {
+          "type": "string"
+        },
+        "created_on": {
+          "type": "date"
+        },
+        "image_url": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "Properties": {
+      "type": "array",
+      "items": {
+        "$ref": "#definitions/Property"
+      }
+    },
     "BadRequest": {
       "properties": {
         "status": {

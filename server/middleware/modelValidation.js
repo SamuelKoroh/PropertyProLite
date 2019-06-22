@@ -19,3 +19,15 @@ export const signinSchema = {
     .required(),
   password: Joi.string().required()
 };
+
+export const createPropertySchema = {
+  title: Joi.string().required(),
+  price: Joi.number().required(),
+  state: Joi.string().required(),
+  city: Joi.string().required(),
+  address: Joi.string().required(),
+  type: Joi.string().required(),
+  billing_type: Joi.string().required(),
+  description: Joi.string().required(),
+  deal_type: Joi.string().required()
+};
