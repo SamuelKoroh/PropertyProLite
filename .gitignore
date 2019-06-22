@@ -2,3 +2,4 @@ node_modules
 build-server
 coverage
 .nyc_output
+.env
