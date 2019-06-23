@@ -14,7 +14,7 @@
   "paths": {
     "/auth/signup": {
       "post": {
-        "tags": ["Auth"],
+        "tags": ["Authentication"],
         "summary": "Create new user",
         "description": "Create new user by sending profile data (e.g image optional, user details ). most fields are reuired",
         "consumes": ["multipart/form-data"],
@@ -69,23 +69,17 @@
             }
           },
           "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#definitions/BadRequest"
-            }
+            "$ref": "#responses/Standard400Error"
           },
           "500": {
-            "description": "Server Error",
-            "schema": {
-              "$ref": "#definitions/BadRequest"
-            }
+            "$ref": "#responses/Standard500Error"
           }
         }
       }
     },
     "/auth/signin": {
       "post": {
-        "tags": ["Auth"],
+        "tags": ["Authentication"],
         "summary": "Login a user",
         "description": "Login using valid credential to gain access to your profile",
         "parameters": [
@@ -95,14 +89,7 @@
             "required": true,
             "description": "valid login credentials",
             "schema": {
-              "properties": {
-                "email": {
-                  "type": "string"
-                },
-                "password": {
-                  "type": "string"
-                }
-              }
+              "$ref": "#definitions/Login"
             }
           }
         ],
@@ -114,16 +101,109 @@
             }
           },
           "400": {
-            "description": "Bad Request",
-            "schema": {
-              "$ref": "#definitions/BadRequest"
-            }
+            "$ref": "#responses/Standard400Error"
           },
           "500": {
-            "description": "Server Error",
+            "$ref": "#responses/Standard500Error"
+          }
+        }
+      }
+    },
+    "/property": {
+      "post": {
+        "tags": ["Properties"],
+        "summary": "Creating new property",
+        "description": "Provide valid property details to create a new property",
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {
+            "$ref": "#parameters/x-auth-token"
+          },
+          {
+            "name": "title",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "price",
+            "in": "formData",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "state",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "city",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "address",
+            "in": "formData",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "type",
+            "in": "formData",
+            "type": "string",
+            "description": "property type include (e.g 2 bedroom, 3 bedroom)",
+            "required": true
+          },
+          {
+            "name": "billing_type",
+            "in": "formData",
+            "type": "string",
+            "description": "billing type include (e.g per year, one time payment)",
+            "required": true
+          },
+          {
+            "name": "deal_type",
+            "in": "formData",
+            "type": "string",
+            "description": "deal type include (e.g for sale, for rent)",
+            "required": true
+          },
+          {
+            "name": "description",
+            "in": "formData",
+            "type": "string",
+            "description": "details of the property",
+            "required": true
+          },
+          {
+            "name": "images",
+            "in": "formData",
+            "type": "file",
+            "multiple": true,
+            "description": "deal type include (e.g for sale, for rent)",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "created",
             "schema": {
-              "$ref": "#definitions/BadRequest"
+              "$ref": "#definitions/Property"
             }
+          },
+          "400": {
+            "$ref": "#responses/Standard400Error"
+          },
+          "401": {
+            "$ref": "#responses/Standard401Error"
+          },
+          "403": {
+            "$ref": "#responses/Standard403Error"
+          },
+          "500": {
+            "$ref": "#responses/Standard500Error"
           }
         }
       }
@@ -188,6 +268,10 @@
         "is_admin": {
           "type": "boolean",
           "example": false
+        },
+        "created_on": {
+          "type": "string",
+          "format": "date"
         }
       }
     },
@@ -233,8 +317,22 @@
             "is_admin": {
               "type": "boolean",
               "example": false
+            },
+            "created_on": {
+              "type": "string",
+              "format": "date"
             }
           }
+        }
+      }
+    },
+    "Login": {
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
         }
       }
     },
@@ -253,7 +351,7 @@
           "type": "string"
         },
         "price": {
-          "type": "float"
+          "type": "number"
         },
         "state": {
           "type": "string"
@@ -274,7 +372,8 @@
           "type": "string"
         },
         "created_on": {
-          "type": "date"
+          "type": "string",
+          "format": "date"
         },
         "image_url": {
           "type": "array",
@@ -287,13 +386,107 @@
         }
       }
     },
-    "Properties": {
-      "type": "array",
-      "items": {
-        "$ref": "#definitions/Property"
+    "GetProperty": {
+      "properties": {
+        "status": {
+          "type": "integer"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "status": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "address": {
+              "type": "string"
+            },
+            "price": {
+              "type": "number"
+            },
+            "created_on": {
+              "type": "string",
+              "format": "date"
+            },
+            "image_url": {
+              "type": "string"
+            },
+            "owner": {
+              "type": "string"
+            },
+            "ownerEmail": {
+              "type": "string"
+            },
+            "ownerPhoneNumber": {
+              "type": "string"
+            }
+          }
+        }
       }
     },
-    "BadRequest": {
+    "GetProperties": {
+      "properties": {
+        "status": {
+          "type": "integer"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "status": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              },
+              "city": {
+                "type": "string"
+              },
+              "address": {
+                "type": "string"
+              },
+              "price": {
+                "type": "number"
+              },
+              "created_on": {
+                "type": "string",
+                "format": "date"
+              },
+              "image_url": {
+                "type": "string"
+              },
+              "owner": {
+                "type": "string"
+              },
+              "ownerEmail": {
+                "type": "string"
+              },
+              "ownerPhoneNumber": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "Error": {
       "properties": {
         "status": {
           "type": "string",
@@ -303,6 +496,40 @@
           "type": "string"
         }
       }
+    }
+  },
+  "responses": {
+    "Standard400Error": {
+      "description": "Bad Request",
+      "schema": {
+        "$ref": "#definitions/Error"
+      }
+    },
+    "Standard401Error": {
+      "description": "Access Denied - Invalid access token",
+      "schema": {
+        "$ref": "#definitions/Error"
+      }
+    },
+    "Standard403Error": {
+      "description": "Access Forbidden - No authorize access",
+      "schema": {
+        "$ref": "#definitions/Error"
+      }
+    },
+    "Standard500Error": {
+      "description": "An unexpected error has occur",
+      "schema": {
+        "$ref": "#definitions/Error"
+      }
+    }
+  },
+  "parameters": {
+    "x-auth-token": {
+      "name": "x-auth-token",
+      "in": "header",
+      "type": "string",
+      "required": true
     }
   }
 }

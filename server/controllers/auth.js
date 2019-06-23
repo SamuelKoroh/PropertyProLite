@@ -16,9 +16,7 @@ const jwtSecret = process.env.JWT_SECRET;
 export const signUp = async ({ body, file }, res) => {
   const errors = Joi.validate(body, signupSchema);
   if (errors.error)
-    return res
-      .status(400)
-      .json({ status: 'error', error: errors.error.details[0].message });
+    return res.status(400).json({ status: 'error', error: errors.error.details[0].message });
 
   let user = Users.find(u => u.email === body.email);
   if (user) {
@@ -45,18 +43,12 @@ export const signUp = async ({ body, file }, res) => {
     }
 
     Users.push(user);
-    user.token = await jwt.sign(
-      _.pick(user, ['id', 'is_admin', 'user_type']),
-      jwtSecret,
-      {
-        expiresIn: 3600
-      }
-    );
-    return res
-      .status(201)
-      .json({ status: 'success', data: { ..._.omit(user, ['password']) } });
+    user.token = await jwt.sign(_.pick(user, ['id', 'is_admin', 'user_type']), jwtSecret, {
+      expiresIn: 3600
+    });
+    return res.status(201).json({ status: 'success', data: { ..._.omit(user, ['password']) } });
   } catch (error) {
-    return res.status(500).json({ status: 'error', error: 'server error' });
+    res.status(500).json({ status: 'error', error: 'server error' });
   }
 };
 
@@ -69,35 +61,25 @@ export const signIn = async ({ body }, res) => {
   try {
     const errors = Joi.validate(body, signinSchema);
     if (errors.error)
-      return res
-        .status(400)
-        .json({ status: 'error', error: errors.error.details[0].message });
+      return res.status(400).json({ status: 'error', error: errors.error.details[0].message });
 
     const user = Users.find(u => u.email === body.email);
     if (!user)
-      return res
-        .status(400)
-        .json({ status: 'error', error: 'Invalid username and password' });
+      return res.status(400).json({ status: 'error', error: 'Invalid username and password' });
 
     const validPassword = await bcrypt.compare(body.password, user.password);
     if (!validPassword)
-      return res
-        .status(400)
-        .json({ status: 'error', error: 'Invalid username and password' });
+      return res.status(400).json({ status: 'error', error: 'Invalid username and password' });
 
-    const token = await jwt.sign(
-      _.pick(user, ['id', 'is_admin', 'user_type']),
-      jwtSecret,
-      {
-        expiresIn: 3600
-      }
-    );
+    const token = await jwt.sign(_.pick(user, ['id', 'is_admin', 'user_type']), jwtSecret, {
+      expiresIn: 3600
+    });
 
     return res.status(200).json({
       status: 'success',
       data: { token, ..._.omit(user, ['password']) }
     });
   } catch (error) {
-    return res.status(500).json({ status: 'error', error });
+    res.status(500).json({ status: 'error', error });
   }
 };
