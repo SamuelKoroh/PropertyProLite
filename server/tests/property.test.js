@@ -9,6 +9,7 @@ chai.use(chaiHttp);
 describe('/api/v1/property', () => {
   let user = '';
   let agent = '';
+  let agent2 = '';
   before(async () => {
     user = await chai
       .request(app)
@@ -19,6 +20,11 @@ describe('/api/v1/property', () => {
       .request(app)
       .post('/api/v1/auth/signup')
       .send({ ...validUser, email: 'agent@gmail.com', user_type: 'agent' });
+
+    agent2 = await chai
+      .request(app)
+      .post('/api/v1/auth/signup')
+      .send({ ...validUser, email: 'agent2@gmail.com', user_type: 'agent' });
   });
   describe('POST /', async () => {
     it('should return 201 if the property details is valid', async () => {
@@ -106,6 +112,30 @@ describe('/api/v1/property', () => {
     });
     it('it should return 200 if property is  found', async () => {
       const result = await chai.request(app).get('/api/v1/property/1');
+      expect(result.status).to.equal(200);
+    });
+  });
+
+  describe('DELETE /:propertyId', () => {
+    it('should return 404 if the property does not exist', async () => {
+      const result = await chai
+        .request(app)
+        .delete('/api/v1/property/100')
+        .set('x-auth-token', agent.body.data.token);
+      expect(result.status).to.equal(404);
+    });
+    it('should return 403 if the property does not belong to the user', async () => {
+      const result = await chai
+        .request(app)
+        .delete('/api/v1/property/1')
+        .set('x-auth-token', agent2.body.data.token);
+      expect(result.status).to.equal(403);
+    });
+    it('should return 200 if the property does exist and belong to the user', async () => {
+      const result = await chai
+        .request(app)
+        .delete('/api/v1/property/1')
+        .set('x-auth-token', agent.body.data.token);
       expect(result.status).to.equal(200);
     });
   });

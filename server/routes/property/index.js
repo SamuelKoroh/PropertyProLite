@@ -6,13 +6,15 @@ import {
   createProperty,
   getProperties,
   updateProperty,
-  getProperty
+  getProperty,
+  deleteProperty
 } from '../../controllers/property';
 
 const router = express.Router();
 
 router.post('/', [authenticate, isAgent, multer.array('images')], createProperty);
 router.patch('/:propertyId', updateProperty);
+router.delete('/:propertyId', [authenticate, isAgent], deleteProperty);
 router.get('/:propertyId', getProperty);
 router.get('/', getProperties);
 

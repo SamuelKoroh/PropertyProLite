@@ -274,6 +274,51 @@
             "$ref": "#responses/Standard404Error"
           }
         }
+      },
+      "delete": {
+        "tags": ["Properties"],
+        "description": "This endpoint permanently remove a single property advert",
+        "summary": "Remove a specific property advert.",
+        "parameters": [
+          {
+            "name": "x-auth-token",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "propertyId",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#responses/Standard403Error"
+          },
+          "404": {
+            "$ref": "#responses/Standard404Error"
+          }
+        }
       }
     }
   },
