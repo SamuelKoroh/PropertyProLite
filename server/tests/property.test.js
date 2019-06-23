@@ -93,9 +93,20 @@ describe('/api/v1/property', () => {
       const result = await chai.request(app).get('/api/v1/property?type=2 bedroom');
       expect(result.status).to.equal(200);
     });
-    it('should return 204 if no content is found', async () => {
+    it('should return 404 if no property is found', async () => {
       const result = await chai.request(app).get('/api/v1/property?location=2 bedroom');
-      expect(result.status).to.equal(204);
+      expect(result.status).to.equal(404);
+    });
+  });
+
+  describe('GET /:propertyId', () => {
+    it('it should return 404 if property is not found', async () => {
+      const result = await chai.request(app).get('/api/v1/property/50000');
+      expect(result.status).to.equal(404);
+    });
+    it('it should return 200 if property is  found', async () => {
+      const result = await chai.request(app).get('/api/v1/property/1');
+      expect(result.status).to.equal(200);
     });
   });
 });

@@ -244,8 +244,34 @@
               "$ref": "#definitions/GetProperties"
             }
           },
-          "204": {
-            "$ref": "#responses/Standard204Response"
+          "404": {
+            "$ref": "#responses/Standard404Error"
+          }
+        }
+      }
+    },
+    "/property/{propertyId}": {
+      "get": {
+        "tags": ["Properties"],
+        "description": "Retrive single property advert by passing a url parameter",
+        "summary": "Get a specific property advert.",
+        "parameters": [
+          {
+            "name": "propertyId",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#definitions/GetProperty"
+            }
+          },
+          "404": {
+            "$ref": "#responses/Standard404Error"
           }
         }
       }
@@ -531,6 +557,12 @@
     },
     "Standard403Error": {
       "description": "Access Forbidden - No authorize access",
+      "schema": {
+        "$ref": "#definitions/Error"
+      }
+    },
+    "Standard404Error": {
+      "description": "Resource not found",
       "schema": {
         "$ref": "#definitions/Error"
       }

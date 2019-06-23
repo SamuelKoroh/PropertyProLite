@@ -27,7 +27,7 @@ export const getProperties = (req, res, next) => {
         || p.address.toLowerCase().startsWith(location.toLowerCase())
     );
   }
-  if (!properties.length) return res.status(204).json({ data: { message: 'No content' } });
+  if (!properties.length) return res.status(404).json({ status: 'error', error: 'No content' });
 
   properties = properties.map((property) => {
     const owner = Users.find(u => u.id === property.owner);
@@ -44,6 +44,33 @@ export const getProperties = (req, res, next) => {
   });
 
   res.status(200).json({ status: 200, data: properties });
+};
+
+/*
+@@ Route          /api/v1//property/:propertyId
+@@ Method         GET
+@@ Description    Get all property adverts.
+*/
+export const getProperty = ({ params }, res, next) => {
+  const property = Properties.find(
+    prop => parseInt(prop.id, 10) === parseInt(params.propertyId, 10)
+  );
+
+  if (!property) return res.status(404).json({ status: 'error', error: 'Not found' });
+
+  const owner = Users.find(u => u.id === property.owner);
+  const {
+    first_name: firstName, last_name: lastName, email, phone_number: phone
+  } = owner;
+
+  const data = {
+    ...property,
+    owner: firstName.concat(' ', lastName),
+    ownerEmail: email,
+    ownerPhoneNumber: phone
+  };
+
+  res.status(200).json({ status: 200, data });
 };
 
 /*
@@ -80,5 +107,5 @@ export const createProperty = async ({ user, files, body }, res, next) => {
 };
 
 export const updateProperty = (req, res, next) => {
-  //   return res.send('update property');
+  res.send('update property');
 };
