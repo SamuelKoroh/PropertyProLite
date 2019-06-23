@@ -206,31 +206,46 @@
             "$ref": "#responses/Standard500Error"
           }
         }
-      }
-    },
-    "/users": {
+      },
       "get": {
-        "summary": "Get all users",
-        "description": "It return all the users of the system",
+        "tags": ["Properties"],
+        "description": "Get all property adverts by sending request to this endpoint, so filter data by passing query string parameter (e.g price, location, type, deals)",
+        "summary": "Get all property adverts",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "location",
+            "in": "query",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "deal",
+            "in": "query",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "price",
+            "in": "query",
+            "type": "number",
+            "required": false
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "type": "array",
-              "items": {
-                "required": ["id", "name"],
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "example": "John Doe"
-                  },
-                  "id": {
-                    "type": "number",
-                    "example": "1"
-                  }
-                }
-              }
+              "$ref": "#definitions/GetProperties"
             }
+          },
+          "204": {
+            "$ref": "#responses/Standard204Response"
           }
         }
       }
@@ -499,6 +514,9 @@
     }
   },
   "responses": {
+    "Standard204Response": {
+      "description": "No content found"
+    },
     "Standard400Error": {
       "description": "Bad Request",
       "schema": {

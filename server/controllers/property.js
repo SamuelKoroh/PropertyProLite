@@ -15,15 +15,10 @@ export const getProperties = (req, res, next) => {
   } = req.query;
   let properties = Properties;
 
-  if (!properties.length) return res.status(204).json({ data: { message: 'No content' } });
-
   if (type)
     properties = properties.filter(p => p.title.toLowerCase().startsWith(type.toLowerCase()));
-
   if (deal) properties = properties.filter(p => p.deal_type.toLowerCase() === deal.toLowerCase());
-
   if (price) properties = properties.filter(p => parseInt(p.price, 10) <= parseInt(price, 10));
-
   if (location) {
     properties = properties.filter(
       p =>
@@ -32,11 +27,14 @@ export const getProperties = (req, res, next) => {
         || p.address.toLowerCase().startsWith(location.toLowerCase())
     );
   }
+  if (!properties.length) return res.status(204).json({ data: { message: 'No content' } });
+
   properties = properties.map((property) => {
     const owner = Users.find(u => u.id === property.owner);
     const {
       first_name: firstName, last_name: lastName, email, phone_number: phone
     } = owner;
+
     return {
       ...property,
       owner: firstName.concat(' ', lastName),

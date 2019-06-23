@@ -86,12 +86,16 @@ describe('/api/v1/property', () => {
       expect(result.status).to.equal(200);
     });
     it('should return 200 if passed deal query string', async () => {
-      const result = await chai.request(app).get('/api/v1/property?location=for rent');
+      const result = await chai.request(app).get('/api/v1/property?deal=for rent');
       expect(result.status).to.equal(200);
     });
     it('should return 200 if passed type query string', async () => {
       const result = await chai.request(app).get('/api/v1/property?type=2 bedroom');
       expect(result.status).to.equal(200);
+    });
+    it('should return 204 if no content is found', async () => {
+      const result = await chai.request(app).get('/api/v1/property?location=2 bedroom');
+      expect(result.status).to.equal(204);
     });
   });
 });
