@@ -43,37 +43,35 @@ export const createProperty = async ({ user, files, body }, res, next) => {
   }
 };
 
-export const getProperties = (req, res, next) => {
-  const {
-    location, type, deal, price
-  } = req.query;
-  let properties = Properties;
+export const getProperties = (req, res) => {
+  const { location, type, deal, price } = req.query;
+  let properties = Properties.filter(p => p.status !== 'sold');
 
   if (type)
     properties = properties.filter(p => p.title.toLowerCase().startsWith(type.toLowerCase()));
+
   if (deal) properties = properties.filter(p => p.deal_type.toLowerCase() === deal.toLowerCase());
+
   if (price) properties = properties.filter(p => parseInt(p.price, 10) <= parseInt(price, 10));
-  if (location) {
+
+  if (location)
     properties = properties.filter(
       p =>
         p.state.toLowerCase().startsWith(location.toLowerCase())
         || p.city.toLowerCase().startsWith(location.toLowerCase())
         || p.address.toLowerCase().startsWith(location.toLowerCase())
     );
-  }
+
   if (!properties.length) return res.status(404).json({ status: 'error', error: 'No content' });
 
   properties = properties.map((property) => {
     const owner = Users.find(u => u.id === property.owner);
-    const {
-      first_name: firstName, last_name: lastName, email, phone_number: phone
-    } = owner;
 
     return {
       ...property,
-      owner: firstName.concat(' ', lastName),
-      ownerEmail: email,
-      ownerPhoneNumber: phone
+      owner: owner.first_name.concat(' ', owner.last_name),
+      ownerEmail: owner.email,
+      ownerPhoneNumber: owner.phone_number
     };
   });
 
@@ -85,31 +83,31 @@ export const getProperties = (req, res, next) => {
 @@ Method         GET
 @@ Description    Get all property adverts.
 */
-export const getProperty = ({ params }, res, next) => {
+export const getProperty = ({ params }, res) => {
   const property = Properties.find(
-    prop => parseInt(prop.id, 10) === parseInt(params.propertyId, 10)
+    prop => parseInt(prop.id, 10) === parseInt(params.propertyId, 10) && prop.status !== 'sold'
   );
 
   if (!property) return res.status(404).json({ status: 'error', error: 'Not found' });
 
   const owner = Users.find(u => u.id === property.owner);
-  const {
-    first_name: firstName, last_name: lastName, email, phone_number: phone
-  } = owner;
 
   const data = {
     ...property,
-    owner: firstName.concat(' ', lastName),
-    ownerEmail: email,
-    ownerPhoneNumber: phone
+    owner: owner.first_name.concat(' ', owner.last_name),
+    ownerEmail: owner.email,
+    ownerPhoneNumber: owner.phone_number
   };
 
   res.status(200).json({ status: 200, data });
 };
 
-export const updateProperty = async ({
-  params, body, files, user
-}, res, next) => {
+/*
+@@ Route          /api/v1//property/:propertyId
+@@ Method         PATCH
+@@ Description    Update a property advert.
+*/
+export const updateProperty = async ({ params, body, files, user }, res) => {
   const property = Properties.find(
     prop => parseInt(prop.id, 10) === parseInt(params.propertyId, 10)
   );
@@ -134,7 +132,34 @@ export const updateProperty = async ({
   res.send({ status: 'success', data: property });
 };
 
-export const deleteProperty = ({ params, user }, res, next) => {
+/*
+@@ Route          /api/v1//property/:propertyId/sold
+@@ Method         PATCH
+@@ Description    Update a property advert mark status as sold.
+*/
+export const updatePropertyAsSold = async ({ params, user }, res) => {
+  const property = Properties.find(
+    prop => parseInt(prop.id, 10) === parseInt(params.propertyId, 10)
+  );
+
+  if (!property) return res.status(404).json({ status: 'error', error: 'Not found' });
+
+  if (property.owner !== user.id && user.is_admin === false)
+    return res
+      .status(403)
+      .json({ status: 'error', error: 'You are not allow to perform this operation' });
+
+  property.status = 'sold';
+
+  res.send({ status: 'success', data: property });
+};
+
+/*
+@@ Route          /api/v1//property/:propertyId
+@@ Method         DELETE
+@@ Description    Delete a property advert.
+*/
+export const deleteProperty = ({ params, user }, res) => {
   const property = Properties.find(
     prop => parseInt(prop.id, 10) === parseInt(params.propertyId, 10)
   );

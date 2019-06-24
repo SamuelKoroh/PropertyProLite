@@ -257,10 +257,7 @@
         "summary": "Get a specific property advert.",
         "parameters": [
           {
-            "name": "propertyId",
-            "in": "path",
-            "type": "integer",
-            "required": true
+            "$ref": "#parameters/propertyId"
           }
         ],
         "responses": {
@@ -275,22 +272,105 @@
           }
         }
       },
+      "patch": {
+        "tags": ["Properties"],
+        "summary": "Update property",
+        "description": "This endpoint enables advert owners to update the details of a particular property advert",
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {
+            "$ref": "#parameters/x-auth-token"
+          },
+          {
+            "$ref": "#parameters/propertyId"
+          },
+          {
+            "name": "title",
+            "in": "formData",
+            "type": "string"
+          },
+          {
+            "name": "price",
+            "in": "formData",
+            "type": "number"
+          },
+          {
+            "name": "state",
+            "in": "formData",
+            "type": "string"
+          },
+          {
+            "name": "city",
+            "in": "formData",
+            "type": "string"
+          },
+          {
+            "name": "address",
+            "in": "formData",
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "in": "formData",
+            "type": "string",
+            "description": "property type include (e.g 2 bedroom, 3 bedroom)"
+          },
+          {
+            "name": "billing_type",
+            "in": "formData",
+            "type": "string",
+            "description": "billing type include (e.g per year, one time payment)"
+          },
+          {
+            "name": "deal_type",
+            "in": "formData",
+            "type": "string",
+            "description": "deal type include (e.g for sale, for rent)"
+          },
+          {
+            "name": "description",
+            "in": "formData",
+            "type": "string",
+            "description": "details of the property"
+          },
+          {
+            "name": "images",
+            "in": "formData",
+            "type": "file",
+            "description": "deal type include (e.g for sale, for rent)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#definitions/Property"
+            }
+          },
+          "400": {
+            "$ref": "#responses/Standard400Error"
+          },
+          "401": {
+            "$ref": "#responses/Standard401Error"
+          },
+          "403": {
+            "$ref": "#responses/Standard403Error"
+          },
+          "500": {
+            "$ref": "#responses/Standard500Error"
+          }
+        }
+      },
       "delete": {
         "tags": ["Properties"],
         "description": "This endpoint permanently remove a single property advert",
         "summary": "Remove a specific property advert.",
         "parameters": [
           {
-            "name": "x-auth-token",
-            "in": "header",
-            "type": "string",
-            "required": true
+            "$ref": "#parameters/x-auth-token"
           },
           {
-            "name": "propertyId",
-            "in": "path",
-            "type": "integer",
-            "required": true
+            "$ref": "#parameters/propertyId"
           }
         ],
         "responses": {
@@ -317,6 +397,41 @@
           },
           "404": {
             "$ref": "#responses/Standard404Error"
+          }
+        }
+      }
+    },
+    "/property/{propertyId}/sold": {
+      "patch": {
+        "tags": ["Properties"],
+        "summary": "Mark a property as sold",
+        "description": "This endpiont enables users to mark a single property as sold",
+        "parameters": [
+          {
+            "$ref": "#parameters/x-auth-token"
+          },
+          {
+            "$ref": "#parameters/propertyId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#definitions/Property"
+            }
+          },
+          "400": {
+            "$ref": "#responses/Standard400Error"
+          },
+          "401": {
+            "$ref": "#responses/Standard401Error"
+          },
+          "403": {
+            "$ref": "#responses/Standard403Error"
+          },
+          "500": {
+            "$ref": "#responses/Standard500Error"
           }
         }
       }
@@ -624,6 +739,12 @@
       "name": "x-auth-token",
       "in": "header",
       "type": "string",
+      "required": true
+    },
+    "propertyId": {
+      "name": "propertyId",
+      "in": "path",
+      "type": "integer",
       "required": true
     }
   }

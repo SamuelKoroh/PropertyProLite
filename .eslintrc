@@ -21,6 +21,7 @@
     "curly": "off",
     "nonblock-statement-body-position": "off",
     "no-unused-vars": ["error", { "var": "all", "args": "none" }],
-    "implicit-arrow-linebreak": "off"
+    "implicit-arrow-linebreak": "off",
+    "object-curly-newline": "off"
   }
 }

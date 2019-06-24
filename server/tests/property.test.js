@@ -109,7 +109,6 @@ describe('/api/v1/property', () => {
       expect(result.status).to.equal(404);
     });
   });
-
   describe('GET /:propertyId', () => {
     it('it should return 404 if property is not found', async () => {
       const result = await request(app).get('/api/v1/property/50000');
@@ -117,6 +116,26 @@ describe('/api/v1/property', () => {
     });
     it('it should return 200 if property is  found', async () => {
       const result = await request(app).get('/api/v1/property/1');
+      expect(result.status).to.equal(200);
+    });
+  });
+  describe('PATCH /:propertyId/sold', () => {
+    it('should return 404 if the property does not exist', async () => {
+      const result = await request(app)
+        .patch('/api/v1/property/100')
+        .set('x-auth-token', agent.body.data.token);
+      expect(result.status).to.equal(404);
+    });
+    it('should return 403 if the property does not belong to the user', async () => {
+      const result = await request(app)
+        .patch('/api/v1/property/1/sold')
+        .set('x-auth-token', agent2.body.data.token);
+      expect(result.status).to.equal(403);
+    });
+    it('should return 200 if the property does exist and belong to the user and was marked as sold', async () => {
+      const result = await request(app)
+        .patch('/api/v1/property/1/sold')
+        .set('x-auth-token', agent.body.data.token);
       expect(result.status).to.equal(200);
     });
   });
