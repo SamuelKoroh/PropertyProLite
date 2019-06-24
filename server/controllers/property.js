@@ -5,9 +5,27 @@ import Users from '../models/Users';
 import { createPropertySchema } from '../middleware/modelValidation';
 
 /*
-@@ Route          /api/v1//property/<:property-id>/
-@@ Method         GET
-@@ Description    Get all property adverts.
+@@ Description    To refractor owner property retrieve from the database
+*/
+const getOwnerProperty = (property, owner) => {
+  return {
+    ...property,
+    owner: owner.first_name.concat(' ', owner.last_name),
+    ownerEmail: owner.email,
+    ownerPhoneNumber: owner.phone_number
+  };
+};
+/*
+@@ Description    Revoke user ffrom changing the state of a property if not it's owner
+*/
+const revokeAccess = (res) => {
+  return res
+    .status(403)
+    .json({ status: 'error', error: 'You are not allow to perform this operation' });
+};
+
+/*
+@@ Description    To refractor owner property retrieve from the database
 */
 
 /*
@@ -43,6 +61,12 @@ export const createProperty = async ({ user, files, body }, res, next) => {
   }
 };
 
+/*
+@@ Route          /api/v1//property/
+@@ Route          /api/v1//property/?type=val&price=val&location=val&deal=val
+@@ Method         GET
+@@ Description    Get all property adverts.
+*/
 export const getProperties = (req, res) => {
   const { location, type, deal, price } = req.query;
   let properties = Properties.filter(p => p.status !== 'sold');
@@ -66,13 +90,7 @@ export const getProperties = (req, res) => {
 
   properties = properties.map((property) => {
     const owner = Users.find(u => u.id === property.owner);
-
-    return {
-      ...property,
-      owner: owner.first_name.concat(' ', owner.last_name),
-      ownerEmail: owner.email,
-      ownerPhoneNumber: owner.phone_number
-    };
+    return getOwnerProperty(property, owner);
   });
 
   res.status(200).json({ status: 200, data: properties });
@@ -91,13 +109,7 @@ export const getProperty = ({ params }, res) => {
   if (!property) return res.status(404).json({ status: 'error', error: 'Not found' });
 
   const owner = Users.find(u => u.id === property.owner);
-
-  const data = {
-    ...property,
-    owner: owner.first_name.concat(' ', owner.last_name),
-    ownerEmail: owner.email,
-    ownerPhoneNumber: owner.phone_number
-  };
+  const data = getOwnerProperty(property, owner);
 
   res.status(200).json({ status: 200, data });
 };
@@ -114,10 +126,7 @@ export const updateProperty = async ({ params, body, files, user }, res) => {
 
   if (!property) return res.status(404).json({ status: 'error', error: 'Not found' });
 
-  if (property.owner !== user.id && user.is_admin === false)
-    return res
-      .status(403)
-      .json({ status: 'error', error: 'You are not allow to perform this operation' });
+  if (property.owner !== user.id && user.is_admin === false) return revokeAccess(res);
 
   const keys = Object.keys(body);
   keys.forEach((key) => {
@@ -144,10 +153,7 @@ export const updatePropertyAsSold = async ({ params, user }, res) => {
 
   if (!property) return res.status(404).json({ status: 'error', error: 'Not found' });
 
-  if (property.owner !== user.id && user.is_admin === false)
-    return res
-      .status(403)
-      .json({ status: 'error', error: 'You are not allow to perform this operation' });
+  if (property.owner !== user.id && user.is_admin === false) return revokeAccess(res);
 
   property.status = 'sold';
 
@@ -166,10 +172,7 @@ export const deleteProperty = ({ params, user }, res) => {
 
   if (!property) return res.status(404).json({ status: 'error', error: 'Not found' });
 
-  if (property.owner !== user.id && user.is_admin === false)
-    return res
-      .status(403)
-      .json({ status: 'error', error: 'You are not allow to perform this operation' });
+  if (property.owner !== user.id && user.is_admin === false) return revokeAccess(res);
 
   const index = Properties.indexOf(property);
   Properties.splice(index, 1);

@@ -7,7 +7,12 @@ import Users from '../models/Users';
 import { signupSchema, signinSchema } from '../middleware/modelValidation';
 
 const jwtSecret = process.env.JWT_SECRET;
-
+/*
+@@ Description    Refractor Joi validation result message
+*/
+const validationErrorMessage = (res, errors) => {
+  return res.status(400).json({ status: 'error', error: errors.error.details[0].message });
+};
 /*
 @@ Route          /api/v1/auth/signup
 @@ Method         POST
@@ -15,8 +20,7 @@ const jwtSecret = process.env.JWT_SECRET;
 */
 export const signUp = async ({ body, file }, res) => {
   const errors = Joi.validate(body, signupSchema);
-  if (errors.error)
-    return res.status(400).json({ status: 'error', error: errors.error.details[0].message });
+  if (errors.error) return validationErrorMessage(res, errors);
 
   let user = Users.find(u => u.email === body.email);
   if (user) {
@@ -46,6 +50,7 @@ export const signUp = async ({ body, file }, res) => {
     user.token = await jwt.sign(_.pick(user, ['id', 'is_admin', 'user_type']), jwtSecret, {
       expiresIn: 3600
     });
+    
     return res.status(201).json({ status: 'success', data: { ..._.omit(user, ['password']) } });
   } catch (error) {
     res.status(400).json({ status: 'error', error: 'Image not valid' });
@@ -60,8 +65,7 @@ export const signUp = async ({ body, file }, res) => {
 export const signIn = async ({ body }, res) => {
   try {
     const errors = Joi.validate(body, signinSchema);
-    if (errors.error)
-      return res.status(400).json({ status: 'error', error: errors.error.details[0].message });
+    if (errors.error) return validationErrorMessage(res, errors);
 
     const user = Users.find(u => u.email === body.email);
     if (!user)
