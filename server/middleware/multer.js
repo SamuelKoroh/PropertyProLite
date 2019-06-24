@@ -5,7 +5,7 @@ export default multer({
   // limits: { fileSize: 200 * 1024 * 1024, files: 1 },
   fileFilter: (req, file, callback) => {
     if (!file.mimetype.match(/jpeg|jpg|png|gif$i/)) {
-      callback(new Error('File is not supported'), false);
+      callback('File is not supported', false);
       return;
     }
     callback(null, true);

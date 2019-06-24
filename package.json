@@ -7,7 +7,7 @@
     "start": "node ./build-server/index.js",
     "build": "babel -d ./build-server ./server",
     "dev": "nodemon --watch server --exec babel-node ./server/index.js",
-    "test:server": "./node_modules/.bin/mocha --timeout 500000 --require @babel/register server/tests/*",
+    "test:server": "./node_modules/.bin/mocha --timeout 500000 --require @babel/register server/tests/",
     "test": "nyc npm run test:server && nyc report --reporter=lcov --reporter=text-lcov | coveralls"
   },
   "repository": {

@@ -107,8 +107,31 @@ export const getProperty = ({ params }, res, next) => {
   res.status(200).json({ status: 200, data });
 };
 
-export const updateProperty = (req, res, next) => {
-  res.send('update property');
+export const updateProperty = async ({
+  params, body, files, user
+}, res, next) => {
+  const property = Properties.find(
+    prop => parseInt(prop.id, 10) === parseInt(params.propertyId, 10)
+  );
+
+  if (!property) return res.status(404).json({ status: 'error', error: 'Not found' });
+
+  if (property.owner !== user.id && user.is_admin === false)
+    return res
+      .status(403)
+      .json({ status: 'error', error: 'You are not allow to perform this operation' });
+
+  const keys = Object.keys(body);
+  keys.forEach((key) => {
+    property[key] = body[key];
+  });
+
+  if (files) {
+    const result = await uploadImages(files);
+    property.image_url = result.images;
+  }
+
+  res.send({ status: 'success', data: property });
 };
 
 export const deleteProperty = ({ params, user }, res, next) => {
@@ -125,5 +148,6 @@ export const deleteProperty = ({ params, user }, res, next) => {
 
   const index = Properties.indexOf(property);
   Properties.splice(index, 1);
+
   res.status(200).json(Properties);
 };

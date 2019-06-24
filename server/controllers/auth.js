@@ -48,7 +48,7 @@ export const signUp = async ({ body, file }, res) => {
     });
     return res.status(201).json({ status: 'success', data: { ..._.omit(user, ['password']) } });
   } catch (error) {
-    res.status(500).json({ status: 'error', error: 'server error' });
+    res.status(400).json({ status: 'error', error: 'Image not valid' });
   }
 };
 
@@ -80,6 +80,6 @@ export const signIn = async ({ body }, res) => {
       data: { token, ..._.omit(user, ['password']) }
     });
   } catch (error) {
-    res.status(500).json({ status: 'error', error });
+    res.status(500).json({ status: 'error', error: 'An unexpected error has occour' });
   }
 };
