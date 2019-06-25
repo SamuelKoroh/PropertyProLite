@@ -4,15 +4,11 @@ import jwt from 'jsonwebtoken';
 import _ from 'lodash';
 import cloudinary from 'cloudinary';
 import Users from '../models/Users';
+import { okResponse, badRequest } from '../utils/refractory';
 import { signupSchema, signinSchema } from '../middleware/modelValidation';
 
 const jwtSecret = process.env.JWT_SECRET;
-/*
-@@ Description    Refractor Joi validation result message
-*/
-const validationErrorMessage = (res, errors) => {
-  return res.status(400).json({ status: 'error', error: errors.error.details[0].message });
-};
+
 /*
 @@ Route          /api/v1/auth/signup
 @@ Method         POST
@@ -20,15 +16,10 @@ const validationErrorMessage = (res, errors) => {
 */
 export const signUp = async ({ body, file }, res) => {
   const errors = Joi.validate(body, signupSchema);
-  if (errors.error) return validationErrorMessage(res, errors);
+  if (errors.error) return badRequest(res, errors.error.details[0].message, 400);
 
   let user = Users.find(u => u.email === body.email);
-  if (user) {
-    return res.status(400).json({
-      status: 'error',
-      error: 'This email has been registered already'
-    });
-  }
+  if (user) return badRequest(res, 'This email has been registered already', 400);
 
   try {
     const salt = await bcrypt.genSalt(10);
@@ -48,12 +39,11 @@ export const signUp = async ({ body, file }, res) => {
 
     Users.push(user);
     user.token = await jwt.sign(_.pick(user, ['id', 'is_admin', 'user_type']), jwtSecret, {
-      expiresIn: 3600
+      expiresIn: 36000
     });
-    
-    return res.status(201).json({ status: 'success', data: { ..._.omit(user, ['password']) } });
+    return okResponse(res, { ..._.omit(user, ['password']) }, 201);
   } catch (error) {
-    res.status(400).json({ status: 'error', error: 'Image not valid' });
+    badRequest(res, 'Image not valid', 400);
   }
 };
 
@@ -65,25 +55,20 @@ export const signUp = async ({ body, file }, res) => {
 export const signIn = async ({ body }, res) => {
   try {
     const errors = Joi.validate(body, signinSchema);
-    if (errors.error) return validationErrorMessage(res, errors);
+    if (errors.error) return badRequest(res, errors.error.details[0].message, 400);
 
     const user = Users.find(u => u.email === body.email);
-    if (!user)
-      return res.status(400).json({ status: 'error', error: 'Invalid username and password' });
+    if (!user) return badRequest(res, 'Invalid username and password', 400);
 
     const validPassword = await bcrypt.compare(body.password, user.password);
-    if (!validPassword)
-      return res.status(400).json({ status: 'error', error: 'Invalid username and password' });
+    if (!validPassword) return badRequest(res, 'Invalid username and password', 400);
 
     const token = await jwt.sign(_.pick(user, ['id', 'is_admin', 'user_type']), jwtSecret, {
-      expiresIn: 3600
+      expiresIn: 36000
     });
 
-    return res.status(200).json({
-      status: 'success',
-      data: { token, ..._.omit(user, ['password']) }
-    });
+    return okResponse(res, { token, ..._.omit(user, ['password']) });
   } catch (error) {
-    res.status(500).json({ status: 'error', error: 'An unexpected error has occour' });
+    badRequest(res, 'An unexpected error has occour', 500);
   }
 };

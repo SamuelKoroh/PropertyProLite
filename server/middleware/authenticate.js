@@ -7,9 +7,7 @@ const authenticate = (req, res, next) => {
     const token = req.header('x-auth-token');
 
     if (!token)
-      return res
-        .status(401)
-        .json({ status: 'error', error: 'Access Denied - No token provided' });
+      return res.status(401).json({ status: 'error', error: 'Access Denied - No token provided' });
 
     req.user = jwt.verify(token, jwtSecret);
     next();
@@ -26,10 +24,10 @@ const isAgent = (req, res, next) => {
 };
 
 const isAdmin = (req, res, next) => {
-  // if (req.user.is_admin === false)
-  //   return res.status(403).json({ status: 'error', error: 'Access Forbidden' });
+  if (req.user.is_admin === false)
+    return res.status(403).json({ status: 'error', error: 'Access Forbidden' });
 
-  // next();
+  next();
 };
 
 export { isAgent, isAdmin };

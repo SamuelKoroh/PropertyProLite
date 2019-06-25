@@ -3,8 +3,10 @@ import uploadImages from '../utils/upload-files';
 import Properties from '../models/Properties';
 import Users from '../models/Users';
 import { createPropertySchema } from '../middleware/modelValidation';
+import { okResponse, badRequest } from '../utils/refractory';
 
-/*
+// ///////////////////////////////////////////////////////////////////
+/* This region is for code refractory
 @@ Description    To refractor owner property retrieve from the database
 */
 const getOwnerProperty = (property, owner) => {
@@ -19,28 +21,41 @@ const getOwnerProperty = (property, owner) => {
 @@ Description    Revoke user ffrom changing the state of a property if not it's owner
 */
 const revokeAccess = (res) => {
-  return res
-    .status(403)
-    .json({ status: 'error', error: 'You are not allow to perform this operation' });
+  return badRequest(res, 'You are not allow to perform this operation', 403);
 };
 
+const filterProperties = (properties, type, deal, price, location) => {
+  let result = properties;
+  if (type) result = result.filter(p => p.title.toLowerCase().startsWith(type.toLowerCase()));
+  if (deal) result = result.filter(p => p.deal_type.toLowerCase() === deal.toLowerCase());
+  if (price) result = result.filter(p => parseInt(p.price, 10) <= parseInt(price, 10));
+  if (location)
+    result = result.filter(
+      p =>
+        p.state.toLowerCase().startsWith(location.toLowerCase())
+        || p.city.toLowerCase().startsWith(location.toLowerCase())
+        || p.address.toLowerCase().startsWith(location.toLowerCase())
+    );
+  return result;
+};
 /*
-@@ Description    To refractor owner property retrieve from the database
+@@ end of refractory
 */
+// ///////////////////////////////////////////////////////////////////////////
 
 /*
 @@ Route          /api/v1/property
 @@ Method         POST
 @@ Description    Create a property ad.
 */
-export const createProperty = async ({ user, files, body }, res, next) => {
+export const createProperty = async ({ user, files, body }, res) => {
   try {
     const errors = Joi.validate(body, createPropertySchema);
-    if (errors.error) return res.status(400).json({ status: 'error', error: errors });
+    if (errors.error) return badRequest(res, errors, 400);
 
     let property = Properties.find(prop => prop.title.toLowerCase() === body.title.toLowerCase());
     if (property && property.owner === user.id)
-      return res.status(400).json({ status: 'error', error: 'This property already exists' });
+      return badRequest(res, 'This property already exists', 400);
 
     property = {
       id: Properties.length + 1,
@@ -55,9 +70,9 @@ export const createProperty = async ({ user, files, body }, res, next) => {
       property.image_url = result.images;
     }
     Properties.push(property);
-    return res.status(201).json({ status: 'success', data: property });
+    return okResponse(res, property, 201);
   } catch (error) {
-    res.status(500).json({ status: 'error', error: error.response });
+    badRequest(res, 'Server Error', 500);
   }
 };
 
@@ -71,29 +86,14 @@ export const getProperties = (req, res) => {
   const { location, type, deal, price } = req.query;
   let properties = Properties.filter(p => p.status !== 'sold');
 
-  if (type)
-    properties = properties.filter(p => p.title.toLowerCase().startsWith(type.toLowerCase()));
-
-  if (deal) properties = properties.filter(p => p.deal_type.toLowerCase() === deal.toLowerCase());
-
-  if (price) properties = properties.filter(p => parseInt(p.price, 10) <= parseInt(price, 10));
-
-  if (location)
-    properties = properties.filter(
-      p =>
-        p.state.toLowerCase().startsWith(location.toLowerCase())
-        || p.city.toLowerCase().startsWith(location.toLowerCase())
-        || p.address.toLowerCase().startsWith(location.toLowerCase())
-    );
-
-  if (!properties.length) return res.status(404).json({ status: 'error', error: 'No content' });
+  properties = filterProperties(properties, type, deal, price, location);
+  if (!properties.length) return badRequest(res, 'No property was found');
 
   properties = properties.map((property) => {
     const owner = Users.find(u => u.id === property.owner);
     return getOwnerProperty(property, owner);
   });
-
-  res.status(200).json({ status: 200, data: properties });
+  okResponse(res, properties);
 };
 
 /*
@@ -105,13 +105,10 @@ export const getProperty = ({ params }, res) => {
   const property = Properties.find(
     prop => parseInt(prop.id, 10) === parseInt(params.propertyId, 10) && prop.status !== 'sold'
   );
-
-  if (!property) return res.status(404).json({ status: 'error', error: 'Not found' });
-
+  if (!property) return badRequest(res, 'The property does not exist');
   const owner = Users.find(u => u.id === property.owner);
   const data = getOwnerProperty(property, owner);
-
-  res.status(200).json({ status: 200, data });
+  okResponse(res, data);
 };
 
 /*
@@ -123,9 +120,7 @@ export const updateProperty = async ({ params, body, files, user }, res) => {
   const property = Properties.find(
     prop => parseInt(prop.id, 10) === parseInt(params.propertyId, 10)
   );
-
-  if (!property) return res.status(404).json({ status: 'error', error: 'Not found' });
-
+  if (!property) return badRequest(res, 'The property does not exist');
   if (property.owner !== user.id && user.is_admin === false) return revokeAccess(res);
 
   const keys = Object.keys(body);
@@ -137,8 +132,7 @@ export const updateProperty = async ({ params, body, files, user }, res) => {
     const result = await uploadImages(files);
     property.image_url = result.images;
   }
-
-  res.send({ status: 'success', data: property });
+  okResponse(res, property);
 };
 
 /*
@@ -146,18 +140,14 @@ export const updateProperty = async ({ params, body, files, user }, res) => {
 @@ Method         PATCH
 @@ Description    Update a property advert mark status as sold.
 */
-export const updatePropertyAsSold = async ({ params, user }, res) => {
+export const updatePropertyAsSold = ({ params, user }, res) => {
   const property = Properties.find(
     prop => parseInt(prop.id, 10) === parseInt(params.propertyId, 10)
   );
-
-  if (!property) return res.status(404).json({ status: 'error', error: 'Not found' });
-
+  if (!property) return badRequest(res, 'The property does not exist');
   if (property.owner !== user.id && user.is_admin === false) return revokeAccess(res);
-
   property.status = 'sold';
-
-  res.send({ status: 'success', data: property });
+  okResponse(res, property);
 };
 
 /*
@@ -170,12 +160,11 @@ export const deleteProperty = ({ params, user }, res) => {
     prop => parseInt(prop.id, 10) === parseInt(params.propertyId, 10)
   );
 
-  if (!property) return res.status(404).json({ status: 'error', error: 'Not found' });
-
+  if (!property) return badRequest(res, 'The property does not exist');
   if (property.owner !== user.id && user.is_admin === false) return revokeAccess(res);
 
   const index = Properties.indexOf(property);
   Properties.splice(index, 1);
 
-  res.status(200).json(Properties);
+  okResponse(res, { message: 'The property has been removed' });
 };

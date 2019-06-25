@@ -31,3 +31,13 @@ export const createPropertySchema = {
   description: Joi.string().required(),
   deal_type: Joi.string().required()
 };
+
+export const flagAddSchema = {
+  email: Joi.string()
+    .email({ minDomainAtoms: 2 })
+    .required(),
+  name: Joi.string().required(),
+  description: Joi.string().required(),
+  reason: Joi.string().required(),
+  property_id: Joi.number().required()
+};
