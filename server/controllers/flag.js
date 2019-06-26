@@ -11,6 +11,13 @@ import { okResponse, badRequest } from '../utils/refractory';
 */
 const noFlag = { status: 'error', error: 'No flag' };
 
+// Fuction for finding return a single flag
+const findFlag = (flags, params) => {
+  return flags.find(
+    f => f.status === 'active' && parseInt(f.id, 10) === parseInt(params.flagId, 10)
+  );
+};
+
 // Description    function to retrieve flags property and owner detail
 const getFlagedUserProperty = (flag) => {
   const property = Properties.find(p => parseInt(p.id, 10) === parseInt(flag.property_id, 10));
@@ -26,22 +33,21 @@ const getFlagedUserProperty = (flag) => {
 };
 
 // Description    function to filtered the list of flags
-const filterByQuery = (allFlags, name, email, reason) => {
+const filterByQuery = (allFlags, search) => {
   let result = allFlags;
-  if (name)
-    result = result.filter(f => f.name.toLocaleLowerCase().startsWith(name.toLocaleLowerCase()));
-  if (reason)
-    result = result.filter(f =>
-      f.reason.toLocaleLowerCase().startsWith(reason.toLocaleLowerCase()));
-  if (email)
-    result = result.filter(f => f.email.toLocaleLowerCase().startsWith(email.toLocaleLowerCase()));
+  if (search)
+    result = result.filter(
+      f =>
+        f.name.toLocaleLowerCase().startsWith(search.toLocaleLowerCase())
+        || f.reason.toLocaleLowerCase().startsWith(search.toLocaleLowerCase())
+        || f.email.toLocaleLowerCase().startsWith(search.toLocaleLowerCase())
+    );
   return result;
 };
 /*
 @@ end of refractory
 */
 // ///////////////////////////////////////////////////////////////////////////
-
 /*
 @@ Route          /api/v1/flag
 @@ Method         POST
@@ -53,7 +59,6 @@ export const flagAdd = ({ body }, res) => {
 
   const addFlag = { id: Flags.length + 1, status: 'active', ...body, created_on: Date.now };
   Flags.push(addFlag);
-
   okResponse(res, addFlag);
 };
 
@@ -63,10 +68,10 @@ export const flagAdd = ({ body }, res) => {
 @@ Description    Get all flaged property.
 */
 export const getAllFlags = ({ query }, res) => {
-  const { name, reason, email } = query;
+  const { search } = query;
   let allFlags = Flags.filter(f => f.status === 'active');
 
-  allFlags = filterByQuery(allFlags, name, email, reason);
+  allFlags = filterByQuery(allFlags, search);
   if (!allFlags.length) return badRequest(res, 'No flags');
 
   allFlags = allFlags.map((flag) => {
@@ -81,12 +86,8 @@ export const getAllFlags = ({ query }, res) => {
 @@ Description    Get a flaged property details.
 */
 export const getFlagById = ({ params }, res) => {
-  const flag = Flags.find(
-    f => f.status === 'active' && parseInt(f.id, 10) === parseInt(params.flagId, 10)
-  );
-
+  const flag = findFlag(Flags, params);
   if (!flag) return badRequest(res, noFlag);
-
   const flagedUserProperty = getFlagedUserProperty(flag);
   okResponse(res, flagedUserProperty);
 };
@@ -97,13 +98,9 @@ export const getFlagById = ({ params }, res) => {
 @@ Description    Remove a flag report
 */
 export const deleteFlag = ({ params }, res) => {
-  const flag = Flags.find(
-    f => f.status === 'active' && parseInt(f.id, 10) === parseInt(params.flagId, 10)
-  );
+  const flag = findFlag(Flags, params);
   if (!flag) return badRequest(res, noFlag);
-
   const index = Flags.indexOf(flag);
   Flags.splice(index, 1);
-
   okResponse(res, { message: 'The flag has been removed' });
 };

@@ -375,22 +375,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "schema": {
-              "properties": {
-                "status": {
-                  "type": "string"
-                },
-                "data": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
+            "$ref": "#responses/DeleteResponse"
           },
           "403": {
             "$ref": "#responses/Standard403Error"
@@ -432,6 +417,204 @@
           },
           "500": {
             "$ref": "#responses/Standard500Error"
+          }
+        }
+      }
+    },
+    "/flag": {
+      "post": {
+        "tags": ["Flag"],
+        "description": "This endpoint allows users to report suspected adverts, and admin can also perform action depending on the severity",
+        "summary": "Flag property advert",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Flag a property advert",
+            "schema": {
+              "$ref": "#definitions/CreateFlag"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "description": "OK",
+              "$ref": "#definitions/FlagResponse"
+            }
+          },
+          "400": {
+            "$ref": "#responses/Standard400Error"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Flag"],
+        "description": "Get all properties flaged by users",
+        "summary": "Get all flaged property",
+        "parameters": [
+          {
+            "$ref": "#parameters/x-auth-token"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#definitions/GetProperties"
+            }
+          },
+          "403": {
+            "$ref": "#responses/Standard403Error"
+          },
+          "404": {
+            "$ref": "#responses/Standard404Error"
+          }
+        }
+      }
+    },
+    "/flag/{flagId}": {
+      "get": {
+        "tags": ["Flag"],
+        "description": "Here an admin can rtrieve details of a flaged properties",
+        "summary": "Get flaged property",
+        "parameters": [
+          {
+            "$ref": "#parameters/x-auth-token"
+          },
+          {
+            "name": "flagId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#definitions/GetProperty"
+            }
+          },
+          "403": {
+            "$ref": "#responses/Standard403Error"
+          },
+          "404": {
+            "$ref": "#responses/Standard404Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Flag"],
+        "description": "Here an admin can remove a single property advert",
+        "summary": "Delete flaged property",
+        "parameters": [
+          {
+            "$ref": "#parameters/x-auth-token"
+          },
+          {
+            "name": "flagId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#responses/DeleteResponse"
+          },
+          "403": {
+            "$ref": "#responses/Standard403Error"
+          },
+          "404": {
+            "$ref": "#responses/Standard404Error"
+          }
+        }
+      }
+    },
+    "/favourites": {
+      "get": {
+        "tags": ["Favourites"],
+        "summary": "Get user favourite property",
+        "description": "Get the current login favourites propertys advert",
+        "parameters": [
+          {
+            "$ref": "#parameters/x-auth-token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#definitions/Favourites"
+            }
+          },
+          "400": {
+            "$ref": "#responses/Standard400Error"
+          },
+          "401": {
+            "$ref": "#responses/Standard401Error"
+          }
+        }
+      }
+    },
+    "/favourites/{propertyId}": {
+      "post": {
+        "tags": ["Favourites"],
+        "summary": "Add property to favourites",
+        "description": "This endpoint enable logged in user to add property to his/her favourites list for easy access later",
+        "parameters": [
+          {
+            "$ref": "#parameters/x-auth-token"
+          },
+          {
+            "$ref": "#parameters/propertyId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#responses/DeleteResponse"
+          },
+          "400": {
+            "$ref": "#responses/Standard400Error"
+          },
+          "401": {
+            "$ref": "#responses/Standard401Error"
+          },
+          "404": {
+            "$ref": "#responses/Standard404Error"
+          }
+        }
+      }
+    },
+    "/favourites/{favouriteId}": {
+      "delete": {
+        "tags": ["Favourites"],
+        "summary": "Remove property from favourite list",
+        "description": "This endpoint enables logged in users to remove property from his/her favourites list",
+        "parameters": [
+          {
+            "$ref": "#parameters/x-auth-token"
+          },
+          {
+            "name": "favouriteId",
+            "in": "path",
+            "type": "number",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#responses/DeleteResponse"
+          },
+          "400": {
+            "$ref": "#responses/Standard400Error"
+          },
+          "401": {
+            "$ref": "#responses/Standard401Error"
           }
         }
       }
@@ -687,6 +870,158 @@
         }
       }
     },
+    "Favourites": {
+      "properties": {
+        "favourite_id": {
+          "type": "integer"
+        },
+        "property_id": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number"
+        },
+        "state": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "billing_type": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "deal_type": {
+          "type": "string"
+        },
+        "owner_id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "string"
+        },
+        "created_on": {
+          "type": "string",
+          "format": "date"
+        },
+        "image_url": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "CreateFlag": {
+      "required": ["property_id", "name", "email", "reason"],
+      "properties": {
+        "property_id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "Flag": {
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "string"
+        },
+        "property_id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "property": {
+          "type": "string"
+        },
+        "agent_id": {
+          "type": "integer"
+        },
+        "agent_name": {
+          "type": "string"
+        }
+      }
+    },
+    "Flags": {
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#definitions/Flag"
+          }
+        }
+      }
+    },
+    "FlagResponse": {
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "data": {
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "status": {
+              "type": "string"
+            },
+            "property_id": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
     "Error": {
       "properties": {
         "status": {
@@ -707,6 +1042,24 @@
       "description": "Bad Request",
       "schema": {
         "$ref": "#definitions/Error"
+      }
+    },
+    "DeleteResponse": {
+      "description": "OK",
+      "schema": {
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            }
+          }
+        }
       }
     },
     "Standard401Error": {

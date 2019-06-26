@@ -241,25 +241,25 @@ describe('/api/v1/flag', () => {
     });
     it('it should return 404 if there are no record returned by using query parameter', async () => {
       const result = await request(app)
-        .get('/api/v1/flag?name=hhhhhhhhhhhhhhhhhh')
+        .get('/api/v1/flag?search=hhhhhhhhhhhhhhhhhh')
         .set('x-auth-token', admin.body.data.token);
       expect(result.status).to.equal(404);
     });
     it('it should return 200 if there are one or more records by using name query string', async () => {
       const result = await request(app)
-        .get('/api/v1/flag?name=sarah')
+        .get('/api/v1/flag?search=sarah')
         .set('x-auth-token', admin.body.data.token);
       expect(result.status).to.equal(200);
     });
     it('it should return 200 if there are one or more records by using reason query string', async () => {
       const result = await request(app)
-        .get('/api/v1/flag?reason=wierd')
+        .get('/api/v1/flag?search=wierd')
         .set('x-auth-token', admin.body.data.token);
       expect(result.status).to.equal(200);
     });
     it('it should return 200 if there are one or more records by using email query string', async () => {
       const result = await request(app)
-        .get('/api/v1/flag?email=reporter')
+        .get('/api/v1/flag?search=reporter')
         .set('x-auth-token', admin.body.data.token);
       expect(result.status).to.equal(200);
     });
