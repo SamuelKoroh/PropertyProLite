@@ -8,6 +8,7 @@ import Mail from '../utils/mail';
 import Users from '../models/Users';
 import { okResponse, badRequest } from '../utils/refractory';
 import { signupSchema, signinSchema, emailSchema } from '../middleware/modelValidation';
+import curDate from '../utils/date';
 
 const jwtSecret = process.env.JWT_SECRET;
 
@@ -31,7 +32,9 @@ export const signUp = async ({ body, file }, res) => {
       id: Users.length + 1,
       ...body,
       is_admin: false,
-      password
+      password,
+      is_active: true,
+      created_on: curDate()
     };
 
     if (file) {

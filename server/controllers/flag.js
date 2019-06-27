@@ -4,6 +4,7 @@ import { flagAddSchema } from '../middleware/modelValidation';
 import Properties from '../models/Properties';
 import Users from '../models/Users';
 import { okResponse, badRequest } from '../utils/refractory';
+import curDate from '../utils/date';
 
 // ///////////////////////////////////////////////////////////////////
 /* This region is for code refractory
@@ -57,7 +58,7 @@ export const flagAdd = ({ body }, res) => {
   const errors = Joi.validate(body, flagAddSchema);
   if (errors.error) return badRequest(res, errors, 400);
 
-  const addFlag = { id: Flags.length + 1, status: 'active', ...body, created_on: Date.now };
+  const addFlag = { id: Flags.length + 1, status: 'active', ...body, created_on: curDate() };
   Flags.push(addFlag);
   okResponse(res, addFlag);
 };

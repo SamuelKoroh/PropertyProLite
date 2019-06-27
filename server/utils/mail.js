@@ -19,7 +19,11 @@ class Mail {
   }
 
   async sendMail() {
-    await this.transporter.sendMail(this.mailOption);
+    try {
+      await this.transporter.sendMail(this.mailOption);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 

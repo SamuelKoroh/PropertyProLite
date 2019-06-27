@@ -5,7 +5,7 @@ import { validUser } from '../testdata/auth';
 import { validProperty } from '../testdata/property';
 
 describe('/api/v1/property', () => {
-  const filePath = `${__dirname}/stupid.jpg`;
+  const filePath = `${__dirname}/house.png`;
   let user = '';
   let agent = '';
   let agent2 = '';
@@ -120,6 +120,13 @@ describe('/api/v1/property', () => {
     });
   });
   describe('PATCH /:propertyId/sold', () => {
+    let property;
+    before(async () => {
+      property = await request(app)
+        .post('/api/v1/property')
+        .set('x-auth-token', agent.body.data.token)
+        .send({ ...validProperty, title: 'duplex in abuja' });
+    });
     it('should return 404 if the property does not exist', async () => {
       const result = await request(app)
         .patch('/api/v1/property/100')
@@ -128,18 +135,25 @@ describe('/api/v1/property', () => {
     });
     it('should return 403 if the property does not belong to the user', async () => {
       const result = await request(app)
-        .patch('/api/v1/property/1/sold')
+        .patch(`/api/v1/property/${property.body.data.id}/sold`)
         .set('x-auth-token', agent2.body.data.token);
       expect(result.status).to.equal(403);
     });
     it('should return 200 if the property does exist and belong to the user and was marked as sold', async () => {
       const result = await request(app)
-        .patch('/api/v1/property/1/sold')
+        .patch(`/api/v1/property/${property.body.data.id}/sold`)
         .set('x-auth-token', agent.body.data.token);
       expect(result.status).to.equal(200);
     });
   });
   describe('PATCH /:propertyId', () => {
+    let property;
+    before(async () => {
+      property = await request(app)
+        .post('/api/v1/property')
+        .set('x-auth-token', agent.body.data.token)
+        .send({ ...validProperty, title: '5 room duplex in abuja' });
+    });
     it('should return 404 if the property does not exist', async () => {
       const result = await request(app)
         .patch('/api/v1/property/100')
@@ -156,20 +170,61 @@ describe('/api/v1/property', () => {
     });
     it('should return 200 if the property does exist and belong to the user and was updated', async () => {
       const result = await request(app)
-        .patch('/api/v1/property/1')
+        .patch(`/api/v1/property/${property.body.data.id}`)
         .set('x-auth-token', agent.body.data.token)
         .send({ price: 200 });
       expect(result.status).to.equal(200);
     });
     it('should return 200 if the property does exist and belong to the user and its image was updated', async () => {
       const res = await request(app)
-        .patch('/api/v1/property/1')
+        .patch(`/api/v1/property/${property.body.data.id}`)
         .set('x-auth-token', agent.body.data.token)
         .attach('images', filePath);
       expect(res.status).to.equal(200);
     });
   });
+  describe('PATCH /:propertyId/activate', () => {
+    let property;
+    let admin;
+    before(async () => {
+      property = await request(app)
+        .post('/api/v1/property')
+        .set('x-auth-token', agent.body.data.token)
+        .send({ ...validProperty, title: '54 room duplex in abuja' });
+      admin = await request(app)
+        .post('/api/v1/auth/signin')
+        .set('Content-Type', 'application/json')
+        .send({ email: 'admin@gmail.com', password: 'admin' });
+    });
+    it('should return 403 if the user is not an admin', async () => {
+      const result = await request(app)
+        .patch(`/api/v1/property/${property.body.data.id}/activate`)
+        .set('x-auth-token', agent2.body.data.token);
+      expect(result.status).to.equal(403);
+    });
+
+    it('should return 404 if the property does not exist', async () => {
+      const result = await request(app)
+        .patch('/api/v1/property/100/activate')
+        .set('x-auth-token', admin.body.data.token);
+      expect(result.status).to.equal(404);
+    });
+    it('should return 200 if the property does exist and the operation was successful', async () => {
+      const result = await request(app)
+        .patch(`/api/v1/property/${property.body.data.id}/activate`)
+        .set('x-auth-token', admin.body.data.token);
+      expect(result.status).to.equal(200);
+    });
+  });
+
   describe('DELETE /:propertyId', () => {
+    let property;
+    before(async () => {
+      property = await request(app)
+        .post('/api/v1/property')
+        .set('x-auth-token', agent.body.data.token)
+        .send({ ...validProperty, title: '12 room duplex in abuja' });
+    });
     it('should return 404 if the property does not exist', async () => {
       const result = await request(app)
         .delete('/api/v1/property/100')
@@ -178,213 +233,14 @@ describe('/api/v1/property', () => {
     });
     it('should return 403 if the property does not belong to the user', async () => {
       const result = await request(app)
-        .delete('/api/v1/property/1')
+        .delete(`/api/v1/property/${property.body.data.id}`)
         .set('x-auth-token', agent2.body.data.token);
       expect(result.status).to.equal(403);
     });
     it('should return 200 if the property to be delete does exist and belong to the user', async () => {
       const result = await request(app)
-        .delete('/api/v1/property/1')
+        .delete(`/api/v1/property/${property.body.data.id}`)
         .set('x-auth-token', agent.body.data.token);
-      expect(result.status).to.equal(200);
-    });
-  });
-});
-
-describe('/api/v1/flag', () => {
-  let admin = '';
-  let flaged = '';
-  before(async () => {
-    admin = await request(app)
-      .post('/api/v1/auth/signin')
-      .set('Content-Type', 'application/json')
-      .send({ email: 'admin@gmail.com', password: 'admin' });
-
-    flaged = await request(app)
-      .post('/api/v1/auth/signup')
-      .field('email', 'agent@agent.com')
-      .field('password', 'agent')
-      .field('first_name', 'Ibadan')
-      .field('last_name', 'Ojoo')
-      .field('phone_number', '20 agodi oojoo')
-      .field('address', '45 rooms in a duples')
-      .field('user_type', 'per year');
-  });
-  describe('POST  /', () => {
-    it('should return 400 if the request body is not valid', async () => {
-      const result = await request(app)
-        .post('/api/v1/flag')
-        .set('Content-Type', 'application/json')
-        .send({ email: 'admin@gmail.com', name: 'admin' });
-      expect(result.status).to.equal(400);
-    });
-    it('should return 200 if the request body is valid', async () => {
-      const result = await request(app)
-        .post('/api/v1/flag')
-        .set('Content-Type', 'application/json')
-        .send({
-          email: 'reporter1@gmail.com',
-          name: 'sarah',
-          reason: 'wierd demand',
-          description: 'wierd demand from agent',
-          property_id: 2
-        });
-      expect(result.status).to.equal(200);
-    });
-  });
-  describe('GET /', () => {
-    it('it should return 403 if the user acces is forbidden', async () => {
-      const result = await request(app)
-        .get('/api/v1/flag')
-        .set('x-auth-token', flaged.body.data.token);
-      expect(result.status).to.equal(403);
-    });
-    it('it should return 404 if there are no record returned by using query parameter', async () => {
-      const result = await request(app)
-        .get('/api/v1/flag?search=hhhhhhhhhhhhhhhhhh')
-        .set('x-auth-token', admin.body.data.token);
-      expect(result.status).to.equal(404);
-    });
-    it('it should return 200 if there are one or more records by using name query string', async () => {
-      const result = await request(app)
-        .get('/api/v1/flag?search=sarah')
-        .set('x-auth-token', admin.body.data.token);
-      expect(result.status).to.equal(200);
-    });
-    it('it should return 200 if there are one or more records by using reason query string', async () => {
-      const result = await request(app)
-        .get('/api/v1/flag?search=wierd')
-        .set('x-auth-token', admin.body.data.token);
-      expect(result.status).to.equal(200);
-    });
-    it('it should return 200 if there are one or more records by using email query string', async () => {
-      const result = await request(app)
-        .get('/api/v1/flag?search=reporter')
-        .set('x-auth-token', admin.body.data.token);
-      expect(result.status).to.equal(200);
-    });
-    it('it should return 200 if there are one or more records', async () => {
-      const result = await request(app)
-        .get('/api/v1/flag')
-        .set('x-auth-token', admin.body.data.token);
-      expect(result.status).to.equal(200);
-    });
-  });
-
-  describe('GET /:flagId', () => {
-    it('it should return 404 if there is no matching record', async () => {
-      const result = await request(app)
-        .get('/api/v1/flag/10000')
-        .set('x-auth-token', admin.body.data.token);
-      expect(result.status).to.equal(404);
-    });
-    it('it should return 200 if there is matching record', async () => {
-      const result = await request(app)
-        .get('/api/v1/flag/1')
-        .set('x-auth-token', admin.body.data.token);
-      expect(result.status).to.equal(200);
-    });
-  });
-  describe('DELETE /:flagId', () => {
-    it('it should return 404 if there is no matching record', async () => {
-      const result = await request(app)
-        .delete('/api/v1/flag/10000')
-        .set('x-auth-token', admin.body.data.token);
-      expect(result.status).to.equal(404);
-    });
-
-    it('should return 200 successfully remove the flag', async () => {
-      const result = await request(app)
-        .delete('/api/v1/flag/1')
-        .set('x-auth-token', admin.body.data.token);
-      expect(result.status).to.equal(200);
-    });
-  });
-});
-
-// Favourites Test
-
-describe('/api/v1/favourites', () => {
-  let admin;
-  let testUser2;
-  let property1;
-  let property2;
-  before(async () => {
-    admin = await request(app)
-      .post('/api/v1/auth/signin')
-      .set('content-type', 'application/json')
-      .send({ email: 'admin@gmail.com', password: 'admin' });
-
-    testUser2 = await request(app)
-      .post('/api/v1/auth/signup')
-      .set('content-type', 'application/json')
-      .send({
-        ...validUser,
-        email: 'testuser2@test.com',
-        first_name: 'testuser2',
-        last_name: 'unittest'
-      });
-
-    property1 = await request(app)
-      .post('/api/v1/property')
-      .set('x-auth-token', admin.body.data.token)
-      .send({ ...validProperty, title: '12 bedroom flat' });
-  });
-
-  describe('POST /:propertyId', () => {
-    it('should return 200 if the property was added to his/her favourite list', async () => {
-      const result = await request(app)
-        .post(`/api/v1/favourites/${property1.body.data.id}`)
-        .set('x-auth-token', testUser2.body.data.token);
-      expect(result.status).to.equal(200);
-    });
-    it('should return 200 if the property was removed from the favourite list', async () => {
-      const result = await request(app)
-        .post(`/api/v1/favourites/${property1.body.data.id}`)
-        .set('x-auth-token', testUser2.body.data.token);
-      expect(result.status).to.equal(200);
-    });
-  });
-  describe('GET /', () => {
-    before(async () => {
-      property1 = await request(app)
-        .post('/api/v1/property')
-        .set('x-auth-token', admin.body.data.token)
-        .send({ ...validProperty, title: '1552 bedroom flat' });
-
-      property2 = await request(app)
-        .post('/api/v1/property')
-        .set('x-auth-token', admin.body.data.token)
-        .send({ ...validProperty, title: '12542 bedroom flat' });
-
-      await request(app)
-        .post(`/api/v1/favourites/${property1.body.data.id}`)
-        .set('x-auth-token', testUser2.body.data.token);
-
-      await request(app)
-        .post(`/api/v1/favourites/${property2.body.data.id}`)
-        .set('x-auth-token', testUser2.body.data.token);
-    });
-
-    it('should return 200 if the user favourite list is loaded successfully', async () => {
-      const result = await request(app)
-        .get('/api/v1/favourites')
-        .set('x-auth-token', testUser2.body.data.token);
-      expect(result.status).to.equal(200);
-    });
-  });
-
-  describe('DELETE /:favouriteId', () => {
-    it('should return 404 if the property does not exist in the favourite list', async () => {
-      const result = await request(app)
-        .delete('/api/v1/favourites/10000000')
-        .set('x-auth-token', testUser2.body.data.token);
-      expect(result.status).to.equal(404);
-    });
-    it('should return 200 if the property was removed from the favourite list', async () => {
-      const result = await request(app)
-        .delete('/api/v1/favourites/1')
-        .set('x-auth-token', testUser2.body.data.token);
       expect(result.status).to.equal(200);
     });
   });

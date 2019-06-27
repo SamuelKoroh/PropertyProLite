@@ -4,6 +4,7 @@ import Properties from '../models/Properties';
 import Users from '../models/Users';
 import { createPropertySchema } from '../middleware/modelValidation';
 import { okResponse, badRequest } from '../utils/refractory';
+import curDate from '../utils/date';
 
 // ///////////////////////////////////////////////////////////////////
 /* This region is for code refractory
@@ -62,7 +63,8 @@ export const createProperty = async ({ user, files, body }, res) => {
       ...body,
       owner: user.id,
       status: 'available',
-      created_on: Date.now()
+      is_active: true,
+      created_on: curDate()
     };
 
     if (files) {
@@ -150,6 +152,17 @@ export const updatePropertyAsSold = ({ params, user }, res) => {
   okResponse(res, property);
 };
 
+/*
+@@ Route          /api/v1/property/:propertyId/activate
+@@ Method         PATCH
+@@ Description    Activate user account
+*/
+export const activateDeactivateAdvaert = ({ params }, res) => {
+  const property = Properties.find(p => parseInt(p.id, 10) === parseInt(params.propertyId, 10));
+  if (!property) return badRequest(res, 'The property advert does not exist');
+  property.is_active = !property.is_active;
+  okResponse(res, property);
+};
 /*
 @@ Route          /api/v1//property/:propertyId
 @@ Method         DELETE
