@@ -3,11 +3,13 @@ import Favourites from '../models/Favourites';
 import { okResponse, badRequest } from '../utils/refractory';
 import Properties from '../models/Properties';
 
-const getFavourite = (params, user, propId = '') => {
+const getFavourite = (favouritePropertyId, user) => {
   return Favourites.find(
     f =>
-      parseInt(f.id, 10) === parseInt(params.favouriteId, 10)
-      && parseInt(f.user_id, 10) === parseInt(user.id, 10)
+      (parseInt(f.id, 10) === parseInt(favouritePropertyId, 10)
+        && parseInt(f.user_id, 10) === parseInt(user.id, 10))
+      || (parseInt(f.property_id, 10) === parseInt(favouritePropertyId, 10)
+        && parseInt(f.user_id, 10) === parseInt(user.id, 10))
   );
 };
 
@@ -18,9 +20,10 @@ const removeFavourite = (favourite) => {
 };
 
 export const saveFavourites = ({ params, user }, res) => {
-  let favourite = getFavourite(params, user);
-  // if (favourite) return okResponse(res, { message: removeFavourite(favourite) });
-  favourite = { id: Favourites.length + 1, user_id: user.id, property_id: params.propertyId };
+  const { propertyId } = params;
+  let favourite = getFavourite(propertyId, user);
+  if (favourite) return okResponse(res, { message: removeFavourite(favourite) });
+  favourite = { id: Favourites.length + 1, user_id: user.id, property_id: propertyId };
   Favourites.push(favourite);
   okResponse(res, { message: 'The property has been saved to your favourite list' });
 };
@@ -40,7 +43,7 @@ export const getFavourites = ({ user }, res) => {
 };
 
 export const deleteFavourite = ({ params, user }, res) => {
-  const favourite = getFavourite(params, user);
+  const favourite = getFavourite(params.favouriteId, user);
   if (!favourite) return badRequest(res, 'The property does not exist', 404);
   okResponse(res, { message: removeFavourite(favourite) });
 };
