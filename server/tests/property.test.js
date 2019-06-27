@@ -309,8 +309,6 @@ describe('/api/v1/favourites', () => {
   let testUser2;
   let property1;
   let property2;
-  let favourite1;
-  let favourite2;
   before(async () => {
     admin = await request(app)
       .post('/api/v1/auth/signin')
@@ -359,11 +357,11 @@ describe('/api/v1/favourites', () => {
         .set('x-auth-token', admin.body.data.token)
         .send({ ...validProperty, title: '12542 bedroom flat' });
 
-      favourite1 = await request(app)
+      await request(app)
         .post(`/api/v1/favourites/${property1.body.data.id}`)
         .set('x-auth-token', testUser2.body.data.token);
 
-      favourite2 = await request(app)
+      await request(app)
         .post(`/api/v1/favourites/${property2.body.data.id}`)
         .set('x-auth-token', testUser2.body.data.token);
     });

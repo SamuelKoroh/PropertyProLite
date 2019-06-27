@@ -41,3 +41,9 @@ export const flagAddSchema = {
   reason: Joi.string().required(),
   property_id: Joi.number().required()
 };
+
+export const emailSchema = {
+  email: Joi.string()
+    .email({ minDomainAtoms: 2 })
+    .required()
+};
