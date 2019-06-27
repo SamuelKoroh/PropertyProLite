@@ -421,9 +421,215 @@
         }
       }
     },
+    "/users": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get all site users",
+        "description": "This endpoint allows enables the site admin to manage all registered users",
+        "parameters": [
+          {
+            "$ref": "#parameters/x-auth-token"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "reuired": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#definitions/Users"
+            }
+          },
+          "400": {
+            "$ref": "#responses/Standard401Error"
+          },
+          "401": {
+            "$ref": "#responses/Standard401Error"
+          },
+          "403": {
+            "$ref": "#responses/Standard403Error"
+          },
+          "404": {
+            "$ref": "#responses/Standard404Error"
+          }
+        }
+      }
+    },
+    "/users/me": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "User profile",
+        "description": "This endpoint allows logged in users to get their personal profile details",
+        "parameters": [
+          {
+            "$ref": "#parameters/x-auth-token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#definitions/User"
+            }
+          },
+          "400": {
+            "$ref": "#responses/Standard401Error"
+          },
+          "401": {
+            "$ref": "#responses/Standard401Error"
+          }
+        }
+      }
+    },
+    "/users/{userId}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "View user profile and adverts",
+        "description": "Simply view a particular users (especially agent) profile details and his/her uploaded property advert",
+        "parameters": [
+          {
+            "$ref": "#parameters/userId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#definitions/UserProperties"
+            }
+          },
+          "404":{
+            "$ref":"#responses/Standard404Error"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Users"],
+        "consumes": ["multipart/form-data"],
+        "summary": "Update user profile",
+        "description": "User can update their profile by making necessary changes",
+        "parameters": [
+          {
+            "$ref": "#parameters/x-auth-token"
+          },
+          {
+            "name": "first_name",
+            "in": "formData"
+          },
+          {
+            "name": "last_name",
+            "in": "formData"
+          },
+          {
+            "name": "phone_number",
+            "in": "formData"
+          },
+          {
+            "name": "address",
+            "in": "formData"
+          },
+          {
+            "name": "image",
+            "in": "formData",
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "data": {
+                  "$ref": "#definitions/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/Standard401Error"
+          },
+          "401": {
+            "$ref": "#responses/Standard401Error"
+          },
+          "403": {
+            "$ref": "#responses/Standard403Error"
+          },
+          "404": {
+            "$ref": "#responses/Standard404Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "summary": "Delete user profile",
+        "description": "This endpoint gives admin the access to remove user profile account permanently from the site database",
+        "parameters": [
+          {
+            "$ref": "#parameters/x-auth-token"
+          },
+          {
+            "$ref": "#parameters/userId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#responses/DeleteResponse"
+          },
+          "400": {
+            "$ref": "#responses/Standard401Error"
+          },
+          "401": {
+            "$ref": "#responses/Standard401Error"
+          },
+          "403": {
+            "$ref": "#responses/Standard403Error"
+          },
+          "404": {
+            "$ref": "#responses/Standard404Error"
+          }
+        }
+      }
+    },
+    "/users/{userId}/activate": {
+      "patch": {
+        "tags": ["Users"],
+        "summary": "Activate user profile",
+        "description": "This endpoint allows the users with admin privelleges to activate or deactivate user profile",
+        "parameters": [
+          {
+            "$ref": "#parameters/x-auth-token"
+          },
+          {
+            "$ref": "#parameters/userId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#definitions/User"
+            }
+          },
+          "400": {
+            "$ref": "#responses/Standard401Error"
+          },
+          "401": {
+            "$ref": "#responses/Standard401Error"
+          },
+          "404": {
+            "$ref": "#responses/Standard404Error"
+          }
+        }
+      }
+    },
     "/flag": {
       "post": {
-        "tags": ["Flag"],
+        "tags": ["Flags"],
         "description": "This endpoint allows users to report suspected adverts, and admin can also perform action depending on the severity",
         "summary": "Flag property advert",
         "parameters": [
@@ -449,7 +655,7 @@
         }
       },
       "get": {
-        "tags": ["Flag"],
+        "tags": ["Flags"],
         "description": "Get all properties flaged by users",
         "summary": "Get all flaged property",
         "parameters": [
@@ -480,7 +686,7 @@
     },
     "/flag/{flagId}": {
       "get": {
-        "tags": ["Flag"],
+        "tags": ["Flags"],
         "description": "Here an admin can rtrieve details of a flaged properties",
         "summary": "Get flaged property",
         "parameters": [
@@ -509,7 +715,7 @@
         }
       },
       "delete": {
-        "tags": ["Flag"],
+        "tags": ["Flags"],
         "description": "Here an admin can remove a single property advert",
         "summary": "Delete flaged property",
         "parameters": [
@@ -659,6 +865,90 @@
         }
       }
     },
+    "Users": {
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#definitions/User"
+          }
+        }
+      }
+    },
+    "Property": {
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number"
+        },
+        "state": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "deal_type": {
+          "type": "string"
+        },
+        "billing_type": {
+          "type": "string"
+        },
+        "created_on": {
+          "type": "string",
+          "format": "date"
+        },
+        "image_url": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "UserProperties": {
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "user": {
+              "$ref": "#definitions/User"
+            },
+            "userAdverts": {
+              "type": "array",
+              "items": {
+                "$ref": "#definitions/Property"
+              }
+            }
+          }
+        }
+      }
+    },
     "Authenticated": {
       "properties": {
         "status": {
@@ -720,56 +1010,7 @@
         }
       }
     },
-    "Property": {
-      "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "title": {
-          "type": "string"
-        },
-        "owner": {
-          "type": "integer"
-        },
-        "status": {
-          "type": "string"
-        },
-        "price": {
-          "type": "number"
-        },
-        "state": {
-          "type": "string"
-        },
-        "city": {
-          "type": "string"
-        },
-        "address": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        },
-        "deal_type": {
-          "type": "string"
-        },
-        "billing_type": {
-          "type": "string"
-        },
-        "created_on": {
-          "type": "string",
-          "format": "date"
-        },
-        "image_url": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "description": {
-          "type": "string"
-        }
-      }
-    },
+
     "GetProperty": {
       "properties": {
         "status": {
@@ -1096,6 +1337,12 @@
     },
     "propertyId": {
       "name": "propertyId",
+      "in": "path",
+      "type": "integer",
+      "required": true
+    },
+    "userId": {
+      "name": "userId",
       "in": "path",
       "type": "integer",
       "required": true

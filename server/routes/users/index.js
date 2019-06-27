@@ -5,11 +5,10 @@ import {
   getAllUser,
   getUserProperties,
   getUserProfile,
-  activateUserProfile,
-  deactivateUserProfile,
+  activateDeactivateUserProfile,
   deleteUserProfile,
   updateUserProfile
-} from '../../controllers/user';
+} from '../../controllers/users';
 
 const router = express.Router();
 
@@ -18,7 +17,6 @@ router.get('/me', authenticate, getUserProfile);
 router.get('/:userId', getUserProperties);
 router.patch('/:userId', [authenticate, multer.single('image')], updateUserProfile);
 router.delete('/:userId', [authenticate, isAdmin], deleteUserProfile);
-router.patch('/:userId/activate', [authenticate, isAdmin], activateUserProfile);
-router.patch('/:userId/deactivate', [authenticate, isAdmin], deactivateUserProfile);
+router.patch('/:userId/activate', [authenticate, isAdmin], activateDeactivateUserProfile);
 
 export default router;

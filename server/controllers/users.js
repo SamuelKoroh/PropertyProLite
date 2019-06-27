@@ -84,22 +84,10 @@ export const updateUserProfile = async ({ params, file, body }, res) => {
 @@ Method         PATCH
 @@ Description    Activate user account
 */
-export const activateUserProfile = ({ params }, res) => {
+export const activateDeactivateUserProfile = ({ params }, res) => {
   const userProfile = Users.find(u => parseInt(u.id, 10) === parseInt(params.userId, 10));
   if (!userProfile) return badRequest(res, 'The user profile does not exist');
-  userProfile.is_active = true;
-  okResponse(res, _.omit(userProfile, ['password', 'token']));
-};
-
-/*
-@@ Route          /api/v1/users/:userId/deactivate
-@@ Method         PATCH
-@@ Description    Deactivate user account
-*/
-export const deactivateUserProfile = ({ params }, res) => {
-  const userProfile = Users.find(u => parseInt(u.id, 10) === parseInt(params.userId, 10));
-  if (!userProfile) return badRequest(res, 'The user profile does not exist');
-  userProfile.is_active = false;
+  userProfile.is_active = !userProfile.is_active;
   okResponse(res, _.omit(userProfile, ['password', 'token']));
 };
 
