@@ -18,6 +18,9 @@
     "type": "git",
     "url": "git+https://github.com/SamuelKoroh/PropertyProLite.git"
   },
+  "engines": {
+    "node": "10.4.1"
+  },
   "author": "Koroh Samuel",
   "license": "MIT",
   "bugs": {
