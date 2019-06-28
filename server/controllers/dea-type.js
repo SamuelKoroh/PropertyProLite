@@ -3,6 +3,7 @@ import { okResponse, badRequest } from '../utils/refractory';
 
 export const addPropertyDeal = ({ body }, res) => {
   const propertyDeal = { id: PropertyDeals.length + 1, ...body };
+  PropertyDeals.push(propertyDeal);
   okResponse(res, propertyDeal);
 };
 
@@ -36,6 +37,7 @@ export const deletePropertyDeal = ({ params }, res) => {
 
 export const addPropertyTypes = ({ body }, res) => {
   const propertyType = { id: PropertyTypes.length + 1, ...body };
+  PropertyTypes.push(propertyType);
   okResponse(res, propertyType);
 };
 export const getAllPropertyTypes = (req, res) => {

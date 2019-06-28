@@ -109,6 +109,120 @@
         }
       }
     },
+    "/auth/reset-password": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Request password reset",
+        "description": "Register user can request password reset if the correct supplied",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "email": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#responses/SuccessResponse"
+          },
+          "400": {
+            "$ref": "#responses/Standard400Error"
+          },
+          "404": {
+            "$ref": "#responses/Standard404Error"
+          }
+        }
+      }
+    },
+    "/auth/reset-password/{token}": {
+      "get": {
+        "tags": ["Authentication"],
+        "description": "Validate user token, and returns the users email if the token is valid",
+        "summary": "Validate user token",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string"
+                    },
+                    "user_id": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#responses/Standard404Error"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Authentication"],
+        "summary": "Update profile password",
+        "description": "If user is valid then he/she need to provide new secure password to complete the password reset process.",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "required": ["email", "password"],
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#definitions/Authenticated"
+            }
+          },
+          "400": {
+            "$ref": "#responses/Standard400Error"
+          },
+          "404": {
+            "$ref": "#responses/Standard404Error"
+          }
+        }
+      }
+    },
     "/property": {
       "post": {
         "tags": ["Properties"],
@@ -375,7 +489,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#responses/DeleteResponse"
+            "$ref": "#responses/SuccessResponse"
           },
           "403": {
             "$ref": "#responses/Standard403Error"
@@ -417,6 +531,49 @@
           },
           "500": {
             "$ref": "#responses/Standard500Error"
+          }
+        }
+      }
+    },
+    "/property/{propertyId}/activate": {
+      "patch": {
+        "tags": ["Properties"],
+        "summary": "Activate or Deactivate suspicious advert",
+        "description": "Admin can Activate or Deactivate an advertt once reported by others, and if found suspicious",
+        "parameters": [
+          {
+            "$ref": "#parameters/x-auth-token"
+          },
+          {
+            "$ref": "#parameters/propertyId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "$ref": "#definitions/Property"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/Standard400Error"
+          },
+          "401": {
+            "$ref": "#responses/Standard401Error"
+          },
+          "403": {
+            "$ref": "#responses/Standard403Error"
+          },
+          "404": {
+            "$ref": "#responses/Standard404Error"
           }
         }
       }
@@ -501,8 +658,8 @@
               "$ref": "#definitions/UserProperties"
             }
           },
-          "404":{
-            "$ref":"#responses/Standard404Error"
+          "404": {
+            "$ref": "#responses/Standard404Error"
           }
         }
       },
@@ -514,6 +671,9 @@
         "parameters": [
           {
             "$ref": "#parameters/x-auth-token"
+          },
+          {
+            "$ref":"#parameters/userId"
           },
           {
             "name": "first_name",
@@ -578,7 +738,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#responses/DeleteResponse"
+            "$ref": "#responses/SuccessResponse"
           },
           "400": {
             "$ref": "#responses/Standard401Error"
@@ -616,10 +776,13 @@
             }
           },
           "400": {
-            "$ref": "#responses/Standard401Error"
+            "$ref": "#responses/Standard400Error"
           },
           "401": {
             "$ref": "#responses/Standard401Error"
+          },
+          "403": {
+            "$ref": "#responses/Standard403Error"
           },
           "404": {
             "$ref": "#responses/Standard404Error"
@@ -643,9 +806,9 @@
           }
         ],
         "responses": {
-          "200": {
+          "201": {
             "schema": {
-              "description": "OK",
+              "description": "Created",
               "$ref": "#definitions/FlagResponse"
             }
           },
@@ -706,6 +869,12 @@
               "$ref": "#definitions/GetProperty"
             }
           },
+          "400": {
+            "$ref": "#responses/Standard400Error"
+          },
+          "401": {
+            "$ref": "#responses/Standard401Error"
+          },
           "403": {
             "$ref": "#responses/Standard403Error"
           },
@@ -730,7 +899,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#responses/DeleteResponse"
+            "$ref": "#responses/SuccessResponse"
           },
           "403": {
             "$ref": "#responses/Standard403Error"
@@ -782,7 +951,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#responses/DeleteResponse"
+            "$ref": "#responses/SuccessResponse"
           },
           "400": {
             "$ref": "#responses/Standard400Error"
@@ -814,13 +983,390 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#responses/DeleteResponse"
+            "$ref": "#responses/SuccessResponse"
           },
           "400": {
             "$ref": "#responses/Standard400Error"
           },
           "401": {
             "$ref": "#responses/Standard401Error"
+          }
+        }
+      }
+    },
+    "/deals-types/deals": {
+      "post": {
+        "tags": ["Set Up"],
+        "summary": "Add new deal",
+        "description": "Add deals dynamically without bring the site down when the need to add new one arise",
+        "parameters": [
+          {
+            "$ref": "#parameters/x-auth-token"
+          },
+          {
+            "$ref": "#parameters/setupBody"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "$ref": "#definitions/SetUp"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/Standard400Error"
+          },
+          "401": {
+            "$ref": "#responses/Standard401Error"
+          },
+          "403": {
+            "$ref": "#responses/Standard403Error"
+          },
+          "404": {
+            "$ref": "#responses/Standard404Error"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Set Up"],
+        "summary": "Retrieve all deals",
+        "parameters": [
+          {
+            "$ref": "#parameters/x-auth-token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#definitions/SetUp"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/Standard400Error"
+          },
+          "401": {
+            "$ref": "#responses/Standard401Error"
+          },
+          "403": {
+            "$ref": "#responses/Standard403Error"
+          },
+          "404": {
+            "$ref": "#responses/Standard404Error"
+          }
+        }
+      }
+    },
+    "/deals-types/deals/{id}": {
+      "get": {
+        "tags": ["Set Up"],
+        "summary": "Retrieve single deal by its ID",
+        "parameters": [
+          {
+            "$ref": "#parameters/x-auth-token"
+          },
+          {
+            "$ref": "#parameters/setupId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "$ref": "#definitions/SetUp"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Set Up"],
+        "summary": "Update deal details",
+        "parameters": [
+          {
+            "$ref": "#parameters/setupId"
+          },
+          {
+            "$ref": "#parameters/setupBody"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "$ref": "#definitions/SetUp"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/Standard400Error"
+          },
+          "401": {
+            "$ref": "#responses/Standard401Error"
+          },
+          "403": {
+            "$ref": "#responses/Standard403Error"
+          },
+          "404": {
+            "$ref": "#responses/Standard404Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Set Up"],
+        "summary": "Remove a deal",
+        "parameters": [
+          {
+            "$ref": "#parameters/x-auth-token"
+          },
+          {
+            "$ref": "#parameters/setupId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#responses/SuccessResponse"
+          },
+          "400": {
+            "$ref": "#responses/Standard400Error"
+          },
+          "401": {
+            "$ref": "#responses/Standard401Error"
+          },
+          "403": {
+            "$ref": "#responses/Standard403Error"
+          },
+          "404": {
+            "$ref": "#responses/Standard404Error"
+          }
+        }
+      }
+    },
+    "/deals-types/types": {
+      "post": {
+        "tags": ["Set Up"],
+        "summary": "Add new property types",
+        "description": "Add property types dynamically without bring the site down when the need to add new one arise",
+        "parameters": [
+          {
+            "$ref": "#parameters/x-auth-token"
+          },
+          {
+            "$ref": "#parameters/setupBody"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "$ref": "#definitions/SetUp"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/Standard400Error"
+          },
+          "401": {
+            "$ref": "#responses/Standard401Error"
+          },
+          "403": {
+            "$ref": "#responses/Standard403Error"
+          },
+          "404": {
+            "$ref": "#responses/Standard404Error"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Set Up"],
+        "summary": "Retrieve all property types",
+        "parameters": [
+          {
+            "$ref": "#parameters/x-auth-token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#definitions/SetUp"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/Standard400Error"
+          },
+          "401": {
+            "$ref": "#responses/Standard401Error"
+          },
+          "403": {
+            "$ref": "#responses/Standard403Error"
+          },
+          "404": {
+            "$ref": "#responses/Standard404Error"
+          }
+        }
+      }
+    },
+    "/deals-types/types/{id}": {
+      "get": {
+        "tags": ["Set Up"],
+        "summary": "Retrieve single property type by its ID",
+        "parameters": [
+          {
+            "$ref": "#parameters/x-auth-token"
+          },
+          {
+            "$ref": "#parameters/setupId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "$ref": "#definitions/SetUp"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/Standard400Error"
+          },
+          "401": {
+            "$ref": "#responses/Standard401Error"
+          },
+          "403": {
+            "$ref": "#responses/Standard403Error"
+          },
+          "404": {
+            "$ref": "#responses/Standard404Error"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Set Up"],
+        "summary": "Update property type details",
+        "parameters": [
+          {
+            "$ref": "#parameters/x-auth-token"
+          },
+          {
+            "$ref": "#parameters/setupId"
+          },
+          {
+            "$ref": "#parameters/setupBody"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "$ref": "#definitions/SetUp"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#responses/Standard400Error"
+          },
+          "401": {
+            "$ref": "#responses/Standard401Error"
+          },
+          "403": {
+            "$ref": "#responses/Standard403Error"
+          },
+          "404": {
+            "$ref": "#responses/Standard404Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Set Up"],
+        "summary": "Remove property type",
+        "parameters": [
+          {
+            "$ref": "#parameters/x-auth-token"
+          },
+          {
+            "$ref": "#parameters/setupId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#responses/SuccessResponse"
+          },
+          "400": {
+            "$ref": "#responses/Standard400Error"
+          },
+          "401": {
+            "$ref": "#responses/Standard401Error"
+          },
+          "403": {
+            "$ref": "#responses/Standard403Error"
+          },
+          "404": {
+            "$ref": "#responses/Standard404Error"
           }
         }
       }
@@ -1010,7 +1556,6 @@
         }
       }
     },
-
     "GetProperty": {
       "properties": {
         "status": {
@@ -1263,6 +1808,19 @@
         }
       }
     },
+    "SetUp": {
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
     "Error": {
       "properties": {
         "status": {
@@ -1285,7 +1843,7 @@
         "$ref": "#definitions/Error"
       }
     },
-    "DeleteResponse": {
+    "SuccessResponse": {
       "description": "OK",
       "schema": {
         "properties": {
@@ -1346,6 +1904,27 @@
       "in": "path",
       "type": "integer",
       "required": true
+    },
+    "setupId": {
+      "name": "id",
+      "in": "path",
+      "type": "integer",
+      "required": true
+    },
+    "setupBody": {
+      "name": "body",
+      "in": "body",
+      "required": true,
+      "schema": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      }
     }
   }
 }

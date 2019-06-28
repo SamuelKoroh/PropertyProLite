@@ -14,6 +14,6 @@ router.post('/signup', multer.single('image'), signUp);
 router.post('/signin', signIn);
 router.post('/reset-password', sendResetLink);
 router.get('/reset-password/:token', validateUrlToken);
-router.patch('/reset-password', updateUserPassword);
+router.patch('/reset-password/:token', updateUserPassword);
 
 export default router;

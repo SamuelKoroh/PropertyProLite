@@ -96,20 +96,25 @@ export const sendResetLink = async ({ body }, res) => {
 
   const mail = new Mail('Property Pro', user.email, 'Reset Password', text);
   const result = await mail.sendMail();
-  res.send(result);
+  if (result !== 'sent') return badRequest(res, result, 400);
+  okResponse(res, { message: 'The link to rest your profile has been sent to this email address' });
 };
 
 export const validateUrlToken = ({ params }, res) => {
-  const user = Users.find(u => u.resetPasswordToken === params.token);
+  const user = Users.find(
+    u =>
+      u.resetPasswordToken === params.token
+      && parseInt(u.resetPasswordExpires, 10) > parseInt(Date.now(), 10)
+  );
   if (!user) return badRequest(res, 'The reset link is invalid or has expired');
-  okResponse(res, { email: user.email, user_id: user.id });
+  okResponse(res, { email: user.email });
 };
 
-export const updateUserPassword = async ({ body }, res) => {
+export const updateUserPassword = async ({ body, params }, res) => {
   const errors = Joi.validate(body, signinSchema);
   if (errors.error) return badRequest(res, errors.error, 400);
 
-  const user = Users.find(u => u.email === body.email);
+  const user = Users.find(u => u.email === body.email && u.resetPasswordToken === params.token);
   if (!user) return badRequest(res, 'The profile account does not exists');
 
   const salt = await bcrypt.genSalt(10);

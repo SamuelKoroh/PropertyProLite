@@ -2,7 +2,7 @@ import nodemailer from 'nodemailer';
 
 class Mail {
   constructor(from, to, subject, text) {
-    this.mailOption = {
+    this.mailOptions = {
       from,
       to,
       subject,
@@ -20,9 +20,10 @@ class Mail {
 
   async sendMail() {
     try {
-      await this.transporter.sendMail(this.mailOption);
+      await this.transporter.sendMail(this.mailOptions);
+      return 'sent';
     } catch (error) {
-      console.log(error);
+      return error;
     }
   }
 }
