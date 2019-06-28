@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../server/models/Favourites.js"],"names":["Favourites"],"mappings":";;;;;;AAAA,MAAMA,UAAU,GAAG,EAAnB;eAEeA,U","sourcesContent":["const Favourites = [];\n\nexport default Favourites;\n"],"file":"Favourites.js"}

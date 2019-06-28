@@ -4,8 +4,12 @@
   "description": "Property Pro Lite is a platform where people can create and/or search properties for sale or rent.",
   "main": "index.js",
   "scripts": {
-    "start": "node ./build-server/index.js",
-    "build": "babel -d ./build-server ./server",
+    "clean": "rm -rf build && mkdir build",
+    "build-babel": "babel -d ./build ./server -s",
+    "build": "npm run clean && npm run build-babel",
+    "start": "node ./build/index.js",
+    "build-back": "babel -d ./build-server ./server",
+    "start-back": "node ./build-server/index.js",
     "dev": "nodemon --watch server --exec babel-node ./server/index.js",
     "test:server": "./node_modules/.bin/mocha --timeout 500000 --require @babel/register server/tests/",
     "test": "nyc npm run test:server && nyc report --reporter=lcov --reporter=text-lcov | coveralls"
@@ -21,7 +25,6 @@
   },
   "homepage": "https://github.com/SamuelKoroh/PropertyProLite#readme",
   "devDependencies": {
-    "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.5",
     "@babel/node": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
@@ -44,6 +47,7 @@
     "supertest": "^4.0.2"
   },
   "dependencies": {
+    "@babel/cli": "^7.4.4",
     "bcrypt": "^3.0.6",
     "cloudinary": "^1.14.0",
     "dotenv": "^8.0.0",

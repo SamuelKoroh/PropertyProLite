@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../server/models/Properties.js"],"names":["Properties"],"mappings":";;;;;;AAAA,MAAMA,UAAU,GAAG,EAAnB;eAEeA,U","sourcesContent":["const Properties = [];\n\nexport default Properties;\n"],"file":"Properties.js"}
