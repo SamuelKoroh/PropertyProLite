@@ -673,7 +673,7 @@
             "$ref": "#parameters/x-auth-token"
           },
           {
-            "$ref":"#parameters/userId"
+            "$ref": "#parameters/userId"
           },
           {
             "name": "first_name",
@@ -1109,6 +1109,9 @@
         "tags": ["Set Up"],
         "summary": "Update deal details",
         "parameters": [
+          {
+            "$ref": "#parameters/x-auth-token"
+          },
           {
             "$ref": "#parameters/setupId"
           },

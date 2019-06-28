@@ -12,7 +12,6 @@ const getFavourite = (favouritePropertyId, user) => {
         && parseInt(f.user_id, 10) === parseInt(user.id, 10))
   );
 };
-
 const removeFavourite = (favourite) => {
   const index = Favourites.indexOf(favourite);
   Favourites.splice(index, 1);

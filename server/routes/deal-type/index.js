@@ -11,18 +11,19 @@ import {
   updatePropertyType,
   deletePropertyType
 } from '../../controllers/dea-type';
+import authenticate, { isAdmin } from '../../middleware/authenticate';
 
 const router = express.Router();
 
-router.post('/deals', addPropertyDeal);
-router.get('/deals', getAllPropertyDeals);
-router.get('/deals/:id', getPropertyDeal);
-router.patch('/deals/:id', updatePropertyDeal);
-router.delete('/deals/:id', deletePropertyDeal);
-router.post('/types', addPropertyTypes);
-router.get('/types', getAllPropertyTypes);
-router.get('/types/:id', getPropertyType);
-router.patch('/types/:id', updatePropertyType);
-router.delete('/types/:id', deletePropertyType);
+router.post('/deals', [authenticate, isAdmin], addPropertyDeal);
+router.get('/deals', [authenticate, isAdmin], getAllPropertyDeals);
+router.get('/deals/:id', [authenticate, isAdmin], getPropertyDeal);
+router.patch('/deals/:id', [authenticate, isAdmin], updatePropertyDeal);
+router.delete('/deals/:id', [authenticate, isAdmin], deletePropertyDeal);
+router.post('/types', [authenticate, isAdmin], addPropertyTypes);
+router.get('/types', [authenticate, isAdmin], getAllPropertyTypes);
+router.get('/types/:id', [authenticate, isAdmin], getPropertyType);
+router.patch('/types/:id', [authenticate, isAdmin], updatePropertyType);
+router.delete('/types/:id', [authenticate, isAdmin], deletePropertyType);
 
 export default router;

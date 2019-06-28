@@ -1,10 +1,14 @@
 import { PropertyDeals, PropertyTypes } from '../models/deal-type';
-import { okResponse, badRequest } from '../utils/refractory';
+import {
+  okResponse,
+  removeItem,
+  updateItem,
+  getItem,
+  addItem
+} from '../utils/refractory';
 
 export const addPropertyDeal = ({ body }, res) => {
-  const propertyDeal = { id: PropertyDeals.length + 1, ...body };
-  PropertyDeals.push(propertyDeal);
-  okResponse(res, propertyDeal);
+  addItem(PropertyDeals, body, res);
 };
 
 export const getAllPropertyDeals = (req, res) => {
@@ -12,58 +16,32 @@ export const getAllPropertyDeals = (req, res) => {
 };
 
 export const getPropertyDeal = ({ params }, res) => {
-  const propertyDeal = PropertyDeals.find(p => parseInt(p.id, 10) === parseInt(params.id, 10));
-  if (!propertyDeal) return badRequest(res, 'The item does not exist');
-  okResponse(res, propertyDeal);
+  getItem(PropertyDeals, params, res);
 };
 
 export const updatePropertyDeal = ({ body, params }, res) => {
-  const propertyDeal = PropertyDeals.find(p => parseInt(p.id, 10) === parseInt(params.id, 10));
-  if (!propertyDeal) return badRequest(res, 'The item does not exist');
-  const keys = Object.keys(body);
-  keys.forEach((key) => {
-    propertyDeal[key] = body[key];
-  });
-  okResponse(res, propertyDeal);
+  updateItem(PropertyDeals, body, params, res);
 };
 
 export const deletePropertyDeal = ({ params }, res) => {
-  const propertyDeal = PropertyDeals.find(p => parseInt(p.id, 10) === parseInt(params.id, 10));
-  if (!propertyDeal) return badRequest(res, 'The item does not exist');
-  const index = PropertyDeals.indexOf(propertyDeal);
-  PropertyDeals.splice(index, 1);
-  okResponse(res, { message: 'The item has been removed' });
+  removeItem(PropertyDeals, params, res);
 };
 
 export const addPropertyTypes = ({ body }, res) => {
-  const propertyType = { id: PropertyTypes.length + 1, ...body };
-  PropertyTypes.push(propertyType);
-  okResponse(res, propertyType);
+  addItem(PropertyTypes, body, res);
 };
 export const getAllPropertyTypes = (req, res) => {
   okResponse(res, PropertyTypes);
 };
 
 export const getPropertyType = ({ params }, res) => {
-  const propertyType = PropertyTypes.find(p => parseInt(p.id, 10) === parseInt(params.id, 10));
-  if (!propertyType) return badRequest(res, 'The item does not exist');
-  okResponse(res, propertyType);
+  getItem(PropertyTypes, params, res);
 };
 
 export const updatePropertyType = ({ body, params }, res) => {
-  const propertyType = PropertyTypes.find(p => parseInt(p.id, 10) === parseInt(params.id, 10));
-  if (!propertyType) return badRequest(res, 'The item does not exist');
-  const keys = Object.keys(body);
-  keys.forEach((key) => {
-    propertyType[key] = body[key];
-  });
-  okResponse(res, propertyType);
+  updateItem(PropertyTypes, body, params, res);
 };
 
 export const deletePropertyType = ({ params }, res) => {
-  const propertyType = PropertyTypes.find(p => parseInt(p.id, 10) === parseInt(params.id, 10));
-  if (!propertyType) return badRequest(res, 'The item does not exist');
-  const index = PropertyDeals.indexOf(propertyType);
-  PropertyTypes.splice(index, 1);
-  okResponse(res, { message: 'The item has been removed' });
+  removeItem(PropertyTypes, params, res);
 };
