@@ -1,1 +1,0 @@
-{"version":3,"sources":["../../server/models/Flags.js"],"names":["Flags"],"mappings":";;;;;;AAAA,MAAMA,KAAK,GAAG,EAAd;eAEeA,K","sourcesContent":["const Flags = [];\n\nexport default Flags;\n"],"file":"Flags.js"}
