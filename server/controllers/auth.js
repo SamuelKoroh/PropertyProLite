@@ -3,10 +3,9 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import _ from 'lodash';
 import crypto from 'crypto';
-import cloudinary from 'cloudinary';
 import Mail from '../utils/mail';
 import Users from '../models/Users';
-import { okResponse, badRequest } from '../utils/refractory';
+import { okResponse, badRequest, setUserImage } from '../utils/refractory';
 import { signupSchema, signinSchema, emailSchema } from '../middleware/modelValidation';
 import curDate from '../utils/date';
 
@@ -37,10 +36,7 @@ export const signUp = async ({ body, file }, res) => {
       created_on: curDate()
     };
 
-    if (file) {
-      const result = await cloudinary.v2.uploader.upload(file.path);
-      user.image = result.secure_url;
-    }
+    user.image = await setUserImage(file, user.image);
 
     Users.push(user);
     user.token = await jwt.sign(_.pick(user, ['id', 'is_admin', 'user_type']), jwtSecret, {
