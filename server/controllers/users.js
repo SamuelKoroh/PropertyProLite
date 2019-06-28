@@ -1,7 +1,6 @@
 import _ from 'lodash';
-import cloudinary from 'cloudinary';
 import Users from '../models/Users';
-import { okResponse, badRequest } from '../utils/refractory';
+import { okResponse, badRequest, removeItem, setUserImage } from '../utils/refractory';
 import Properties from '../models/Properties';
 
 const filterUsers = (users, query) => {
@@ -69,10 +68,8 @@ export const updateUserProfile = async ({ params, file, body }, res) => {
       user[key] = body[key];
     });
 
-    if (file) {
-      const result = await cloudinary.v2.uploader.upload(file.path);
-      user.image = result.secure_url;
-    }
+    user.image = await setUserImage(file, user.image);
+
     return okResponse(res, { ..._.omit(user, ['password']) });
   } catch (error) {
     badRequest(res, 'Image not valid', 400);
@@ -97,9 +94,5 @@ export const activateDeactivateUserProfile = ({ params }, res) => {
 @@ Description    Remove user account permanently from storage
 */
 export const deleteUserProfile = ({ params }, res) => {
-  const userProfile = Users.find(u => parseInt(u.id, 10) === parseInt(params.userId, 10));
-  if (!userProfile) return badRequest(res, 'The user profile does not exist or has been deleted');
-  const index = Users.indexOf(userProfile);
-  Users.splice(index, 1);
-  okResponse(res, { message: 'The user has been removed' });
+  removeItem(Users, params, res, 'userId', 'The user has been removed');
 };
