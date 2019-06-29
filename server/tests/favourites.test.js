@@ -65,7 +65,12 @@ describe('/api/v1/favourites', () => {
         .post(`/api/v1/favourites/${property2.body.data.id}`)
         .set('x-auth-token', testUser2.body.data.token);
     });
-
+    it('should return 404 if the user favourite list is empty', async () => {
+      const result = await request(app)
+        .get('/api/v1/favourites')
+        .set('x-auth-token', admin.body.data.token);
+      expect(result.status).to.equal(404);
+    });
     it('should return 200 if the user favourite list is loaded successfully', async () => {
       const result = await request(app)
         .get('/api/v1/favourites')

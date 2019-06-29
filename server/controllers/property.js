@@ -86,7 +86,7 @@ export const createProperty = async ({ user, files, body }, res) => {
 */
 export const getProperties = (req, res) => {
   const { location, type, deal, price } = req.query;
-  let properties = Properties.filter(p => p.status !== 'sold');
+  let properties = Properties.filter(p => p.status !== 'sold' && p.is_active);
 
   properties = filterProperties(properties, type, deal, price, location);
   if (!properties.length) return badRequest(res, 'No property was found');
@@ -105,7 +105,10 @@ export const getProperties = (req, res) => {
 */
 export const getProperty = ({ params }, res) => {
   const property = Properties.find(
-    prop => parseInt(prop.id, 10) === parseInt(params.propertyId, 10) && prop.status !== 'sold'
+    prop =>
+      parseInt(prop.id, 10) === parseInt(params.propertyId, 10)
+      && prop.status !== 'sold'
+      && prop.is_active
   );
   if (!property) return badRequest(res, 'The property does not exist');
   const owner = Users.find(u => u.id === property.owner);

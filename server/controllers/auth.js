@@ -20,7 +20,7 @@ export const signUp = async ({ body, file }, res) => {
   const errors = Joi.validate(body, signupSchema);
   if (errors.error) return badRequest(res, errors.error.details[0].message, 400);
 
-  let user = Users.find(u => u.email === body.email);
+  let user = Users.find(u => u.email === body.email && u.is_active);
   if (user) return badRequest(res, 'This email has been registered already', 400);
 
   try {
@@ -58,7 +58,7 @@ export const signIn = async ({ body }, res) => {
     const errors = Joi.validate(body, signinSchema);
     if (errors.error) return badRequest(res, errors.error.details[0].message, 400);
 
-    const user = Users.find(u => u.email === body.email);
+    const user = Users.find(u => u.email === body.email && u.is_active);
     if (!user) return badRequest(res, 'Invalid username and password', 400);
 
     const validPassword = await bcrypt.compare(body.password, user.password);

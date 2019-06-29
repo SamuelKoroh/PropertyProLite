@@ -964,6 +964,9 @@
           },
           "401": {
             "$ref": "#responses/Standard401Error"
+          },
+          "404": {
+            "$ref": "#responses/Standard404Error"
           }
         }
       }

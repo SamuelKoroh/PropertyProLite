@@ -8,7 +8,8 @@ const Users = [
     phone_number: '08037545637',
     address: '24 Oboro park PH',
     user_type: 'agent',
-    is_admin: true
+    is_admin: true,
+    is_active: true
   }
 ];
 

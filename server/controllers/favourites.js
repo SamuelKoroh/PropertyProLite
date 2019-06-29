@@ -39,6 +39,7 @@ export const saveFavourites = ({ params, user }, res) => {
 */
 export const getFavourites = ({ user }, res) => {
   const favourites = Favourites.filter(f => parseInt(f.user_id, 10) === parseInt(user.id, 10));
+  if (!favourites.length) return badRequest(res, 'No property on your favorite list yet');
   const myFavourites = favourites.map((f) => {
     const property = Properties.find(p => parseInt(p.id, 10) === parseInt(f.property_id, 10));
     return {
