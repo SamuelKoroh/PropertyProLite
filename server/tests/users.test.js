@@ -81,16 +81,10 @@ describe('/api/v1/user', () => {
       expect(result.status).to.equal(200);
     });
   });
-  describe('PATCH  /:userId', () => {
-    it('should return 404 if the user is not found', async () => {
-      const result = await request(app)
-        .patch('/api/v1/users/10000')
-        .set('x-auth-token', admin.body.data.token);
-      expect(result.status).to.equal(404);
-    });
+  describe('PATCH  /', () => {
     it('should return 200 if the user profile was updated', async () => {
       const result = await request(app)
-        .patch(`/api/v1/users/${testUser1.body.data.id}`)
+        .patch('/api/v1/users')
         .set('x-auth-token', testUser1.body.data.token)
         .send({ address: 'new address' });
       expect(result.status).to.equal(200);
@@ -98,7 +92,7 @@ describe('/api/v1/user', () => {
     it('should return 200 if the user image was updated', async () => {
       const filePath = `${__dirname}/user.png`;
       const result = await request(app)
-        .patch(`/api/v1/users/${testUser1.body.data.id}`)
+        .patch('/api/v1/users')
         .set('x-auth-token', testUser1.body.data.token)
         .attach('image', filePath);
       expect(result.status).to.equal(200);
@@ -106,7 +100,7 @@ describe('/api/v1/user', () => {
     it('should return 200 if the user image is not valid', async () => {
       const filePath = `${__dirname}/badimage.txt`;
       const result = await request(app)
-        .patch(`/api/v1/users/${testUser1.body.data.id}`)
+        .patch('/api/v1/users')
         .set('x-auth-token', testUser1.body.data.token)
         .attach('image', filePath);
       expect(result.status).to.equal(500);
@@ -122,6 +116,20 @@ describe('/api/v1/user', () => {
     it('should return 200 if the user is_active field is set to true', async () => {
       const result = await request(app)
         .patch(`/api/v1/users/${testUser1.body.data.id}/activate`)
+        .set('x-auth-token', admin.body.data.token);
+      expect(result.status).to.equal(200);
+    });
+  });
+  describe('PATCH  /:userId/set-admin', () => {
+    it('should return 404 if the user is not found', async () => {
+      const result = await request(app)
+        .patch('/api/v1/users/1000000/set-admin')
+        .set('x-auth-token', admin.body.data.token);
+      expect(result.status).to.equal(404);
+    });
+    it('should return 200 if the user is_admin field is set to true', async () => {
+      const result = await request(app)
+        .patch(`/api/v1/users/${testUser1.body.data.id}/set-admin`)
         .set('x-auth-token', admin.body.data.token);
       expect(result.status).to.equal(200);
     });

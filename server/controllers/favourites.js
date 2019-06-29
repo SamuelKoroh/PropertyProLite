@@ -18,6 +18,11 @@ const removeFavourite = (favourite) => {
   return 'The property has been removed';
 };
 
+/*
+@@ Route          /api/v1/favourites/:userId
+@@ Method         POST
+@@ Description    Add - remove property from favourite
+*/
 export const saveFavourites = ({ params, user }, res) => {
   const { propertyId } = params;
   let favourite = getFavourite(propertyId, user);
@@ -27,6 +32,11 @@ export const saveFavourites = ({ params, user }, res) => {
   okResponse(res, { message: 'The property has been saved to your favourite list' });
 };
 
+/*
+@@ Route          /api/v1/favourites
+@@ Method         GET
+@@ Description    Get the login user favourite
+*/
 export const getFavourites = ({ user }, res) => {
   const favourites = Favourites.filter(f => parseInt(f.user_id, 10) === parseInt(user.id, 10));
   const myFavourites = favourites.map((f) => {
@@ -41,6 +51,11 @@ export const getFavourites = ({ user }, res) => {
   okResponse(res, myFavourites);
 };
 
+/*
+@@ Route          /api/v1/favourites/:favouriteId
+@@ Method         DELETE
+@@ Description    Remove the property from user favourites
+*/
 export const deleteFavourite = ({ params, user }, res) => {
   const favourite = getFavourite(params.favouriteId, user);
   if (!favourite) return badRequest(res, 'The property does not exist', 404);

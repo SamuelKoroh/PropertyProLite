@@ -15,8 +15,8 @@
     "/auth/signup": {
       "post": {
         "tags": ["Authentication"],
-        "summary": "Create new user",
-        "description": "Create new user by sending profile data (e.g image optional, user details ). most fields are reuired",
+        "summary": "Register user",
+        "description": "This endpoint allow users to register with the system as either (regular or agent). Note: it only admin and agent as the access to upload property adverts.",
         "consumes": ["multipart/form-data"],
         "parameters": [
           {
@@ -80,8 +80,8 @@
     "/auth/signin": {
       "post": {
         "tags": ["Authentication"],
-        "summary": "Login a user",
-        "description": "Login using valid credential to gain access to your profile",
+        "summary": "User login",
+        "description": "Login using valid credential to gain access to your profile <br/><br/> <strong style='color:red'>Note:</strong> Default admin user login credentials is:<br/><br/> <strong style='color:red'>email:</strong> admin@gmail.com, <br/><br/> <strong style='color:red'>password:</strong> admin",
         "parameters": [
           {
             "name": "body",
@@ -113,7 +113,7 @@
       "post": {
         "tags": ["Authentication"],
         "summary": "Request password reset",
-        "description": "Register user can request password reset if the correct supplied",
+        "description": "Register user can request password reset if the correct email used in registering the profile is supplied",
         "parameters": [
           {
             "name": "body",
@@ -539,7 +539,7 @@
       "patch": {
         "tags": ["Properties"],
         "summary": "Activate or Deactivate suspicious advert",
-        "description": "Admin can Activate or Deactivate an advertt once reported by others, and if found suspicious",
+        "description": "Admin can <span style='color:red'>activate</span> or <span style='color:red'>deactivate</span> an advert once reported by other users, and found suspicious by the admin",
         "parameters": [
           {
             "$ref": "#parameters/x-auth-token"
@@ -613,55 +613,6 @@
             "$ref": "#responses/Standard404Error"
           }
         }
-      }
-    },
-    "/users/me": {
-      "get": {
-        "tags": ["Users"],
-        "summary": "User profile",
-        "description": "This endpoint allows logged in users to get their personal profile details",
-        "parameters": [
-          {
-            "$ref": "#parameters/x-auth-token"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#definitions/User"
-            }
-          },
-          "400": {
-            "$ref": "#responses/Standard401Error"
-          },
-          "401": {
-            "$ref": "#responses/Standard401Error"
-          }
-        }
-      }
-    },
-    "/users/{userId}": {
-      "get": {
-        "tags": ["Users"],
-        "summary": "View user profile and adverts",
-        "description": "Simply view a particular users (especially agent) profile details and his/her uploaded property advert",
-        "parameters": [
-          {
-            "$ref": "#parameters/userId"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#definitions/UserProperties"
-            }
-          },
-          "404": {
-            "$ref": "#responses/Standard404Error"
-          }
-        }
       },
       "patch": {
         "tags": ["Users"],
@@ -671,9 +622,6 @@
         "parameters": [
           {
             "$ref": "#parameters/x-auth-token"
-          },
-          {
-            "$ref": "#parameters/userId"
           },
           {
             "name": "first_name",
@@ -718,6 +666,55 @@
           },
           "403": {
             "$ref": "#responses/Standard403Error"
+          },
+          "404": {
+            "$ref": "#responses/Standard404Error"
+          }
+        }
+      }
+    },
+    "/users/me": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "User profile",
+        "description": "This endpoint allows logged in users to get their personal profile details",
+        "parameters": [
+          {
+            "$ref": "#parameters/x-auth-token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#definitions/User"
+            }
+          },
+          "400": {
+            "$ref": "#responses/Standard401Error"
+          },
+          "401": {
+            "$ref": "#responses/Standard401Error"
+          }
+        }
+      }
+    },
+    "/users/{userId}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "View user profile and adverts",
+        "description": "Simply view a particular users (especially agent) profile details and his/her uploaded property advert",
+        "parameters": [
+          {
+            "$ref": "#parameters/userId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#definitions/UserProperties"
+            }
           },
           "404": {
             "$ref": "#responses/Standard404Error"
@@ -790,10 +787,45 @@
         }
       }
     },
+    "/users/{userId}/set-admin": {
+      "patch": {
+        "tags": ["Users"],
+        "summary": "Set user as admin",
+        "description": "This endpoint allow the users with admin privelleges to set and remove user as admin",
+        "parameters": [
+          {
+            "$ref": "#parameters/x-auth-token"
+          },
+          {
+            "$ref": "#parameters/userId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#definitions/User"
+            }
+          },
+          "400": {
+            "$ref": "#responses/Standard400Error"
+          },
+          "401": {
+            "$ref": "#responses/Standard401Error"
+          },
+          "403": {
+            "$ref": "#responses/Standard403Error"
+          },
+          "404": {
+            "$ref": "#responses/Standard404Error"
+          }
+        }
+      }
+    },
     "/flag": {
       "post": {
         "tags": ["Flags"],
-        "description": "This endpoint allows users to report suspected adverts, and admin can also perform action depending on the severity",
+        "description": "This endpoint allows users to report suspected adverts",
         "summary": "Flag property advert",
         "parameters": [
           {
@@ -819,8 +851,8 @@
       },
       "get": {
         "tags": ["Flags"],
-        "description": "Get all properties flaged by users",
-        "summary": "Get all flaged property",
+        "description": "Get all properties flagged by users",
+        "summary": "Get all flagged property",
         "parameters": [
           {
             "$ref": "#parameters/x-auth-token"
@@ -850,7 +882,7 @@
     "/flag/{flagId}": {
       "get": {
         "tags": ["Flags"],
-        "description": "Here an admin can rtrieve details of a flaged properties",
+        "description": "Here an admin can retrieve details of a flagged property",
         "summary": "Get flaged property",
         "parameters": [
           {
@@ -914,7 +946,7 @@
       "get": {
         "tags": ["Favourites"],
         "summary": "Get user favourite property",
-        "description": "Get the current login favourites propertys advert",
+        "description": "Get the current login user favourites propertys advert",
         "parameters": [
           {
             "$ref": "#parameters/x-auth-token"
@@ -998,7 +1030,7 @@
       "post": {
         "tags": ["Set Up"],
         "summary": "Add new deal",
-        "description": "Add deals dynamically without bring the site down when the need to add new one arise",
+        "description": "Add deals dynamically without bringing the site down when the need to add new one arise",
         "parameters": [
           {
             "$ref": "#parameters/x-auth-token"
@@ -1182,7 +1214,7 @@
       "post": {
         "tags": ["Set Up"],
         "summary": "Add new property types",
-        "description": "Add property types dynamically without bring the site down when the need to add new one arise",
+        "description": "Add property types dynamically without bringing the site down when the need to add new one arise",
         "parameters": [
           {
             "$ref": "#parameters/x-auth-token"

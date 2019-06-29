@@ -3,6 +3,9 @@ import Users from '../models/Users';
 import { okResponse, badRequest, removeItem, setUserImage } from '../utils/refractory';
 import Properties from '../models/Properties';
 
+/*
+@@  Code refractory
+*/
 const filterUsers = (users, query) => {
   let filteredUsers = users;
   if (query) {
@@ -19,6 +22,13 @@ const filterUsers = (users, query) => {
   return filteredUsers;
 };
 
+const toggleField = (params, res, field = 'is_active') => {
+  const userProfile = Users.find(u => parseInt(u.id, 10) === parseInt(params.userId, 10));
+  if (!userProfile) return badRequest(res, 'The user profile does not exist');
+  userProfile[field] = !userProfile[field];
+  okResponse(res, _.omit(userProfile, ['password', 'token']));
+};
+// ///////////////////////////////////////////////////////////////
 /*
 @@ Route          /api/v1/users
 @@ Method         GET
@@ -58,19 +68,18 @@ export const getUserProperties = ({ params }, res) => {
 @@ Method         PATCH
 @@ Description    Update user profile details.
 */
-export const updateUserProfile = async ({ params, file, body }, res) => {
+export const updateUserProfile = async ({ user, file, body }, res) => {
   try {
-    const user = Users.find(u => parseInt(u.id, 10) === parseInt(params.userId, 10));
-    if (!user) return badRequest(res, 'The user does not exist');
+    const getUser = Users.find(u => parseInt(u.id, 10) === parseInt(user.id, 10));
 
     const keys = Object.keys(body);
     keys.forEach((key) => {
-      user[key] = body[key];
+      getUser[key] = body[key];
     });
 
-    user.image = await setUserImage(file, user.image);
+    getUser.image = await setUserImage(file, getUser.image);
 
-    return okResponse(res, { ..._.omit(user, ['password']) });
+    return okResponse(res, { ..._.omit(getUser, ['password', 'token']) });
   } catch (error) {
     badRequest(res, 'Image not valid', 400);
   }
@@ -82,12 +91,17 @@ export const updateUserProfile = async ({ params, file, body }, res) => {
 @@ Description    Activate user account
 */
 export const activateDeactivateUserProfile = ({ params }, res) => {
-  const userProfile = Users.find(u => parseInt(u.id, 10) === parseInt(params.userId, 10));
-  if (!userProfile) return badRequest(res, 'The user profile does not exist');
-  userProfile.is_active = !userProfile.is_active;
-  okResponse(res, _.omit(userProfile, ['password', 'token']));
+  toggleField(params, res);
 };
 
+/*
+@@ Route          /api/v1/users/:userId/set-amin
+@@ Method         PATCH
+@@ Description    Make or remove user as an admin
+*/
+export const makeRemoveUserAdmin = ({ params }, res) => {
+  toggleField(params, res, 'is_admin');
+};
 /*
 @@ Route          /api/v1/users/:userId
 @@ Method         DELETE
