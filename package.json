@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./build-server/index.js",
+    "testMigrate": "psql -U postgres -f server/models/travis.sql",
     "build": "babel -d ./build-server ./server/*",
     "dev": "nodemon --watch server --exec babel-node ./server/index.js",
     "test:server": "./node_modules/.bin/mocha --timeout 500000 --require @babel/register server/tests/",
-    "test": "cross-env NODE_ENV=test nyc npm run test:server && nyc report --reporter=lcov --reporter=text-lcov | coveralls"
+    "test": "npm run testMigrate && cross-env NODE_ENV=test nyc npm run test:server && nyc report --reporter=lcov --reporter=text-lcov | coveralls"
   },
   "engines": {
     "node": "10.4.1"
