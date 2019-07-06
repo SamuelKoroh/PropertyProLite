@@ -153,7 +153,6 @@ export const updateUserPassword = async ({ body, params }, res) => {
       + ' reset_password_expires=null WHERE id=$2 RETURNING *';
 
     const { rows: user } = await db.query(strQuery, [password, rows[0].id]);
-
     const token = await jwt.sign(_.pick(user[0], ['id', 'is_admin', 'user_type']), jwtSecret, {
       expiresIn: 360000
     });

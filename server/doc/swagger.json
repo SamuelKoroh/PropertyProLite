@@ -1439,6 +1439,16 @@
         "user_type": {
           "type": "string"
         },
+        "reset_password_token": {
+          "type": "string"
+        },
+        "reset_password_expires": {
+          "type": "integer"
+        },
+        "is_active": {
+          "type": "boolean",
+          "example": false
+        },
         "is_admin": {
           "type": "boolean",
           "example": false
@@ -1496,6 +1506,9 @@
         },
         "billing_type": {
           "type": "string"
+        },
+        "is_active": {
+          "type": "boolean"
         },
         "created_on": {
           "type": "string",
@@ -1572,6 +1585,16 @@
             "user_type": {
               "type": "string"
             },
+            "reset_password_token": {
+              "type": "string"
+            },
+            "reset_password_expires": {
+              "type": "integer"
+            },
+            "is_active": {
+              "type": "boolean",
+              "example": false
+            },
             "is_admin": {
               "type": "boolean",
               "example": false
@@ -1631,12 +1654,12 @@
               "type": "string"
             },
             "owner": {
+              "type": "number"
+            },
+            "owner_email": {
               "type": "string"
             },
-            "ownerEmail": {
-              "type": "string"
-            },
-            "ownerPhoneNumber": {
+            "owner_phone": {
               "type": "string"
             }
           }
@@ -1681,12 +1704,12 @@
                 "type": "string"
               },
               "owner": {
+                "type": "number"
+              },
+              "owner_email": {
                 "type": "string"
               },
-              "ownerEmail": {
-                "type": "string"
-              },
-              "ownerPhoneNumber": {
+              "owner_phone": {
                 "type": "string"
               }
             }
