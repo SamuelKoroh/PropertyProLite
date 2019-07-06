@@ -23,7 +23,7 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - psql -c travis.sql
+  - ./travis.sql
   - npm test
 
 after_script:
