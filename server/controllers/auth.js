@@ -3,12 +3,13 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import _ from 'lodash';
 import crypto from 'crypto';
+// import Database from '../db/index';
+import db from '../db/db';
 import Mail from '../utils/mail';
-import Users from '../models/Users';
 import { okResponse, badRequest, setUserImage } from '../utils/refractory';
 import { signupSchema, signinSchema, emailSchema } from '../middleware/modelValidation';
-import curDate from '../utils/date';
 
+// const db = new Database();
 const jwtSecret = process.env.JWT_SECRET;
 
 /*
@@ -20,31 +21,37 @@ export const signUp = async ({ body, file }, res) => {
   const errors = Joi.validate(body, signupSchema);
   if (errors.error) return badRequest(res, errors.error.details[0].message, 400);
 
-  let user = Users.find(u => u.email === body.email && u.is_active);
-  if (user) return badRequest(res, 'This email has been registered already', 400);
+  const user = await db.query('SELECT * FROM users WHERE email = $1', [body.email]);
+  if (user.rowCount > 0) return badRequest(res, 'This email has been registered already', 400);
 
   try {
+    const { first_name, last_name, email, phone_number, address, user_type } = body;
+
+    const image = await setUserImage(file, '');
     const salt = await bcrypt.genSalt(10);
     const password = await bcrypt.hash(body.password, salt);
 
-    user = {
-      id: Users.length + 1,
-      ...body,
-      is_admin: false,
+    const text = 'INSERT INTO users(first_name,last_name,email,password,phone_number,address,image,user_type)'
+      + ' VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *';
+
+    const { rows } = await db.query(text, [
+      first_name,
+      last_name,
+      email,
       password,
-      is_active: true,
-      created_on: curDate()
-    };
+      phone_number,
+      address,
+      image,
+      user_type
+    ]);
 
-    user.image = await setUserImage(file, user.image);
-
-    Users.push(user);
-    user.token = await jwt.sign(_.pick(user, ['id', 'is_admin', 'user_type']), jwtSecret, {
-      expiresIn: 36000
-    });
-    return okResponse(res, { ..._.omit(user, ['password']) }, 201);
+    const payload = _.pick(rows[0], ['id', 'is_admin', 'user_type']);
+    const token = await jwt.sign(payload, jwtSecret, { expiresIn: 36000 });
+    return okResponse(res, { token, ..._.omit(rows[0], ['password']) }, 201);
   } catch (error) {
     badRequest(res, 'Image not valid', 400);
+  } finally {
+    // db.release();
   }
 };
 
@@ -58,68 +65,103 @@ export const signIn = async ({ body }, res) => {
     const errors = Joi.validate(body, signinSchema);
     if (errors.error) return badRequest(res, errors.error.details[0].message, 400);
 
-    const user = Users.find(u => u.email === body.email && u.is_active);
-    if (!user) return badRequest(res, 'Invalid username and password', 400);
+    const { rows: user } = await db.query(
+      'SELECT * FROM users WHERE email = $1 AND is_active=true',
+      [body.email]
+    );
+    if (!user[0]) return badRequest(res, 'Invalid username and password', 400);
 
-    const validPassword = await bcrypt.compare(body.password, user.password);
+    const validPassword = await bcrypt.compare(body.password, user[0].password);
     if (!validPassword) return badRequest(res, 'Invalid username and password', 400);
 
-    const token = await jwt.sign(_.pick(user, ['id', 'is_admin', 'user_type']), jwtSecret, {
+    const token = await jwt.sign(_.pick(user[0], ['id', 'is_admin', 'user_type']), jwtSecret, {
       expiresIn: 36000
     });
 
-    return okResponse(res, { token, ..._.omit(user, ['password']) });
+    return okResponse(res, { token, ..._.omit(user[0], ['password']) });
   } catch (error) {
     badRequest(res, 'An unexpected error has occour', 500);
+  } finally {
+    // db.release();
   }
 };
 
 export const sendResetLink = async ({ body }, res) => {
-  const errors = Joi.validate(body, emailSchema);
-  if (errors.error) return badRequest(res, errors.error, 400);
+  try {
+    const errors = Joi.validate(body, emailSchema);
+    if (errors.error) return badRequest(res, errors.error, 400);
 
-  const user = Users.find(u => u.email === body.email);
-  if (!user) return badRequest(res, 'The account does not exist');
+    const { rows: user } = await db.query('SELECT * FROM users WHERE email = $1', [body.email]);
+    if (!user[0]) return badRequest(res, 'The account does not exist');
 
-  const token = crypto.randomBytes(20).toString('hex');
-  user.resetPasswordToken = token;
-  user.resetPasswordExpires = Date.now() + 360000;
+    const token = crypto.randomBytes(20).toString('hex');
 
-  const text = 'You are receiving this because you (or some else) have requested the reset of the password for your account.\n\n'
-    + 'Please click on the following link, or paste this into your browser to complete the process within one hour of receiving it: \n\n'
-    + `https://sam-propertyprolite.herokuapp.com/api/v1/auth/reset-password/${token}\n\n`
-    + 'If you did not request this, please ignore this email and your password will remain unchanged.\n';
+    const strQuery = 'UPDATE users SET  reset_password_token=$1, reset_password_expires=$2 WHERE email=$3';
+    await db.query(strQuery, [token, Date.now() + 360000, body.email]);
 
-  const mail = new Mail('Property Pro', user.email, 'Reset Password', text);
-  const result = await mail.sendMail();
-  if (result !== 'sent') return badRequest(res, result, 400);
-  okResponse(res, { message: 'The link to rest your profile has been sent to this email address' });
+    const text = 'You are receiving this because you (or some else) have requested the reset of the password for your account.\n\n'
+      + 'Please click on the following link, or paste this into your browser to complete the process within one hour of receiving it: \n\n'
+      + `http://localhost:3500/api/v1/auth/reset-password/${token}\n\n`
+      + 'If you did not request this, please ignore this email and your password will remain unchanged.\n';
+
+    const mail = new Mail('Property Pro', user[0].email, 'Reset Password', text);
+    const result = await mail.sendMail();
+    if (result !== 'sent') return badRequest(res, result, 400);
+    okResponse(res, {
+      message: 'The link to rest your profile has been sent to this email address'
+    });
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  } finally {
+    // db.release();
+  }
 };
 
-export const validateUrlToken = ({ params }, res) => {
-  const user = Users.find(
-    u =>
-      u.resetPasswordToken === params.token
-      && parseInt(u.resetPasswordExpires, 10) > parseInt(Date.now(), 10)
-  );
-  if (!user) return badRequest(res, 'The reset link is invalid or has expired');
-  okResponse(res, { email: user.email });
+export const validateUrlToken = async ({ params: { token } }, res) => {
+  try {
+    const { rows: user } = await db.query('SELECT * FROM users WHERE reset_password_token=$1', [
+      token
+    ]);
+
+    if (!user[0] || parseInt(Date.now(), 10) > parseInt(user[0].reset_password_expires, 10))
+      return badRequest(res, 'The reset link is invalid or has expired');
+
+    okResponse(res, { email: user[0].email });
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  } finally {
+    // db.release();
+  }
 };
 
 export const updateUserPassword = async ({ body, params }, res) => {
-  const errors = Joi.validate(body, signinSchema);
-  if (errors.error) return badRequest(res, errors.error, 400);
+  try {
+    const errors = Joi.validate(body, signinSchema);
+    if (errors.error) return badRequest(res, errors.error, 400);
 
-  const user = Users.find(u => u.email === body.email && u.resetPasswordToken === params.token);
-  if (!user) return badRequest(res, 'The profile account does not exists');
+    const { rows } = await db.query(
+      'SELECT * FROM users WHERE reset_password_token=$1 AND email=$2',
+      [params.token, body.email]
+    );
 
-  const salt = await bcrypt.genSalt(10);
-  user.password = await bcrypt.hash(body.password, salt);
-  user.resetPasswordExpires = null;
-  user.resetPasswordToken = null;
-  user.token = await jwt.sign(_.pick(user, ['id', 'is_admin', 'user_type']), jwtSecret, {
-    expiresIn: 360000
-  });
+    if (!rows[0]) return badRequest(res, 'The profile account does not exists');
 
-  return okResponse(res, _.omit(user, ['password']));
+    const salt = await bcrypt.genSalt(10);
+    const password = await bcrypt.hash(body.password, salt);
+
+    const strQuery = 'UPDATE users SET password=$1, reset_password_token=null, '
+      + ' reset_password_expires=null WHERE id=$2 RETURNING *';
+
+    const { rows: user } = await db.query(strQuery, [password, rows[0].id]);
+
+    const token = await jwt.sign(_.pick(user[0], ['id', 'is_admin', 'user_type']), jwtSecret, {
+      expiresIn: 360000
+    });
+
+    return okResponse(res, { token, ..._.omit(user[0], ['password']) });
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  } finally {
+    // db.release();
+  }
 };

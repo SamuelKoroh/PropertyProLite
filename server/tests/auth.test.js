@@ -2,11 +2,17 @@ import request from 'supertest';
 import { expect } from 'chai';
 import app from '../app';
 import { validUser, validLogin } from '../testdata/auth';
+import db from '../db/db';
+
+// const db = new Database();
 
 let user = '';
 let newUser;
 describe('/api/v1/auth', () => {
   before(async () => {
+    await db.query('TRUNCATE TABLE users');
+    // db.close();
+
     user = await request(app)
       .post('/api/v1/auth/signup')
       .send(validUser);
@@ -15,7 +21,6 @@ describe('/api/v1/auth', () => {
       .post('/api/v1/auth/signup')
       .send({ ...validUser, email: 'godwin4koroh@gmail.com', password: 'admin' });
   });
-
   describe('POST /signup', () => {
     it('should return 201 if provide with valid data', async () => {
       expect(user.status).to.equal(201);
@@ -127,13 +132,13 @@ describe('/api/v1/auth', () => {
     });
     it('should return 404 if the reset password token has expired or not valid', async () => {
       const result = await request(app)
-        .get(`/api/v1/auth/reset-password/${newUserLogin.body.data.resetPasswordToken}dd`)
+        .get(`/api/v1/auth/reset-password/${newUserLogin.body.data.reset_password_token}dd`)
         .set('content-type', 'application/json');
       expect(result.status).to.equal(404);
     });
     it('should return 200 if the reset password token is valid', async () => {
       const result = await request(app)
-        .get(`/api/v1/auth/reset-password/${newUserLogin.body.data.resetPasswordToken}`)
+        .get(`/api/v1/auth/reset-password/${newUserLogin.body.data.reset_password_token}`)
         .set('content-type', 'application/json');
       expect(result.status).to.equal(200);
     });
@@ -149,21 +154,21 @@ describe('/api/v1/auth', () => {
     });
     it('should return 400 if it does not contain email and password', async () => {
       const result = await request(app)
-        .patch(`/api/v1/auth/reset-password/${newUserLogin.body.data.resetPasswordToken}`)
+        .patch(`/api/v1/auth/reset-password/${newUserLogin.body.data.reset_password_token}`)
         .set('content-type', 'application/json')
         .send({});
       expect(result.status).to.equal(400);
     });
     it('should return 404 if the email is not attached to an account', async () => {
       const result = await request(app)
-        .patch(`/api/v1/auth/reset-password/${newUserLogin.body.data.resetPasswordToken}`)
+        .patch(`/api/v1/auth/reset-password/${newUserLogin.body.data.reset_password_token}`)
         .set('content-type', 'application/json')
         .send({ email: 'nomatch@gmail.com', password: 'admin' });
       expect(result.status).to.equal(404);
     });
     it('should return 200 if  email and password is valid ', async () => {
       const result = await request(app)
-        .patch(`/api/v1/auth/reset-password/${newUserLogin.body.data.resetPasswordToken}`)
+        .patch(`/api/v1/auth/reset-password/${newUserLogin.body.data.reset_password_token}`)
         .set('content-type', 'application/json')
         .send({ email: newUser.body.data.email, password: 'admin' });
       expect(result.status).to.equal(200);
