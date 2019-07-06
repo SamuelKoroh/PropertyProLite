@@ -1,7 +1,6 @@
 env:
   global:
     - CC_TEST_REPORTER_ID=dd3eff2e7f99ceb7e067747055dd6a925351986cb9718a6ac70a6af101370402
-    - PGPORT=5432
 language: node_js
 install:
   - npm install
