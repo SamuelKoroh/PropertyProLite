@@ -89,7 +89,7 @@ export const getProperties = async (req, res) => {
     const { rows } = await db.query(strQuery, ['available', true]);
 
     const properties = filterProperties(rows, type, deal, price, location);
-    if (!rows.length) return badRequest(res, 'No property was found');
+    if (!properties.length) return badRequest(res, 'No property was found');
 
     okResponse(res, properties);
   } catch (error) {
@@ -122,19 +122,30 @@ export const getProperty = async ({ params: { propertyId } }, res) => {
 @@ Description    Update a property advert.
 */
 export const updateProperty = async ({ params: { propertyId }, body, files, user }, res) => {
-  const keys = Object.keys(body);
-  let result = '';
-  keys.forEach(async (key) => {
-    const strQuery = `UPDATE properties SET ${key}=$1 WHERE id=$2 AND owner=$3 RETURNING *`;
-    result = await db.query(strQuery, [body[key], propertyId, user.id]);
-  });
+  try {
+    let strQuery = 'SELECT * FROM properties WHERE id=$1';
+    const { rows } = await db.query(strQuery, [propertyId]);
 
-  // if (files.length) {
-  //   const response = await uploadImages(files);
-  //   const strQuery = 'UPDATE properties SET image_url = $1 WHERE id=$2 AND owner=$3 RETURNING *';
-  //   result = await db.query(strQuery, [response.images, propertyId, user.id]);
-  // }
-  okResponse(res, result.rows[0]);
+    if (!rows[0]) return badRequest(res, 'The advert does not exist', 404);
+
+    if (parseInt(rows[0].owner, 10) !== parseInt(user.id, 10))
+      return badRequest(res, 'Access Denied - Authorize access', 403);
+
+    const keys = Object.keys(body);
+    keys.forEach(async (key) => {
+      strQuery = `UPDATE properties SET ${key}=$1 WHERE id=$2 AND owner=$3 RETURNING *`;
+      await db.query(strQuery, [body[key], propertyId, user.id]);
+    });
+
+    if (files.length) {
+      const response = await uploadImages(files);
+      strQuery = 'UPDATE properties SET image_url = $1 WHERE id=$2 AND owner=$3 RETURNING *';
+      await db.query(strQuery, [response.images, propertyId, user.id]);
+    }
+    okResponse(res, { ...rows[0], ...body });
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  }
 };
 
 /*

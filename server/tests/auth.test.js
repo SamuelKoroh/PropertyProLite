@@ -2,7 +2,6 @@ import request from 'supertest';
 import { expect } from 'chai';
 import app from '../app';
 import { validUser, validLogin } from '../testdata/auth';
-import db from '../db/db';
 
 // const db = new Database();
 
@@ -10,9 +9,6 @@ let user = '';
 let newUser;
 describe('/api/v1/auth', () => {
   before(async () => {
-    await db.query('TRUNCATE TABLE users');
-    // db.close();
-
     user = await request(app)
       .post('/api/v1/auth/signup')
       .send(validUser);
