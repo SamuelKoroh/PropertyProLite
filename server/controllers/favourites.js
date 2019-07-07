@@ -12,7 +12,7 @@ export const saveFavourites = async ({ params: { propertyId }, user: { id } }, r
     await db.query(strQuery, [id, propertyId]);
     okResponse(res, { message: 'The property has been saved to your favourite list' });
   } catch (error) {
-    badRequest(res, "It's like this property has been added already", 500);
+    badRequest(res, "It's like this property has been added already", 400);
   }
 };
 //
@@ -28,6 +28,7 @@ export const getFavourites = async ({ user: { id } }, res) => {
       + ' FROM properties A INNER JOIN favourites B ON A.id = B.property_id  WHERE B.user_id=$1';
 
     const { rows } = await db.query(strQuery, [id]);
+    if (!rows.length) return badRequest(res, 'No property on your favorite list yet');
     okResponse(res, rows);
   } catch (error) {
     badRequest(res, 'An unexpected error has occour', 500);
