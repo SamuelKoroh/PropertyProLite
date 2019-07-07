@@ -99,6 +99,13 @@ describe('/api/v1/auth', () => {
   });
 
   describe('POST /reset-password', () => {
+    it('should return 200 if recovery email is valid and mail was sent', async () => {
+      const result = await request(app)
+        .post('/api/v1/auth/reset-password')
+        .set('content-type', 'application/json')
+        .send({ email: newUser.body.data.email });
+      expect(result.status).to.equal(200);
+    });
     it('should return 400 if the recovery email is not valid', async () => {
       const result = await request(app)
         .post('/api/v1/auth/reset-password')
@@ -112,13 +119,6 @@ describe('/api/v1/auth', () => {
         .set('content-type', 'application/json')
         .send({ email: 'nomatch@gmail.com' });
       expect(result.status).to.equal(404);
-    });
-    it('should return 200 if recovery email is valid and mail was sent', async () => {
-      const result = await request(app)
-        .post('/api/v1/auth/reset-password')
-        .set('content-type', 'application/json')
-        .send({ email: newUser.body.data.email });
-      expect(result.status).to.equal(200);
     });
   });
 
@@ -166,12 +166,12 @@ describe('/api/v1/auth', () => {
         .send({ email: 'nomatch@gmail.com', password: 'admin' });
       expect(result.status).to.equal(404);
     });
-    // it('should return 200 if  email and password is valid ', async () => {
-    //   const result = await request(app)
-    //     .patch(`/api/v1/auth/reset-password/${newUserLogin.body.data.reset_password_token}`)
-    //     .set('content-type', 'application/json')
-    //     .send({ email: newUser.body.data.email, password: 'admin' });
-    //   expect(result.status).to.equal(200);
-    // });
+    it('should return 200 if  email and password is valid ', async () => {
+      const result = await request(app)
+        .patch(`/api/v1/auth/reset-password/${newUserLogin.body.data.reset_password_token}`)
+        .set('content-type', 'application/json')
+        .send({ email: newUser.body.data.email, password: 'admin' });
+      expect(result.status).to.equal(200);
+    });
   });
 });
