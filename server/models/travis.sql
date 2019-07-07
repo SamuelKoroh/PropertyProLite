@@ -18,7 +18,6 @@ CREATE TABLE users
     reset_password_token VARCHAR,
     reset_password_expires VARCHAR
 );
-
 CREATE TABLE properties
 (
     id SERIAL PRIMARY KEY,
@@ -36,4 +35,13 @@ CREATE TABLE properties
     description text,
     is_active boolean DEFAULT true,
     created_on date DEFAULT CURRENT_DATE
-)
+);
+CREATE TABLE favourites
+(
+    id SERIAL,
+    user_id integer NOT NULL,
+    property_id integer NOT NULL,
+    CONSTRAINT favourites_pkey PRIMARY KEY (user_id, property_id)
+);
+INSERT INTO users(first_name, last_name, email, phone_number, is_admin, user_type, password) 
+VALUES('admin','admin','admin@gmail.com','0803',true,'agent','$2b$10$6MAXFQLCsGWW7JBvnwCks.y1NobKqvd2csveJYK6YWthyNoP2ig9i');

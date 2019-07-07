@@ -129,12 +129,12 @@ export const updateProperty = async ({ params: { propertyId }, body, files, user
     result = await db.query(strQuery, [body[key], propertyId, user.id]);
   });
 
-  // if (files) {
+  // if (files.length) {
   //   const response = await uploadImages(files);
-  //   const strQuery = 'UPDATE properties image_url=$1 WHERE id=$2 AND owner=$3 RETURNING *';
+  //   const strQuery = 'UPDATE properties SET image_url = $1 WHERE id=$2 AND owner=$3 RETURNING *';
   //   result = await db.query(strQuery, [response.images, propertyId, user.id]);
   // }
-  okResponse(res, result);
+  okResponse(res, result.rows[0]);
 };
 
 /*

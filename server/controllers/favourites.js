@@ -1,55 +1,37 @@
-import _ from 'lodash';
-import Favourites from '../models/Favourites';
 import { okResponse, badRequest } from '../utils/refractory';
-import Properties from '../models/Properties';
-
-const getFavourite = (favouritePropertyId, user) => {
-  return Favourites.find(
-    f =>
-      (parseInt(f.id, 10) === parseInt(favouritePropertyId, 10)
-        && parseInt(f.user_id, 10) === parseInt(user.id, 10))
-      || (parseInt(f.property_id, 10) === parseInt(favouritePropertyId, 10)
-        && parseInt(f.user_id, 10) === parseInt(user.id, 10))
-  );
-};
-const removeFavourite = (favourite) => {
-  const index = Favourites.indexOf(favourite);
-  Favourites.splice(index, 1);
-  return 'The property has been removed';
-};
+import db from '../db/db';
 
 /*
 @@ Route          /api/v1/favourites/:userId
 @@ Method         POST
 @@ Description    Add - remove property from favourite
 */
-export const saveFavourites = ({ params, user }, res) => {
-  const { propertyId } = params;
-  let favourite = getFavourite(propertyId, user);
-  if (favourite) return okResponse(res, { message: removeFavourite(favourite) });
-  favourite = { id: Favourites.length + 1, user_id: user.id, property_id: propertyId };
-  Favourites.push(favourite);
-  okResponse(res, { message: 'The property has been saved to your favourite list' });
+export const saveFavourites = async ({ params: { propertyId }, user: { id } }, res) => {
+  try {
+    const strQuery = 'INSERT INTO favourites (user_id, property_id) VALUES($1,$2)';
+    await db.query(strQuery, [id, propertyId]);
+    okResponse(res, { message: 'The property has been saved to your favourite list' });
+  } catch (error) {
+    badRequest(res, "It's like this property has been added already", 500);
+  }
 };
-
+//
 /*
 @@ Route          /api/v1/favourites
 @@ Method         GET
 @@ Description    Get the login user favourite
 */
-export const getFavourites = ({ user }, res) => {
-  const favourites = Favourites.filter(f => parseInt(f.user_id, 10) === parseInt(user.id, 10));
-  if (!favourites.length) return badRequest(res, 'No property on your favorite list yet');
-  const myFavourites = favourites.map((f) => {
-    const property = Properties.find(p => parseInt(p.id, 10) === parseInt(f.property_id, 10));
-    return {
-      favorite_id: f.id,
-      property_id: property.id,
-      owner_id: property.owner,
-      ..._.omit(property, ['id', 'owner'])
-    };
-  });
-  okResponse(res, myFavourites);
+export const getFavourites = async ({ user: { id } }, res) => {
+  try {
+    const strQuery = 'SELECT B.id AS favourite_id, A.id AS property_id,A.owner AS owner_id, A.title,'
+      + 'A.price,A.state,A.city,A.address,A.type,A.billing_type,A.deal_type,A.status,A.created_on,A.image_url '
+      + ' FROM properties A INNER JOIN favourites B ON A.id = B.property_id  WHERE B.user_id=$1';
+
+    const { rows } = await db.query(strQuery, [id]);
+    okResponse(res, rows);
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  }
 };
 
 /*
@@ -57,8 +39,14 @@ export const getFavourites = ({ user }, res) => {
 @@ Method         DELETE
 @@ Description    Remove the property from user favourites
 */
-export const deleteFavourite = ({ params, user }, res) => {
-  const favourite = getFavourite(params.favouriteId, user);
-  if (!favourite) return badRequest(res, 'The property does not exist', 404);
-  okResponse(res, { message: removeFavourite(favourite) });
+export const deleteFavourite = async ({ params: { favouriteId } }, res) => {
+  try {
+    const strQuery = 'DELETE FROM favourites WHERE id=$1  RETURNING *';
+    const { rows } = await db.query(strQuery, [favouriteId]);
+
+    if (!rows[0]) return badRequest(res, 'The property does not exist');
+    okResponse(res, { message: 'The property has been removed' });
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  }
 };
