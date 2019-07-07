@@ -27,7 +27,7 @@ export const getAllUser = async ({ query: { search } }, res) => {
     strQuery
       += ' WHERE first_name ILIKE $1 OR last_name ILIKE $1 OR email ILIKE $1 '
       + 'OR user_type ILIKE $1 OR phone_number ILIKE $1';
-    result = await db.query(strQuery, [search]);
+    result = await db.query(strQuery, [`${search}%`]);
   } else result = await db.query(strQuery);
 
   if (result.rowCount < 1) return badRequest(res, 'There is no matching record');

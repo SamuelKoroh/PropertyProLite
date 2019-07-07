@@ -11,7 +11,6 @@ const transporter = nodemailer.createTransport({
 });
 
 export default {
-  // send mail with defined transport object
   sendMail: async (from, to, subject, text = null, html = null) => {
     await transporter.sendMail({
       from: `Property Pro Lite 👻 ${from}`,

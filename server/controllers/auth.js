@@ -46,9 +46,13 @@ export const signUp = async ({ body, file }, res) => {
 
     const payload = _.pick(rows[0], ['id', 'is_admin', 'user_type']);
     const token = await jwt.sign(payload, jwtSecret, { expiresIn: 36000 });
-    return okResponse(res, { token, ..._.omit(rows[0], ['password']) }, 201);
+    return okResponse(
+      res,
+      { token, ..._.omit(rows[0], ['password', 'reset_password_token']) },
+      201
+    );
   } catch (error) {
-    badRequest(res, 'Image not valid', 400);
+    badRequest(res, 'An unexpected error has occour', 500);
   } finally {
     // db.release();
   }
@@ -77,7 +81,7 @@ export const signIn = async ({ body }, res) => {
       expiresIn: 36000
     });
 
-    return okResponse(res, { token, ..._.omit(user[0], ['password']) });
+    return okResponse(res, { token, ..._.omit(user[0], ['password', 'reset_password_token']) });
   } catch (error) {
     badRequest(res, 'An unexpected error has occour', 500);
   } finally {
@@ -103,7 +107,12 @@ export const sendResetLink = async ({ body }, res) => {
       + `http://localhost:3500/api/v1/auth/reset-password/${token}\n\n`
       + 'If you did not request this, please ignore this email and your password will remain unchanged.\n';
 
-    const result = await mail.sendMail(process.env.MAIL_USER, user[0].email, 'Reset Password', text);
+    const result = await mail.sendMail(
+      process.env.MAIL_USER,
+      user[0].email,
+      'Reset Password',
+      text
+    );
     if (result !== 'sent') return badRequest(res, result, 400);
     okResponse(res, {
       message: 'The link to rest your profile has been sent to this email address'

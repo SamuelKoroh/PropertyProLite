@@ -1,66 +1,25 @@
 import Joi from 'joi';
-import Flags from '../models/Flags';
 import { flagAddSchema } from '../middleware/modelValidation';
-import Properties from '../models/Properties';
-import Users from '../models/Users';
 import { okResponse, badRequest } from '../utils/refractory';
-import curDate from '../utils/date';
+import db from '../db/db';
 
-// ///////////////////////////////////////////////////////////////////
-/* This region is for code refractory
-@@ Description    function to retrieve flags property and owner detail
-*/
-const noFlag = { status: 'error', error: 'No flag' };
-
-// Fuction for finding return a single flag
-const findFlag = (flags, params) => {
-  return flags.find(
-    f => f.status === 'active' && parseInt(f.id, 10) === parseInt(params.flagId, 10)
-  );
-};
-
-// Description    function to retrieve flags property and owner detail
-const getFlagedUserProperty = (flag) => {
-  const property = Properties.find(p => parseInt(p.id, 10) === parseInt(flag.property_id, 10));
-  const { first_name: fName, last_name: lName, id: agentId } = Users.find(
-    u => parseInt(u.id, 10) === parseInt(property.owner, 10)
-  );
-  return {
-    ...flag,
-    property: property.title,
-    agent_id: agentId,
-    agent_name: fName.concat(' ', lName)
-  };
-};
-
-// Description    function to filtered the list of flags
-const filterByQuery = (allFlags, search) => {
-  let result = allFlags;
-  if (search)
-    result = result.filter(
-      f =>
-        f.name.toLocaleLowerCase().startsWith(search.toLocaleLowerCase())
-        || f.reason.toLocaleLowerCase().startsWith(search.toLocaleLowerCase())
-        || f.email.toLocaleLowerCase().startsWith(search.toLocaleLowerCase())
-    );
-  return result;
-};
-/*
-@@ end of refractory
-*/
-// ///////////////////////////////////////////////////////////////////////////
 /*
 @@ Route          /api/v1/flag
 @@ Method         POST
 @@ Description    Report - flag a property advert.
 */
-export const flagAdd = ({ body }, res) => {
+export const flagAdd = async ({ body }, res) => {
   const errors = Joi.validate(body, flagAddSchema);
   if (errors.error) return badRequest(res, errors, 400);
 
-  const addFlag = { id: Flags.length + 1, status: 'active', ...body, created_on: curDate() };
-  Flags.push(addFlag);
-  okResponse(res, addFlag);
+  try {
+    const { property_id, name, email, reason, description } = body;
+    const strQuery = 'INSERT INTO flag(property_id,name,email,reason,description) VALUES($1,$2,$3,$4,$5) RETURNING *';
+    const { rows } = await db.query(strQuery, [property_id, name, email, reason, description]);
+    okResponse(res, rows[0]);
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  }
 };
 
 /*
@@ -68,17 +27,23 @@ export const flagAdd = ({ body }, res) => {
 @@ Method         GET
 @@ Description    Get all flaged property.
 */
-export const getAllFlags = ({ query }, res) => {
-  const { search } = query;
-  let allFlags = Flags.filter(f => f.status === 'active');
+export const getAllFlags = async ({ query: { search } }, res) => {
+  try {
+    let result;
+    let strQuery = 'SELECT A.id, A.property_id, A.name, A.email, A.reason, A.description, B.title AS property,'
+      + " C.id AS agent_id, CONCAT(C.first_name,' ', C.last_name) AS agent_name, A.created_on FROM flag A "
+      + ' INNER JOIN properties B ON A.property_id = B.id INNER JOIN users C ON B.owner = C.id';
 
-  allFlags = filterByQuery(allFlags, search);
-  if (!allFlags.length) return badRequest(res, 'No flags');
+    if (search) {
+      strQuery += ' WHERE A.name ILIKE $1 OR A.reason ILIKE $1 OR A.email ILIKE $1 ';
+      result = await db.query(strQuery, [`${search}%`]);
+    } else result = await db.query(strQuery);
 
-  allFlags = allFlags.map((flag) => {
-    return getFlagedUserProperty(flag);
-  });
-  return okResponse(res, allFlags);
+    if (result.rowCount < 1) return badRequest(res, 'There is no matching record');
+    okResponse(res, result.rows);
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  }
 };
 
 /*
@@ -86,11 +51,18 @@ export const getAllFlags = ({ query }, res) => {
 @@ Method         GET
 @@ Description    Get a flaged property details.
 */
-export const getFlagById = ({ params }, res) => {
-  const flag = findFlag(Flags, params);
-  if (!flag) return badRequest(res, noFlag);
-  const flagedUserProperty = getFlagedUserProperty(flag);
-  okResponse(res, flagedUserProperty);
+export const getFlagById = async ({ params: { flagId } }, res) => {
+  try {
+    const strQuery = 'SELECT A.id, A.property_id, A.name, A.email, A.reason, A.description, B.title AS property,'
+      + " C.id AS agent_id, CONCAT(C.first_name,' ', C.last_name) AS agent_name, A.created_on FROM flag A "
+      + ' INNER JOIN properties B ON A.property_id = B.id INNER JOIN users C ON B.owner = C.id  WHERE A.id=$1';
+
+    const { rows } = await db.query(strQuery, [flagId]);
+    if (!rows[0]) badRequest(res, 'There is no matching record');
+    okResponse(res, rows[0]);
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  }
 };
 
 /*
@@ -98,10 +70,14 @@ export const getFlagById = ({ params }, res) => {
 @@ Method         DELETE
 @@ Description    Remove a flag report
 */
-export const deleteFlag = ({ params }, res) => {
-  const flag = findFlag(Flags, params);
-  if (!flag) return badRequest(res, noFlag);
-  const index = Flags.indexOf(flag);
-  Flags.splice(index, 1);
-  okResponse(res, { message: 'The flag has been removed' });
+export const deleteFlag = async ({ params: { flagId } }, res) => {
+  try {
+    const strQuery = 'DELETE FROM flag WHERE id=$1  RETURNING *';
+    const { rows } = await db.query(strQuery, [flagId]);
+
+    if (!rows[0]) return badRequest(res, 'The flag does not exist');
+    okResponse(res, { message: 'The flag/report has been removed' });
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  }
 };
