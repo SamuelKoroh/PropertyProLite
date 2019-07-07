@@ -1,44 +1,37 @@
 import _ from 'lodash';
 import Users from '../models/Users';
-import { okResponse, badRequest, removeItem, setUserImage } from '../utils/refractory';
-import Properties from '../models/Properties';
-
+import { okResponse, badRequest, setUserImage } from '../utils/refractory';
+import db from '../db/db';
 /*
 @@  Code refractory
 */
-const filterUsers = (users, query) => {
-  let filteredUsers = users;
-  if (query) {
-    filteredUsers = filteredUsers.filter(
-      u =>
-        u.user_type.toLowerCase().startsWith(query.toLowerCase())
-        || u.first_name.toLowerCase().startsWith(query.toLowerCase())
-        || u.last_name.toLowerCase().startsWith(query.toLowerCase())
-        || u.phone_number.toLowerCase().startsWith(query.toLowerCase())
-        || u.email.toLowerCase().startsWith(query.toLowerCase())
-        || u.is_active === query
-    );
-  }
-  return filteredUsers;
-};
 
-const toggleField = (params, res, field = 'is_active') => {
-  const userProfile = Users.find(u => parseInt(u.id, 10) === parseInt(params.userId, 10));
-  if (!userProfile) return badRequest(res, 'The user profile does not exist');
-  userProfile[field] = !userProfile[field];
-  okResponse(res, _.omit(userProfile, ['password', 'token']));
-};
+// const toggleField = (params, res, field = 'is_active') => {
+//   const userProfile = Users.find(u => parseInt(u.id, 10) === parseInt(params.userId, 10));
+//   if (!userProfile) return badRequest(res, 'The user profile does not exist');
+//   userProfile[field] = !userProfile[field];
+//   okResponse(res, _.omit(userProfile, ['password', 'token']));
+// };
 // ///////////////////////////////////////////////////////////////
 /*
 @@ Route          /api/v1/users
 @@ Method         GET
 @@ Description    Get all registered users.
 */
-export const getAllUser = ({ query }, res) => {
-  let users = filterUsers(Users, query.search);
-  if (!users.length) return badRequest(res, 'There is no matching record');
-  users = users.map(u => _.omit(u, ['password', 'token']));
-  okResponse(res, users);
+export const getAllUser = async ({ query: { search } }, res) => {
+  let result;
+  let strQuery = 'SELECT id, first_name, last_name, email, phone_number, address, image, user_type,'
+    + ' is_admin,is_active,created_on  FROM users ';
+
+  if (search) {
+    strQuery
+      += ' WHERE first_name ILIKE $1 OR last_name ILIKE $1 OR email ILIKE $1 '
+      + 'OR user_type ILIKE $1 OR phone_number ILIKE $1';
+    result = await db.query(strQuery, [search]);
+  } else result = await db.query(strQuery);
+
+  if (result.rowCount < 1) return badRequest(res, 'There is no matching record');
+  okResponse(res, result.rows);
 };
 
 /*
@@ -46,9 +39,11 @@ export const getAllUser = ({ query }, res) => {
 @@ Method         GET
 @@ Description    Get logged in user profile details.
 */
-export const getUserProfile = ({ user }, res) => {
-  const userProfile = Users.find(u => parseInt(u.id, 10) === parseInt(user.id, 10));
-  okResponse(res, _.omit(userProfile, ['password', 'token']));
+export const getUserProfile = async ({ user: { id } }, res) => {
+  const strQuery = 'SELECT id, first_name, last_name, email, phone_number, address, image, user_type,'
+    + ' is_admin,is_active,created_on  FROM users WHERE id=$1';
+  const { rows } = await db.query(strQuery, [id]);
+  okResponse(res, rows[0]);
 };
 
 /*
@@ -56,11 +51,17 @@ export const getUserProfile = ({ user }, res) => {
 @@ Method         GET
 @@ Description    Get a single user and the advert he/she uploaded .
 */
-export const getUserProperties = ({ params }, res) => {
-  const user = Users.find(u => parseInt(u.id, 10) === parseInt(params.userId, 10));
-  if (!user) return badRequest(res, 'The user does not exist');
-  const userAdverts = Properties.filter(p => parseInt(p.owner, 10) === parseInt(params.userId, 10));
-  okResponse(res, { user: _.omit(user, ['password', 'token']), userAdverts });
+export const getUserProperties = async ({ params: { userId } }, res) => {
+  let strQuery = 'SELECT id, first_name, last_name, email, phone_number, address, image, user_type,'
+    + ' is_admin,is_active,created_on  FROM users WHERE id=$1';
+  const { rows } = await db.query(strQuery, [userId]);
+
+  if (!rows[0]) return badRequest(res, 'The user does not exist');
+
+  strQuery = 'SELECT * FROM properties WHERE owner = $1';
+  const result = await db.query(strQuery, [userId]);
+
+  okResponse(res, { user: rows[0], userAdverts: result.rows });
 };
 
 /*
@@ -90,8 +91,15 @@ export const updateUserProfile = async ({ user, file, body }, res) => {
 @@ Method         PATCH
 @@ Description    Activate user account
 */
-export const activateDeactivateUserProfile = ({ params }, res) => {
-  toggleField(params, res);
+export const activateDeactivateUserProfile = async ({ params: { userId } }, res) => {
+  try {
+    const strQuery = 'UPDATE users SET is_active = NOT is_active WHERE id=$1 RETURNING *';
+    const { rows } = await db.query(strQuery, [userId]);
+    if (!rows[0]) return badRequest(res, 'The operation was not successful');
+    okResponse(res, _.omit(rows[0], ['password', 'reset_password_token']));
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  }
 };
 
 /*
@@ -99,14 +107,29 @@ export const activateDeactivateUserProfile = ({ params }, res) => {
 @@ Method         PATCH
 @@ Description    Make or remove user as an admin
 */
-export const makeRemoveUserAdmin = ({ params }, res) => {
-  toggleField(params, res, 'is_admin');
+export const makeRemoveUserAdmin = async ({ params: { userId } }, res) => {
+  try {
+    const strQuery = 'UPDATE users SET is_admin = NOT is_admin WHERE id=$1 RETURNING *';
+    const { rows } = await db.query(strQuery, [userId]);
+    if (!rows[0]) return badRequest(res, 'The operation was not successful');
+    okResponse(res, _.omit(rows[0], ['password', 'reset-password-token']));
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  }
 };
 /*
 @@ Route          /api/v1/users/:userId
 @@ Method         DELETE
 @@ Description    Remove user account permanently from storage
 */
-export const deleteUserProfile = ({ params }, res) => {
-  removeItem(Users, params, res, 'userId', 'The user has been removed');
+export const deleteUserProfile = async ({ params: { userId } }, res) => {
+  try {
+    const strQuery = 'DELETE FROM users WHERE id=$1  RETURNING *';
+    const { rows } = await db.query(strQuery, [userId]);
+
+    if (!rows[0]) return badRequest(res, 'The operation was not successful');
+    okResponse(res, { message: 'The user has been removed' });
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  }
 };

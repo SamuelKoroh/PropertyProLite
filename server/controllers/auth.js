@@ -3,7 +3,6 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import _ from 'lodash';
 import crypto from 'crypto';
-// import Database from '../db/index';
 import db from '../db/db';
 import mail from '../utils/mail';
 import { okResponse, badRequest, setUserImage } from '../utils/refractory';

@@ -70,7 +70,7 @@ export const createProperty = async ({ user: { id }, files, body }, res) => {
 
     return okResponse(res, result.rows[0], 201);
   } catch (error) {
-    badRequest(res, 'Server Error', 500);
+    badRequest(res, error, 500);
   }
 };
 

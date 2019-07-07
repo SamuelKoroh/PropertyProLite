@@ -18,3 +18,22 @@ CREATE TABLE users
     reset_password_token VARCHAR,
     reset_password_expires VARCHAR
 );
+
+CREATE TABLE properties
+(
+    id SERIAL PRIMARY KEY,
+    title VARCHAR,
+    owner integer,
+    status VARCHAR DEFAULT 'available',
+    price numeric,
+    state VARCHAR,
+    city VARCHAR,
+    address VARCHAR,
+    type VARCHAR,
+    deal_type VARCHAR,
+    billing_type VARCHAR,
+    image_url character varying[],
+    description text,
+    is_active boolean DEFAULT true,
+    created_on date DEFAULT CURRENT_DATE
+)
