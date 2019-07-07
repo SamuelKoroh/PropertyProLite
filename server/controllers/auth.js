@@ -46,11 +46,10 @@ export const signUp = async ({ body, file }, res) => {
 
     const payload = _.pick(rows[0], ['id', 'is_admin', 'user_type']);
     const token = await jwt.sign(payload, jwtSecret, { expiresIn: 36000 });
-    return okResponse(
-      res,
-      { token, ..._.omit(rows[0], ['password', 'reset_password_token']) },
-      201
-    );
+    const data = {
+      ..._.omit(rows[0], ['password', 'reset_password_token', 'reset_password_expires'])
+    };
+    return okResponse(res, { token, ...data }, 201);
   } catch (error) {
     badRequest(res, 'An unexpected error has occour', 500);
   } finally {
@@ -80,8 +79,10 @@ export const signIn = async ({ body }, res) => {
     const token = await jwt.sign(_.pick(user[0], ['id', 'is_admin', 'user_type']), jwtSecret, {
       expiresIn: 36000
     });
-
-    return okResponse(res, { token, ..._.omit(user[0], ['password']) });
+    const data = {
+      ..._.omit(user[0], ['password', 'reset_password_token', 'reset_password_expires'])
+    };
+    return okResponse(res, { token, ...data });
   } catch (error) {
     badRequest(res, 'An unexpected error has occour', 500);
   } finally {

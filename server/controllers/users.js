@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import Users from '../models/Users';
 import { okResponse, badRequest, setUserImage } from '../utils/refractory';
 import db from '../db/db';
 /*
@@ -69,20 +68,27 @@ export const getUserProperties = async ({ params: { userId } }, res) => {
 @@ Method         PATCH
 @@ Description    Update user profile details.
 */
-export const updateUserProfile = async ({ user, file, body }, res) => {
+export const updateUserProfile = async ({ user: { id }, file, body }, res) => {
   try {
-    const getUser = Users.find(u => parseInt(u.id, 10) === parseInt(user.id, 10));
+    const { rows } = await db.query('SELECT * FROM users WHERE id=$1', [id]);
+    let { image } = rows[0];
 
     const keys = Object.keys(body);
-    keys.forEach((key) => {
-      getUser[key] = body[key];
+    keys.forEach(async (key) => {
+      const strQuery = `UPDATE users SET ${key}=$1 WHERE id=$2 `;
+      await db.query(strQuery, [body[key], id]);
     });
 
-    getUser.image = await setUserImage(file, getUser.image);
-
-    return okResponse(res, { ..._.omit(getUser, ['password', 'token']) });
+    if (file) {
+      image = await setUserImage(file, image);
+      await db.query('UPDATE users SET image=$1 WHERE id=$2', [image, id]);
+    }
+    const data = {
+      ..._.omit(rows[0], ['password', 'reset_password_token', 'reset_password_expires'])
+    };
+    return okResponse(res, { ...data, ...body, image });
   } catch (error) {
-    badRequest(res, 'Image not valid', 400);
+    badRequest(res, 'Image not valid', 500);
   }
 };
 
@@ -96,7 +102,7 @@ export const activateDeactivateUserProfile = async ({ params: { userId } }, res)
     const strQuery = 'UPDATE users SET is_active = NOT is_active WHERE id=$1 RETURNING *';
     const { rows } = await db.query(strQuery, [userId]);
     if (!rows[0]) return badRequest(res, 'The operation was not successful');
-    okResponse(res, _.omit(rows[0], ['password', 'reset_password_token']));
+    okResponse(res, _.omit(rows[0], ['password', 'reset_password_token', 'reset_password_expires']));
   } catch (error) {
     badRequest(res, 'An unexpected error has occour', 500);
   }
@@ -112,7 +118,7 @@ export const makeRemoveUserAdmin = async ({ params: { userId } }, res) => {
     const strQuery = 'UPDATE users SET is_admin = NOT is_admin WHERE id=$1 RETURNING *';
     const { rows } = await db.query(strQuery, [userId]);
     if (!rows[0]) return badRequest(res, 'The operation was not successful');
-    okResponse(res, _.omit(rows[0], ['password', 'reset-password-token']));
+    okResponse(res, _.omit(rows[0], ['password', 'reset-password-token', 'reset_password_expires']));
   } catch (error) {
     badRequest(res, 'An unexpected error has occour', 500);
   }
