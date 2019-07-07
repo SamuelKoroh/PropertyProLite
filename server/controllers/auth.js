@@ -5,7 +5,7 @@ import _ from 'lodash';
 import crypto from 'crypto';
 // import Database from '../db/index';
 import db from '../db/db';
-import Mail from '../utils/mail';
+import mail from '../utils/mail';
 import { okResponse, badRequest, setUserImage } from '../utils/refractory';
 import { signupSchema, signinSchema, emailSchema } from '../middleware/modelValidation';
 
@@ -104,14 +104,13 @@ export const sendResetLink = async ({ body }, res) => {
       + `http://localhost:3500/api/v1/auth/reset-password/${token}\n\n`
       + 'If you did not request this, please ignore this email and your password will remain unchanged.\n';
 
-    const mail = new Mail('Property Pro', user[0].email, 'Reset Password', text);
-    const result = await mail.sendMail();
+    const result = await mail.sendMail(process.env.MAIL_USER, user[0].email, 'Reset Password', text);
     if (result !== 'sent') return badRequest(res, result, 400);
     okResponse(res, {
       message: 'The link to rest your profile has been sent to this email address'
     });
   } catch (error) {
-    badRequest(res, 'An unexpected error has occour', 500);
+    badRequest(res, error, 500);
   } finally {
     // db.release();
   }
