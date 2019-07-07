@@ -1,6 +1,9 @@
 DROP DATABASE IF EXISTS travis_ci_test;
 CREATE DATABASE travis_ci_test;
 \c travis_ci_test;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS properties;
+DROP TABLE IF EXISTS favourites;
 CREATE TABLE users
 (
     id SERIAL PRIMARY KEY,
@@ -43,5 +46,5 @@ CREATE TABLE favourites
     property_id integer NOT NULL,
     CONSTRAINT favourites_pkey PRIMARY KEY (user_id, property_id)
 );
-INSERT INTO users(first_name, last_name, email, phone_number, is_admin, user_type, password) 
-VALUES('admin','admin','admin@gmail.com','0803',true,'agent','$2b$10$6MAXFQLCsGWW7JBvnwCks.y1NobKqvd2csveJYK6YWthyNoP2ig9i');
+-- INSERT INTO users(first_name, last_name, email, phone_number, is_admin, user_type, password) 
+-- VALUES('admin','admin','admin@gmail.com','0803',true,'agent','$2b$10$6MAXFQLCsGWW7JBvnwCks.y1NobKqvd2csveJYK6YWthyNoP2ig9i');

@@ -10,6 +10,9 @@ let user = '';
 let newUser;
 describe('/api/v1/auth', () => {
   before(async () => {
+    await db.query('TRUNCATE TABLE users');
+    // db.close();
+
     user = await request(app)
       .post('/api/v1/auth/signup')
       .send(validUser);
@@ -18,10 +21,6 @@ describe('/api/v1/auth', () => {
       .post('/api/v1/auth/signup')
       .send({ ...validUser, email: 'godwin4koroh@gmail.com', password: 'admin' });
   });
-  after(async () => {
-    await db.query('DELETE FROM users WHERE is_admin=false');
-  });
-
   describe('POST /signup', () => {
     it('should return 201 if provide with valid data', async () => {
       expect(user.status).to.equal(201);

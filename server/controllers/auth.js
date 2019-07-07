@@ -81,7 +81,7 @@ export const signIn = async ({ body }, res) => {
       expiresIn: 36000
     });
 
-    return okResponse(res, { token, ..._.omit(user[0], ['password', 'reset_password_token']) });
+    return okResponse(res, { token, ..._.omit(user[0], ['password']) });
   } catch (error) {
     badRequest(res, 'An unexpected error has occour', 500);
   } finally {
