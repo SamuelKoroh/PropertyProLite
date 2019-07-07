@@ -16,5 +16,5 @@ CREATE TABLE users
     is_active boolean DEFAULT true,
     created_on date DEFAULT CURRENT_DATE,
     reset_password_token VARCHAR,
-    reset_password_expires bigint
+    reset_password_expires VARCHAR
 );
