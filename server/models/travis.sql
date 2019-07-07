@@ -4,6 +4,7 @@ CREATE DATABASE travis_ci_test;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS properties;
 DROP TABLE IF EXISTS favourites;
+DROP TABLE IF EXISTS flag;
 CREATE TABLE users
 (
     id SERIAL PRIMARY KEY,
@@ -45,6 +46,17 @@ CREATE TABLE favourites
     user_id integer NOT NULL,
     property_id integer NOT NULL,
     CONSTRAINT favourites_pkey PRIMARY KEY (user_id, property_id)
+);
+CREATE TABLE flag
+(
+    id SERIAL,
+    property_id integer NOT NULL,
+    name character varying NOT NULL,
+    email character varying NOT NULL,
+    reason character varying NOT NULL,
+    description character varying(500),
+    created_on date DEFAULT CURRENT_DATE,
+    CONSTRAINT flag_pkey PRIMARY KEY (id)
 );
 INSERT INTO users(first_name, last_name, email, phone_number, is_admin, user_type, password) 
 VALUES('admin','admin','admin@gmail.com','0803',true,'agent','$2b$10$6MAXFQLCsGWW7JBvnwCks.y1NobKqvd2csveJYK6YWthyNoP2ig9i');

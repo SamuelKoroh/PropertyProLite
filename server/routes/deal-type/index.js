@@ -10,7 +10,7 @@ import {
   getPropertyType,
   updatePropertyType,
   deletePropertyType
-} from '../../controllers/dea-type';
+} from '../../controllers/deal-type';
 import authenticate, { isAdmin } from '../../middleware/authenticate';
 
 const router = express.Router();
