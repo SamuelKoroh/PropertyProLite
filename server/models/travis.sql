@@ -5,6 +5,8 @@ DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS properties;
 DROP TABLE IF EXISTS favourites;
 DROP TABLE IF EXISTS flag;
+DROP TABLE IF EXISTS types;
+DROP TABLE IF EXISTS deals;
 CREATE TABLE users
 (
     id SERIAL PRIMARY KEY,
@@ -57,6 +59,20 @@ CREATE TABLE flag
     description character varying(500),
     created_on date DEFAULT CURRENT_DATE,
     CONSTRAINT flag_pkey PRIMARY KEY (id)
+);
+CREATE TABLE deals
+(
+    id character varying NOT NULL,
+    name character varying NOT NULL,
+    description character varying,
+    CONSTRAINT deals_pkey PRIMARY KEY (id)
+);
+CREATE TABLE types
+(
+    id character varying NOT NULL,
+    name character varying NOT NULL,
+    description character varying,
+    CONSTRAINT types_pkey PRIMARY KEY (id)
 );
 INSERT INTO users(first_name, last_name, email, phone_number, is_admin, user_type, password) 
 VALUES('admin','admin','admin@gmail.com','0803',true,'agent','$2b$10$6MAXFQLCsGWW7JBvnwCks.y1NobKqvd2csveJYK6YWthyNoP2ig9i');

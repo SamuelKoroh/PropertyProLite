@@ -3,7 +3,6 @@ import { expect } from 'chai';
 import app from '../app';
 import { validUser, validLogin } from '../testdata/auth';
 import db from '../db/db';
-// const db = new Database();
 
 let user = '';
 let newUser;

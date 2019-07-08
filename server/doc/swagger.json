@@ -1065,9 +1065,6 @@
           },
           "403": {
             "$ref": "#responses/Standard403Error"
-          },
-          "404": {
-            "$ref": "#responses/Standard404Error"
           }
         }
       },
@@ -1104,9 +1101,6 @@
           },
           "403": {
             "$ref": "#responses/Standard403Error"
-          },
-          "404": {
-            "$ref": "#responses/Standard404Error"
           }
         }
       }
@@ -1137,6 +1131,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "$ref": "#responses/Standard404Error"
           }
         }
       },
@@ -1249,9 +1246,6 @@
           },
           "403": {
             "$ref": "#responses/Standard403Error"
-          },
-          "404": {
-            "$ref": "#responses/Standard404Error"
           }
         }
       },
@@ -1288,9 +1282,6 @@
           },
           "403": {
             "$ref": "#responses/Standard403Error"
-          },
-          "404": {
-            "$ref": "#responses/Standard404Error"
           }
         }
       }
@@ -1971,7 +1962,7 @@
     "setupId": {
       "name": "id",
       "in": "path",
-      "type": "integer",
+      "type": "string",
       "required": true
     },
     "setupBody": {

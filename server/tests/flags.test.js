@@ -1,8 +1,6 @@
 import request from 'supertest';
 import { expect } from 'chai';
 import app from '../app';
-// import { validUser } from '../testdata/auth';
-// import { validProperty } from '../testdata/property';
 
 describe('/api/v1/flag', () => {
   let admin = '';
@@ -114,5 +112,3 @@ describe('/api/v1/flag', () => {
     });
   });
 });
-
-// Favourites Test
