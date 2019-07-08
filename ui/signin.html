@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta
+      name="description"
+      content="Property Pro Lite is a platform where people can create and/or
+    search properties for sale or rent."
+    />
+    <title>Welcome to Property Pro</title>
+    <link rel="stylesheet" href="./css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="brand">
+          <h1><a href="index.html">PropertyPro</a></h1>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="all-listing.html">Listing</a></li>
+            <li><a href="signup.html">Sign up</a></li>
+            <li><a href="signin.html">Sign in</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="m-20">
+      <div class="container">
+        <h1 class="text-primary">Sign In</h1>
+        <p class="lead"><i class="fas fa-user"></i> Sign into Your Account</p>
+        <form class="form" action="dashboard.html">
+          <div class="form-group">
+            <input
+              type="email"
+              placeholder="Email Address"
+              name="email"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <input type="password" placeholder="Password" name="password" />
+          </div>
+          <input
+            type="submit"
+            id="btnSubmit"
+            class="btn btn-primary btn-block"
+            value="Login"
+          />
+          <input
+            type="submit"
+            id="btnForget"
+            class="btn btn-danger btn-block"
+            value="Forget Password"
+          />
+        </form>
+        <p class="my-1">
+          Don't have an account? <a href="signup.html">Sign Up</a>
+        </p>
+      </div>
+    </main>
+    <footer>
+      <p>All right reserved PropertyPro &copy; 2019</p>
+    </footer>
+    <script src="./js/main.js"></script>
+    <script>
+      let btnSubmit = document.querySelector("#btnSubmit");
+      let btnForget = document.querySelector("#btnForget");
+
+      btnSubmit.addEventListener("click", e => {
+        e.preventDefault();
+        window.location.href = "dashboard.html";
+      });
+      btnForget.addEventListener("click", e => {
+        e.preventDefault();
+        window.location.href = "forget-password.html";
+      });
+    </script>
+  </body>
+</html>
