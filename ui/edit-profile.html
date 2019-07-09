@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta
+      name="description"
+      content="Property Pro Lite is a platform where people can create and/or
+    search properties for sale or rent."
+    />
+    <title>Welcome to Property Pro</title>
+    <link rel="stylesheet" href="./css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="brand">
+          <h1><a href="index.html">PropertyPro</a></h1>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="add-property.html">New Ads</a></li>
+            <li><a href="favourite.html">My Favourite</a></li>
+            <li><a href="edit-profile.html">Update Profile</a></li>
+            <li class="dropdown">
+              <a href="javascript:void(0)" class="dropbtn">Admin</a>
+              <div class="dropdown-content">
+                <a href="manage-dealtype.html">Ads Types/Deals</a>
+                <a href="manage-ads.html">Manage Ads</a>
+                <a href="manage-user.html">Manage Users</a>
+                <a href="manage-report.html">Reported Issues</a>
+              </div>
+            </li>
+            <li><a href="signin.html">Sign Out</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="m-20">
+      <div class="container">
+        <h2 class="lead text-primary">
+          Edit Your Profile
+        </h2>
+        <p class="lead">
+          <i class="fas fa-user"></i> Let's get some information to make your
+          profile stand out
+        </p>
+        <small class="mb-">* = required field</small>
+        <form class="form mt-30">
+          <div class="form">
+            <small class="form-text">update your profile photo</small>
+            <img
+              class="image-preview"
+              width="200"
+              src="./img/placeholder-person.jpg"
+              alt="your image"
+            />
+            <input type="file" onchange="readURL(this);" />
+          </div>
+          <div class="form-group">
+            <input type="text" placeholder="Email" name="email" />
+          </div>
+          <div class="form-group">
+            <input type="text" placeholder="First Name" name="first_name" />
+          </div>
+          <div class="form-group">
+            <input type="text" placeholder="Last Name" name="last_name" />
+          </div>
+          <div class="form-group">
+            <input type="text" placeholder="Phone Number" name="phone_number" />
+          </div>
+          <div class="form-group">
+            <textarea placeholder="Address" name="address"></textarea>
+          </div>
+
+          <input type="submit" class="btn btn-primary btn-block mr-10" />
+          <a class="btn btn-link btn-block" href="dashboard.html">Go Back</a>
+        </form>
+      </div>
+    </main>
+    <footer>
+      <p>All right reserved PropertyPro &copy; 2019</p>
+    </footer>
+    <script src="./js/main.js"></script>
+  </body>
+</html>
