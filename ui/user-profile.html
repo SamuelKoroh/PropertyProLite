@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta
+      name="description"
+      content="Property Pro Lite is a platform where people can create and/or
+    search properties for sale or rent."
+    />
+    <title>Welcome to Property Pro</title>
+    <link rel="stylesheet" href="./css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="brand">
+          <h1><a href="index.html">PropertyPro</a></h1>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="all-listing.html">Listing</a></li>
+            <li><a href="signup.html">Sign up</a></li>
+            <li><a href="signin.html">Sign in</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="m-20">
+      <div class="container">
+        <div class="mb-20">
+          <span class="lead text-primary">User Profile</span>
+        </div>
+        <table class="table mb-30">
+          <thead>
+            <tr>
+              <th colspan="2">Profile Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="2">
+                <img
+                  class="image-preview"
+                  height="120"
+                  src="./img/placeholder-person.jpg"
+                  alt="your image"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>Names</td>
+              <td>Clark Kent</td>
+            </tr>
+            <tr>
+              <td>Phone</td>
+              <td>+23480387937363</td>
+            </tr>
+            <tr>
+              <td>Email</td>
+              <td>clarkkent@gmail.com</td>
+            </tr>
+          </tbody>
+        </table>
+        <hr />
+        <h2 class="mt-20 text-primary">Properties uploaded by clark kent</h2>
+        <div class="property">
+          <div class="property-detail">
+            <a href="property-details.html">
+              <img src="./img/prop.jpg" alt="" />
+            </a>
+            <div class="description center">
+              <span class="property-type inline-block">2 Bedroom</span>
+              <span class="property-location inline-block">Lagos</span>
+              <span class="property-price">Price: $2000</span>
+            </div>
+          </div>
+        </div>
+        <div class="property">
+          <div class="property-detail">
+            <a href="property-details.html">
+              <img src="./img/prop.jpg" alt="" />
+            </a>
+
+            <div class="description center">
+              <span class="property-type inline-block">2 Bedroom</span>
+              <span class="property-location inline-block">Lagos</span>
+              <span class="property-price">Price: $2000</span>
+            </div>
+          </div>
+        </div>
+        <div class="property">
+          <div class="property-detail">
+            <a href="property-details.html">
+              <img src="./img/prop.jpg" alt="" />
+            </a>
+
+            <div class="description center">
+              <span class="property-type inline-block">2 Bedroom</span>
+              <span class="property-location inline-block">Lagos</span>
+              <span class="property-price">Price: $2000</span>
+            </div>
+          </div>
+        </div>
+        <div class="property">
+          <div class="property-detail">
+            <a href="property-details.html">
+              <img src="./img/prop.jpg" alt="" />
+            </a>
+
+            <div class="description center">
+              <span class="property-type inline-block">2 Bedroom</span>
+              <span class="property-location inline-block">Lagos</span>
+              <span class="property-price">Price: $2000</span>
+            </div>
+          </div>
+        </div>
+        <div class="property">
+          <div class="property-detail">
+            <a href="property-details.html">
+              <img src="./img/prop.jpg" alt="" />
+            </a>
+
+            <div class="description center">
+              <span class="property-type inline-block">2 Bedroom</span>
+              <span class="property-location inline-block">Lagos</span>
+              <span class="property-price">Price: $2000</span>
+            </div>
+          </div>
+        </div>
+        <div class="property">
+          <div class="property-detail">
+            <a href="property-details.html">
+              <img src="./img/prop.jpg" alt="" />
+            </a>
+
+            <div class="description center">
+              <span class="property-type inline-block">2 Bedroom</span>
+              <span class="property-location inline-block">Lagos</span>
+              <span class="property-price">Price: $2000</span>
+            </div>
+          </div>
+        </div>
+        <div class="property">
+          <div class="property-detail">
+            <a href="property-details.html">
+              <img src="./img/prop.jpg" alt="" />
+            </a>
+
+            <div class="description center">
+              <span class="property-type inline-block">2 Bedroom</span>
+              <span class="property-location inline-block">Lagos</span>
+              <span class="property-price">Price: $2000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      let buttons = document.querySelectorAll('.btn-danger');
+      console.log(buttons);
+      buttons.forEach(button => {
+        button.addEventListener('click', ({ target }) => {
+          if (confirm('Do you want to remove this user')) {
+            document.removeChild(button.parentNode.parentNode.remove());
+          }
+        });
+      });
+    </script>
+    <footer>
+      <p>All right reserved PropertyPro &copy; 2019</p>
+    </footer>
+    <script src="./js/main.js"></script>
+  </body>
+</html>
