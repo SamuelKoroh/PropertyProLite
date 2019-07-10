@@ -59,3 +59,19 @@ export const getFlagById = async ({ params: { flagId } }, res) => {
     badRequest(res, 'An unexpected error has occour', 500);
   }
 };
+/*
+@@ Route          /api/v1/flag/:flagId
+@@ Method         DELETE
+@@ Description    Remove a flag report
+*/
+export const deleteFlag = async ({ params: { flagId } }, res) => {
+  try {
+    const strQuery = 'DELETE FROM flag WHERE id=$1  RETURNING *';
+    const { rows } = await db.query(strQuery, [flagId]);
+
+    if (!rows[0]) return badRequest(res, 'The flag does not exist');
+    okResponse(res, { message: 'The flag/report has been removed' });
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  }
+};

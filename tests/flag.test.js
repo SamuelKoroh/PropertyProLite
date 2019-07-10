@@ -106,4 +106,19 @@ describe('/api/v1/flag', () => {
       expect(result.status).to.equal(200);
     });
   });
+  describe('DELETE /:flagId', () => {
+    it('it should return 404 if there is no matching record', async () => {
+      const result = await request(app)
+        .delete('/api/v1/flag/10000')
+        .set('x-auth-token', admin.body.data.token);
+      expect(result.status).to.equal(404);
+    });
+
+    it('should return 200 successfully remove the flag', async () => {
+      const result = await request(app)
+        .delete('/api/v1/flag/1')
+        .set('x-auth-token', admin.body.data.token);
+      expect(result.status).to.equal(200);
+    });
+  });
 });
