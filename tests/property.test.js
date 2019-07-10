@@ -80,4 +80,30 @@ describe('/api/v1/property', () => {
       expect(result.status).to.equal(400);
     });
   });
+  describe('GET /', () => {
+    it('should return 200 if there is property but no query string provide', async () => {
+      const result = await request(app).get('/api/v1/property');
+      expect(result.status).to.equal(200);
+    });
+    it('should return 200 if passed price query string', async () => {
+      const result = await request(app).get('/api/v1/property?price=500000');
+      expect(result.status).to.equal(200);
+    });
+    it('should return 200 if passed location query string', async () => {
+      const result = await request(app).get('/api/v1/property?location=Warri');
+      expect(result.status).to.equal(200);
+    });
+    it('should return 200 if passed deal query string', async () => {
+      const result = await request(app).get('/api/v1/property?deal=for rent');
+      expect(result.status).to.equal(200);
+    });
+    it('should return 200 if passed type query string', async () => {
+      const result = await request(app).get('/api/v1/property?type=2 bedroom');
+      expect(result.status).to.equal(200);
+    });
+    it('should return 404 if no property is found', async () => {
+      const result = await request(app).get('/api/v1/property?location=2 bedroom');
+      expect(result.status).to.equal(404);
+    });
+  });
 });

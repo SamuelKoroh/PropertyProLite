@@ -1,9 +1,14 @@
 import Joi from 'joi';
 import uploadImages from '../utils/uploadFiles';
 import { propertySchema } from '../middlewares/validators';
-import { okResponse, badRequest } from '../utils/refractory';
+import { okResponse, badRequest, filterProperties } from '../utils/refractory';
 import db from '../config/db';
 
+/*
+@@ Route          /api/v1/property
+@@ Method         POST
+@@ Description    Create a property advert.
+*/
 export const createAdvert = async ({ user: { id }, files, body }, res) => {
   try {
     const errors = Joi.validate(body, propertySchema);
@@ -47,4 +52,25 @@ export const createAdvert = async ({ user: { id }, files, body }, res) => {
   }
 };
 
-export const getProperties = async (req, res) => {};
+/*
+@@ Route          /api/v1//property/
+@@ Route          /api/v1//property/?type=val&price=val&location=val&deal=val
+@@ Method         GET
+@@ Description    Get all property adverts.
+*/
+export const getProperties = async ({ query }, res) => {
+  try {
+    const { location, type, deal, price } = query;
+
+    const strQuery = 'SELECT A.*,B.id AS owner,B.email AS owner_Email,B.phone_number AS owner_Phone'
+      + ' FROM properties A INNER JOIN users B on A.owner=B.id WHERE A.status=$1 AND A.is_active=$2';
+    const { rows } = await db.query(strQuery, ['available', true]);
+
+    const properties = filterProperties(rows, type, deal, price, location);
+    if (!properties.length) return badRequest(res, 'No property was found');
+
+    okResponse(res, properties);
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  }
+};

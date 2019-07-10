@@ -27,3 +27,18 @@ export const generateUserToken = async (user) => {
   const data = _.omit(user, ['password', 'reset_password_token', 'reset_password_expires']);
   return { token, ...data };
 };
+
+export const filterProperties = (properties, type, deal, price, location) => {
+  let result = properties;
+  if (type) result = result.filter(p => p.title.toLowerCase().startsWith(type.toLowerCase()));
+  if (deal) result = result.filter(p => p.deal_type.toLowerCase() === deal.toLowerCase());
+  if (price) result = result.filter(p => parseInt(p.price, 10) <= parseInt(price, 10));
+  if (location)
+    result = result.filter(
+      p =>
+        p.state.toLowerCase().startsWith(location.toLowerCase())
+        || p.city.toLowerCase().startsWith(location.toLowerCase())
+        || p.address.toLowerCase().startsWith(location.toLowerCase())
+    );
+  return result;
+};
