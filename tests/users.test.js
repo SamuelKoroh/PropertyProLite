@@ -81,4 +81,29 @@ describe('/api/v1/user', () => {
       expect(result.status).to.equal(200);
     });
   });
+  describe('PATCH  /', () => {
+    it('should return 200 if the user profile was updated', async () => {
+      const result = await request(app)
+        .patch('/api/v1/users')
+        .set('x-auth-token', testUser1.body.data.token)
+        .send({ address: 'new address' });
+      expect(result.status).to.equal(200);
+    });
+    it('should return 200 if the user image was updated', async () => {
+      const filePath = `${__dirname}/testdata/user.png`;
+      const result = await request(app)
+        .patch('/api/v1/users')
+        .set('x-auth-token', testUser1.body.data.token)
+        .attach('image', filePath);
+      expect(result.status).to.equal(200);
+    });
+    it('should return 200 if the user image is not valid', async () => {
+      const filePath = `${__dirname}/testdata/badimage.txt`;
+      const result = await request(app)
+        .patch('/api/v1/users')
+        .set('x-auth-token', testUser1.body.data.token)
+        .attach('image', filePath);
+      expect(result.status).to.equal(500);
+    });
+  });
 });

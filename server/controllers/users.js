@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { okResponse, badRequest } from '../utils/refractory';
+import { okResponse, badRequest, setUserImage } from '../utils/refractory';
 import db from '../config/db';
 
 /*
@@ -69,7 +69,29 @@ export const getUserProperties = async ({ params: { userId } }, res) => {
 @@ Method         PATCH
 @@ Description    Update user profile details.
 */
-export const updateUserProfile = async ({ user: { id }, file, body }, res) => {};
+export const updateUserProfile = async ({ user: { id }, file, body }, res) => {
+  try {
+    const { rows } = await db.query('SELECT * FROM users WHERE id=$1', [id]);
+    let { image } = rows[0];
+
+    const keys = Object.keys(body);
+    keys.forEach(async (key) => {
+      const strQuery = `UPDATE users SET ${key}=$1 WHERE id=$2 `;
+      await db.query(strQuery, [body[key], id]);
+    });
+
+    if (file) {
+      image = await setUserImage(file, image);
+      await db.query('UPDATE users SET image=$1 WHERE id=$2', [image, id]);
+    }
+    const data = {
+      ..._.omit(rows[0], ['password', 'reset_password_token', 'reset_password_expires'])
+    };
+    return okResponse(res, { ...data, ...body, image });
+  } catch (error) {
+    badRequest(res, 'Image not valid', 500);
+  }
+};
 
 /*
 @@ Route          /api/v1/users/:userId/activate
