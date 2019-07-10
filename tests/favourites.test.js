@@ -78,4 +78,18 @@ describe('/api/v1/favourites', () => {
       expect(result.status).to.equal(200);
     });
   });
+  describe('DELETE /:favouriteId', () => {
+    it('should return 404 if the property does not exist in the favourite list', async () => {
+      const result = await request(app)
+        .delete('/api/v1/favourites/10000000')
+        .set('x-auth-token', testUser2.body.data.token);
+      expect(result.status).to.equal(404);
+    });
+    it('should return 200 if the property was removed from the favourite list', async () => {
+      const result = await request(app)
+        .delete('/api/v1/favourites/1')
+        .set('x-auth-token', testUser2.body.data.token);
+      expect(result.status).to.equal(200);
+    });
+  });
 });

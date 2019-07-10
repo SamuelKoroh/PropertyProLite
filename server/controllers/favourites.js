@@ -39,4 +39,14 @@ export const getFavourites = async ({ user: { id } }, res) => {
 @@ Method         DELETE
 @@ Description    Remove the property from user favourites
 */
-export const deleteFavourite = async ({ params: { favouriteId } }, res) => {};
+export const deleteFavourite = async ({ params: { favouriteId } }, res) => {
+  try {
+    const strQuery = 'DELETE FROM favourites WHERE id=$1  RETURNING *';
+    const { rows } = await db.query(strQuery, [favouriteId]);
+
+    if (!rows[0]) return badRequest(res, 'The property does not exist');
+    okResponse(res, { message: 'The property has been removed' });
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  }
+};
