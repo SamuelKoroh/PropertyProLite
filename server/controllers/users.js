@@ -1,5 +1,11 @@
 import _ from 'lodash';
-import { okResponse, badRequest, setUserImage } from '../utils/refractory';
+import {
+  okResponse,
+  badRequest,
+  setUserImage,
+  toggleboolUserField,
+  deleteRow
+} from '../utils/refractory';
 import db from '../config/db';
 
 /*
@@ -98,18 +104,8 @@ export const updateUserProfile = async ({ user: { id }, file, body }, res) => {
 @@ Method         PATCH
 @@ Description    Activate user account
 */
-export const activateDeactivateUserProfile = async ({ params: { userId } }, res) => {
-  try {
-    const strQuery = 'UPDATE users SET is_active = NOT is_active WHERE id=$1 RETURNING *';
-    const { rows } = await db.query(strQuery, [userId]);
-    if (!rows[0]) return badRequest(res, 'The operation was not successful');
-    okResponse(
-      res,
-      _.omit(rows[0], ['password', 'reset_password_token', 'reset_password_expires'])
-    );
-  } catch (error) {
-    badRequest(res, 'An unexpected error has occour', 500);
-  }
+export const activateDeactivateUserProfile = (req, res) => {
+  toggleboolUserField(req, res, 'is_active');
 };
 
 /*
@@ -117,18 +113,8 @@ export const activateDeactivateUserProfile = async ({ params: { userId } }, res)
 @@ Method         PATCH
 @@ Description    Make or remove user as an admin
 */
-export const makeRemoveUserAdmin = async ({ params: { userId } }, res) => {
-  try {
-    const strQuery = 'UPDATE users SET is_admin = NOT is_admin WHERE id=$1 RETURNING *';
-    const { rows } = await db.query(strQuery, [userId]);
-    if (!rows[0]) return badRequest(res, 'The operation was not successful');
-    okResponse(
-      res,
-      _.omit(rows[0], ['password', 'reset-password-token', 'reset_password_expires'])
-    );
-  } catch (error) {
-    badRequest(res, 'An unexpected error has occour', 500);
-  }
+export const makeRemoveUserAdmin = async (req, res) => {
+  toggleboolUserField(req, res, 'is_admin');
 };
 /*
 @@ Route          /api/v1/users/:userId
@@ -136,13 +122,5 @@ export const makeRemoveUserAdmin = async ({ params: { userId } }, res) => {
 @@ Description    Remove user account permanently from storage
 */
 export const deleteUserProfile = async ({ params: { userId } }, res) => {
-  try {
-    const strQuery = 'DELETE FROM users WHERE id=$1  RETURNING *';
-    const { rows } = await db.query(strQuery, [userId]);
-
-    if (!rows[0]) return badRequest(res, 'The operation was not successful');
-    okResponse(res, { message: 'The user has been removed' });
-  } catch (error) {
-    badRequest(res, 'An unexpected error has occour', 500);
-  }
+  deleteRow(res, 'users', userId);
 };

@@ -1,6 +1,7 @@
 import cloudinary from 'cloudinary';
 import _ from 'lodash';
 import jwt from 'jsonwebtoken';
+import db from '../config/db';
 
 const jwtSecret = process.env.JWT_SECRET;
 
@@ -41,4 +42,73 @@ export const filterProperties = (properties, type, deal, price, location) => {
         || p.address.toLowerCase().startsWith(location.toLowerCase())
     );
   return result;
+};
+
+export const addDealType = async (req, res, table) => {
+  try {
+    const { name, description } = req.body;
+    const id = name.toLowerCase().replace(' ', '-');
+    const strQuery = `INSERT INTO ${table}(id,name,description) VALUES($1,$2,$3) RETURNING *`;
+    const { rows } = await db.query(strQuery, [id, name, description]);
+    okResponse(res, rows[0], 201);
+  } catch (error) {
+    badRequest(res, 'It likes this item already exist', 400);
+  }
+};
+
+export const updateDealType = async (req, res, table) => {
+  try {
+    const { name, description } = req.body;
+    const { id } = req.params;
+    const strQuery = `UPDATE ${table} SET name=$1,description=$2 WHERE id=$3 RETURNING *`;
+    const { rows } = await db.query(strQuery, [name, description, id]);
+    if (!rows[0]) return badRequest(res, 'Item not found');
+    okResponse(res, rows[0]);
+  } catch (error) {
+    // badRequest(res, 'It likes this item already exist', 400);
+  }
+};
+
+export const deleteRow = async (res, table, key) => {
+  try {
+    const strQuery = `DELETE FROM ${table} WHERE id=$1 RETURNING *`;
+    const { rows } = await db.query(strQuery, [key]);
+    if (!rows[0]) return badRequest(res, 'The record was not found');
+    okResponse(res, { message: 'The item has been deleted' });
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  }
+};
+
+export const getAllRecord = async (res, table) => {
+  try {
+    const strQuery = `SELECT * FROM ${table}`;
+    const { rows } = await db.query(strQuery);
+    okResponse(res, rows);
+  } catch (error) {
+    // badRequest(res, 'It likes this item already exist', 400);
+  }
+};
+
+export const getRecord = async ({ params: { id } }, res, table) => {
+  try {
+    const strQuery = `SELECT * FROM ${table} WHERE id=$1`;
+    const { rows } = await db.query(strQuery, [id]);
+    if (!rows[0]) return badRequest(res, 'Item not found');
+    okResponse(res, rows[0]);
+  } catch (error) {
+    // badRequest(res, 'It likes this item already exist', 400);
+  }
+};
+
+export const toggleboolUserField = async ({ params: { userId } }, res, field) => {
+  try {
+    const strQuery = `UPDATE users SET ${field} = NOT ${field} WHERE id=$1 RETURNING *`;
+    const { rows } = await db.query(strQuery, [userId]);
+    if (!rows[0]) return badRequest(res, 'The operation was not successful');
+    const data = _.omit(rows[0], ['password', 'reset_password_token', 'reset_password_expires']);
+    okResponse(res, data);
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  }
 };
