@@ -20,7 +20,19 @@ export const saveFavourites = async ({ params: { propertyId }, user: { id } }, r
 @@ Method         GET
 @@ Description    Get the login user favourite
 */
-export const getFavourites = async ({ user: { id } }, res) => {};
+export const getFavourites = async ({ user: { id } }, res) => {
+  try {
+    const strQuery = 'SELECT B.id AS favourite_id, A.id AS property_id,A.owner AS owner_id, A.title,'
+      + 'A.price,A.state,A.city,A.address,A.type,A.billing_type,A.deal_type,A.status,A.created_on,A.image_url '
+      + ' FROM properties A INNER JOIN favourites B ON A.id = B.property_id  WHERE B.user_id=$1';
+
+    const { rows } = await db.query(strQuery, [id]);
+    if (!rows.length) return badRequest(res, 'No property on your favorite list yet');
+    okResponse(res, rows);
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  }
+};
 
 /*
 @@ Route          /api/v1/favourites/:favouriteId
