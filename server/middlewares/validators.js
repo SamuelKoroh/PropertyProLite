@@ -3,7 +3,7 @@ import { badRequest } from '../utils/refractory';
 import schema from '../utils/validationSchemas';
 
 const validator = (data, dataSchema, res, next) => {
-  const errors = Joi.validate(data, dataSchema);
+  const errors = Joi.validate(data, dataSchema, { abortEarly: false });
   if (errors.error) {
     const errorMSG = [];
     errors.error.details.forEach(err => errorMSG.push(err.message));
@@ -28,4 +28,8 @@ const postAdvert = ({ body }, res, next) => {
   validator(body, schema.property, res, next);
 };
 
-export default { signUp, signIn, resetEmail, postAdvert };
+const flagAdvert = ({ body }, res, next) => {
+  validator(body, schema.flagAdvert, res, next);
+};
+
+export default { signUp, signIn, resetEmail, postAdvert, flagAdvert };

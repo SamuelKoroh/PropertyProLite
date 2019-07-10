@@ -38,4 +38,14 @@ const property = {
   deal_type: Joi.string().required()
 };
 
-export default { signup, signin, property, email };
+const flagAdvert = {
+  email: Joi.string()
+    .email({ minDomainAtoms: 2 })
+    .required(),
+  name: Joi.string().required(),
+  description: Joi.string().required(),
+  reason: Joi.string().required(),
+  property_id: Joi.number().required()
+};
+
+export default { signup, signin, property, email, flagAdvert };
