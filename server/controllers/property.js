@@ -74,3 +74,22 @@ export const getProperties = async ({ query }, res) => {
     badRequest(res, 'An unexpected error has occour', 500);
   }
 };
+
+/*
+@@ Route          /api/v1//property/:propertyId
+@@ Method         GET
+@@ Description    Get all property adverts.
+*/
+export const getProperty = async ({ params: { propertyId } }, res) => {
+  try {
+    const strQuery = 'SELECT A.*,B.id AS owner,B.email AS owner_Email,B.phone_number AS owner_Phone'
+      + ' FROM properties A INNER JOIN users B on A.owner=B.id WHERE A.id=$1 AND A.status=$2 AND A.is_active=$3';
+    const { rows } = await db.query(strQuery, [propertyId, 'available', true]);
+
+    if (!rows[0]) return badRequest(res, 'The property does not exist');
+
+    okResponse(res, rows[0]);
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  }
+};

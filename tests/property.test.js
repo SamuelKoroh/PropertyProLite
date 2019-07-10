@@ -106,4 +106,14 @@ describe('/api/v1/property', () => {
       expect(result.status).to.equal(404);
     });
   });
+  describe('GET /:propertyId', () => {
+    it('it should return 404 if property is not found', async () => {
+      const result = await request(app).get('/api/v1/property/50000');
+      expect(result.status).to.equal(404);
+    });
+    it('it should return 200 if property is  found', async () => {
+      const result = await request(app).get(`/api/v1/property/${property1.body.data.id}`);
+      expect(result.status).to.equal(200);
+    });
+  });
 });
