@@ -106,4 +106,18 @@ describe('/api/v1/user', () => {
       expect(result.status).to.equal(500);
     });
   });
+  describe('PATCH  /:userId/activate', () => {
+    it('should return 404 if the user is not found', async () => {
+      const result = await request(app)
+        .patch('/api/v1/users/1000000/activate')
+        .set('x-auth-token', admin.body.data.token);
+      expect(result.status).to.equal(404);
+    });
+    it('should return 200 if the user is_active field is set to true', async () => {
+      const result = await request(app)
+        .patch(`/api/v1/users/${testUser1.body.data.id}/activate`)
+        .set('x-auth-token', admin.body.data.token);
+      expect(result.status).to.equal(200);
+    });
+  });
 });
