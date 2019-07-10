@@ -1,17 +1,21 @@
 {
-  "extends": ["airbnb"],
-  "parser": "babel-eslint",
   "env": {
     "node": true,
     "browser": true,
     "es6": true,
     "mocha": true
   },
+  "extends": "airbnb-base",
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
   "parserOptions": {
-    "ecmaVersion": 6,
+    "ecmaVersion": 2018,
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true
-    }
+    },
+    "sourceType": "module"
   },
   "rules": {
     "linebreak-style": "off",

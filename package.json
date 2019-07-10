@@ -5,8 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./build-server/index.js",
+    "testMigrate": "psql -U postgres -f server/models/travis.sql",
     "build": "babel -d ./build-server ./server/*",
-    "dev": "nodemon --watch server --exec babel-node ./server/index.js"
+    "dev": "nodemon --watch server --exec babel-node ./server/index.js",
+    "test:server": "./node_modules/.bin/mocha --timeout 500000 --require @babel/register ./tests/",
+    "test": "npm run testMigrate && cross-env NODE_ENV=test nyc npm run test:server && nyc report --reporter=lcov --reporter=text-lcov | coveralls"
   },
   "engines": {
     "node": "10.4.1"
@@ -35,6 +38,7 @@
     "cross-env": "^5.2.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-airbnb-base": "^13.2.0",
     "eslint-plugin-import": "^2.18.0",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.14.2",
@@ -49,9 +53,11 @@
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
     "express-validator": "^5.3.1",
+    "helmet": "^3.18.0",
     "joi": "^14.3.1",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
+    "morgan": "^1.9.1",
     "multer": "^1.4.1",
     "nodemailer": "^6.2.1",
     "pg": "^7.11.0",
