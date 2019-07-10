@@ -22,4 +22,21 @@ export const flagAdd = async ({ body }, res) => {
   @@ Method         GET
   @@ Description    Get all flaged property.
   */
-export const getAllFlags = async ({ query: { search } }, res) => {};
+export const getAllFlags = async ({ query: { search } }, res) => {
+  try {
+    let result;
+    let strQuery = 'SELECT A.id, A.property_id, A.name, A.email, A.reason, A.description, B.title AS property,'
+      + " C.id AS agent_id, CONCAT(C.first_name,' ', C.last_name) AS agent_name, A.created_on FROM flag A "
+      + ' INNER JOIN properties B ON A.property_id = B.id INNER JOIN users C ON B.owner = C.id';
+
+    if (search) {
+      strQuery += ' WHERE A.name ILIKE $1 OR A.reason ILIKE $1 OR A.email ILIKE $1 ';
+      result = await db.query(strQuery, [`${search}%`]);
+    } else result = await db.query(strQuery);
+
+    if (result.rowCount < 1) return badRequest(res, 'There is no matching record');
+    okResponse(res, result.rows);
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  }
+};

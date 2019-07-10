@@ -1,8 +1,38 @@
 import request from 'supertest';
 import { expect } from 'chai';
 import app from '../server/app';
+import { validProperty } from './testdata/property';
 
 describe('/api/v1/flag', () => {
+  let admin = '';
+  let flager = '';
+  //   let property1;
+  before(async () => {
+    admin = await request(app)
+      .post('/api/v1/auth/signin')
+      .set('Content-Type', 'application/json')
+      .send({ email: 'admin@gmail.com', password: 'admin' });
+
+    flager = await request(app)
+      .post('/api/v1/auth/signup')
+      .field('email', 'agent@agent.com')
+      .field('password', 'agent')
+      .field('first_name', 'Ibadan')
+      .field('last_name', 'Ojoo')
+      .field('phone_number', '20 agodi oojoo')
+      .field('address', '45 rooms in a duples')
+      .field('user_type', 'agent');
+
+    await request(app)
+      .post('/api/v1/property')
+      .set('x-auth-token', flager.body.data.token)
+      .send({ ...validProperty, title: 'flaged property 1' });
+
+    await request(app)
+      .post('/api/v1/property')
+      .set('x-auth-token', flager.body.data.token)
+      .send({ ...validProperty, title: 'flaged property 2' });
+  });
   describe('POST  /', () => {
     it('should return 400 if the request body is not valid', async () => {
       const result = await request(app)
@@ -22,6 +52,44 @@ describe('/api/v1/flag', () => {
           description: 'wierd demand from agent',
           property_id: 2
         });
+      expect(result.status).to.equal(200);
+    });
+  });
+  describe('GET /', () => {
+    it('it should return 403 if the user acces is forbidden', async () => {
+      const result = await request(app)
+        .get('/api/v1/flag')
+        .set('x-auth-token', flager.body.data.token);
+      expect(result.status).to.equal(403);
+    });
+    it('it should return 404 if there are no record returned by using query parameter', async () => {
+      const result = await request(app)
+        .get('/api/v1/flag?search=hhhhhhhhhhhhhhhhhh')
+        .set('x-auth-token', admin.body.data.token);
+      expect(result.status).to.equal(404);
+    });
+    it('it should return 200 if there are one or more records by using name query string', async () => {
+      const result = await request(app)
+        .get('/api/v1/flag?search=sarah')
+        .set('x-auth-token', admin.body.data.token);
+      expect(result.status).to.equal(200);
+    });
+    it('it should return 200 if there are one or more records by using reason query string', async () => {
+      const result = await request(app)
+        .get('/api/v1/flag?search=wierd')
+        .set('x-auth-token', admin.body.data.token);
+      expect(result.status).to.equal(200);
+    });
+    it('it should return 200 if there are one or more records by using email query string', async () => {
+      const result = await request(app)
+        .get('/api/v1/flag?search=reporter')
+        .set('x-auth-token', admin.body.data.token);
+      expect(result.status).to.equal(200);
+    });
+    it('it should return 200 if there are one or more records', async () => {
+      const result = await request(app)
+        .get('/api/v1/flag')
+        .set('x-auth-token', admin.body.data.token);
       expect(result.status).to.equal(200);
     });
   });
