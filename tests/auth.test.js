@@ -2,6 +2,7 @@ import request from 'supertest';
 import { expect } from 'chai';
 import app from '../server/app';
 import { validUser, validLogin } from './testdata/auth';
+import db from '../server/config/db';
 
 let user = '';
 let newUser;
@@ -108,6 +109,26 @@ describe('/api/v1/auth', () => {
         .post('/api/v1/auth/nomatch@gmail.com/reset-password')
         .set('content-type', 'application/json');
       expect(result.status).to.equal(404);
+    });
+  });
+  describe('GET :token/reset-password', () => {
+    let newUserLogin;
+    before(async () => {
+      newUserLogin = await db.query('SELECT * FROM users WHERE email=$1', [
+        newUser.body.data.email
+      ]);
+    });
+    it('should return 404 if the reset password token has expired or not valid', async () => {
+      const result = await request(app)
+        .get(`/api/v1/auth/${newUserLogin.rows[0].reset_password_token}dd/reset-password`)
+        .set('content-type', 'application/json');
+      expect(result.status).to.equal(404);
+    });
+    it('should return 200 if the reset password token is valid', async () => {
+      const result = await request(app)
+        .get(`/api/v1/auth/${newUserLogin.rows[0].reset_password_token}/reset-password`)
+        .set('content-type', 'application/json');
+      expect(result.status).to.equal(200);
     });
   });
 });

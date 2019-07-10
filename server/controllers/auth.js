@@ -105,7 +105,7 @@ export const sendResetLink = async ({ params }, res) => {
 
     const text = 'You are receiving this because you (or some else) have requested the reset of the password for your account.\n\n'
       + 'Please click on the following link, or paste this into your browser to complete the process within one hour of receiving it: \n\n'
-      + `http://localhost:3500/api/v1/auth/reset-password/${token}\n\n`
+      + `http://localhost:3500/api/v1/auth/${token}/reset-password\n\n`
       + 'If you did not request this, please ignore this email and your password will remain unchanged.\n';
 
     const result = await mail.sendMail(
@@ -120,6 +120,22 @@ export const sendResetLink = async ({ params }, res) => {
     });
   } catch (error) {
     badRequest(res, error, 500);
+  } finally {
+    // db.release();
+  }
+};
+export const validateUrlToken = async ({ params: { token } }, res) => {
+  try {
+    const { rows: user } = await db.query('SELECT * FROM users WHERE reset_password_token=$1', [
+      token
+    ]);
+
+    if (!user[0] || parseInt(Date.now(), 10) > parseInt(user[0].reset_password_expires, 10))
+      return badRequest(res, 'The reset link is invalid or has expired');
+
+    okResponse(res, { email: user[0].email });
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
   } finally {
     // db.release();
   }
