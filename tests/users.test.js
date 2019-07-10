@@ -134,4 +134,18 @@ describe('/api/v1/user', () => {
       expect(result.status).to.equal(200);
     });
   });
+  describe('DELETE  /:userId', () => {
+    it('should return 404 if the user is not found', async () => {
+      const result = await request(app)
+        .delete('/api/v1/users/100000')
+        .set('x-auth-token', admin.body.data.token);
+      expect(result.status).to.equal(404);
+    });
+    it('should return 200 if the user is_active field is set to false', async () => {
+      const result = await request(app)
+        .delete(`/api/v1/users/${testUser1.body.data.id}`)
+        .set('x-auth-token', admin.body.data.token);
+      expect(result.status).to.equal(200);
+    });
+  });
 });

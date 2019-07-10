@@ -131,9 +131,18 @@ export const makeRemoveUserAdmin = async ({ params: { userId } }, res) => {
   }
 };
 /*
-/*
 @@ Route          /api/v1/users/:userId
 @@ Method         DELETE
 @@ Description    Remove user account permanently from storage
 */
-export const deleteUserProfile = async ({ params: { userId } }, res) => {};
+export const deleteUserProfile = async ({ params: { userId } }, res) => {
+  try {
+    const strQuery = 'DELETE FROM users WHERE id=$1  RETURNING *';
+    const { rows } = await db.query(strQuery, [userId]);
+
+    if (!rows[0]) return badRequest(res, 'The operation was not successful');
+    okResponse(res, { message: 'The user has been removed' });
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  }
+};
