@@ -2,9 +2,11 @@ import Joi from 'joi';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import _ from 'lodash';
+import crypto from 'crypto';
 import db from '../config/db';
+import mail from '../utils/mail';
 import { okResponse, badRequest, setUserImage } from '../utils/refractory';
-import { signupSchema, signinSchema } from '../middlewares/validators';
+import { signupSchema, signinSchema, emailSchema } from '../middlewares/validators';
 
 // const db = new Database();
 const jwtSecret = process.env.JWT_SECRET;
@@ -83,6 +85,41 @@ export const signIn = async ({ body }, res) => {
     return okResponse(res, { token, ...data });
   } catch (error) {
     badRequest(res, 'An unexpected error has occour', 500);
+  } finally {
+    // db.release();
+  }
+};
+
+export const sendResetLink = async ({ params }, res) => {
+  try {
+    const errors = Joi.validate(params, emailSchema);
+    if (errors.error) return badRequest(res, errors.error, 400);
+
+    const { rows: user } = await db.query('SELECT * FROM users WHERE email = $1', [params.email]);
+    if (!user[0]) return badRequest(res, 'The account does not exist');
+
+    const token = crypto.randomBytes(20).toString('hex');
+
+    const strQuery = 'UPDATE users SET  reset_password_token=$1, reset_password_expires=$2 WHERE email=$3';
+    await db.query(strQuery, [token, Date.now() + 360000, params.email]);
+
+    const text = 'You are receiving this because you (or some else) have requested the reset of the password for your account.\n\n'
+      + 'Please click on the following link, or paste this into your browser to complete the process within one hour of receiving it: \n\n'
+      + `http://localhost:3500/api/v1/auth/reset-password/${token}\n\n`
+      + 'If you did not request this, please ignore this email and your password will remain unchanged.\n';
+
+    const result = await mail.sendMail(
+      process.env.MAIL_USER,
+      user[0].email,
+      'Reset Password',
+      text
+    );
+    if (result !== 'sent') return badRequest(res, result, 400);
+    okResponse(res, {
+      message: 'The link to rest your profile has been sent to this email address'
+    });
+  } catch (error) {
+    badRequest(res, error, 500);
   } finally {
     // db.release();
   }

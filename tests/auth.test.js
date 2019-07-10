@@ -4,11 +4,16 @@ import app from '../server/app';
 import { validUser, validLogin } from './testdata/auth';
 
 let user = '';
+let newUser;
 describe('/api/v1/auth', () => {
   before(async () => {
     user = await request(app)
       .post('/api/v1/auth/signup')
       .send(validUser);
+
+    newUser = await request(app)
+      .post('/api/v1/auth/signup')
+      .send({ ...validUser, email: 'godwin4koroh@gmail.com', password: 'admin' });
   });
   describe('POST /signup', () => {
     it('should return 201 if provide with valid data', async () => {
@@ -83,6 +88,26 @@ describe('/api/v1/auth', () => {
         .set('Content-Type', 'application/json')
         .send({ ...validLogin, password: 'secret45' });
       expect(result.status).to.equal(400);
+    });
+  });
+  describe('POST /:email/reset-password', () => {
+    it('should return 200 if recovery email is valid and mail was sent', async () => {
+      const result = await request(app)
+        .post(`/api/v1/auth/${newUser.body.data.email}/reset-password`)
+        .set('content-type', 'application/json');
+      expect(result.status).to.equal(200);
+    });
+    it('should return 400 if the recovery email is not valid', async () => {
+      const result = await request(app)
+        .post('/api/v1/auth/email.com/reset-password')
+        .set('content-type', 'application/json');
+      expect(result.status).to.equal(400);
+    });
+    it('should return 404 if the recovery email is not attached to an account', async () => {
+      const result = await request(app)
+        .post('/api/v1/auth/nomatch@gmail.com/reset-password')
+        .set('content-type', 'application/json');
+      expect(result.status).to.equal(404);
     });
   });
 });

@@ -19,3 +19,9 @@ export const signinSchema = {
     .required(),
   password: Joi.string().required()
 };
+
+export const emailSchema = {
+  email: Joi.string()
+    .email({ minDomainAtoms: 2 })
+    .required()
+};
