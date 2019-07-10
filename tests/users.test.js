@@ -59,4 +59,12 @@ describe('/api/v1/user', () => {
       expect(result.status).to.equal(404);
     });
   });
+  describe('GET /me', () => {
+    it('should return 200 if the current user profile is load', async () => {
+      const result = await request(app)
+        .get('/api/v1/users/me')
+        .set('x-auth-token', testUser1.body.data.token);
+      expect(result.status).to.equal(200);
+    });
+  });
 });

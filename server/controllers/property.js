@@ -42,7 +42,7 @@ const createAdvert = async ({ user: { id }, files, body }, res) => {
 
     return okResponse(res, result.rows[0], 201);
   } catch (error) {
-    badRequest(res, error, 500);
+    badRequest(res, 'An unexpected error has occour', 500);
   }
 };
 
