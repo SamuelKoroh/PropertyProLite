@@ -6,7 +6,6 @@ import { validProperty } from './testdata/property';
 describe('/api/v1/flag', () => {
   let admin = '';
   let flager = '';
-  //   let property1;
   before(async () => {
     admin = await request(app)
       .post('/api/v1/auth/signin')
@@ -89,6 +88,20 @@ describe('/api/v1/flag', () => {
     it('it should return 200 if there are one or more records', async () => {
       const result = await request(app)
         .get('/api/v1/flag')
+        .set('x-auth-token', admin.body.data.token);
+      expect(result.status).to.equal(200);
+    });
+  });
+  describe('GET /:flagId', () => {
+    it('it should return 404 if there is no matching record', async () => {
+      const result = await request(app)
+        .get('/api/v1/flag/10000')
+        .set('x-auth-token', admin.body.data.token);
+      expect(result.status).to.equal(404);
+    });
+    it('it should return 200 if there is matching record', async () => {
+      const result = await request(app)
+        .get('/api/v1/flag/1')
         .set('x-auth-token', admin.body.data.token);
       expect(result.status).to.equal(200);
     });
