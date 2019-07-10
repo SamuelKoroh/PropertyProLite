@@ -1,15 +1,10 @@
 import Joi from 'joi';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import _ from 'lodash';
 import crypto from 'crypto';
 import db from '../config/db';
 import mail from '../utils/mail';
-import { okResponse, badRequest, setUserImage } from '../utils/refractory';
+import { okResponse, badRequest, setUserImage, generateUserToken } from '../utils/refractory';
 import { signupSchema, signinSchema, emailSchema } from '../middlewares/validators';
-
-// const db = new Database();
-const jwtSecret = process.env.JWT_SECRET;
 
 /*
 @@ Route          /api/v1/auth/signup
@@ -44,12 +39,8 @@ export const signUp = async ({ body, file }, res) => {
       user_type
     ]);
 
-    const payload = _.pick(rows[0], ['id', 'is_admin', 'user_type']);
-    const token = await jwt.sign(payload, jwtSecret, { expiresIn: 36000 });
-    const data = {
-      ..._.omit(rows[0], ['password', 'reset_password_token', 'reset_password_expires'])
-    };
-    return okResponse(res, { token, ...data }, 201);
+    const data = await generateUserToken(rows[0]);
+    return okResponse(res, data, 201);
   } catch (error) {
     badRequest(res, 'An unexpected error has occour', 500);
   } finally {
@@ -76,13 +67,8 @@ export const signIn = async ({ body }, res) => {
     const validPassword = await bcrypt.compare(body.password, user[0].password);
     if (!validPassword) return badRequest(res, 'Invalid username and password', 400);
 
-    const token = await jwt.sign(_.pick(user[0], ['id', 'is_admin', 'user_type']), jwtSecret, {
-      expiresIn: 36000
-    });
-    const data = {
-      ..._.omit(user[0], ['password', 'reset_password_token', 'reset_password_expires'])
-    };
-    return okResponse(res, { token, ...data });
+    const data = await generateUserToken(user[0]);
+    return okResponse(res, data);
   } catch (error) {
     badRequest(res, 'An unexpected error has occour', 500);
   } finally {
@@ -134,6 +120,36 @@ export const validateUrlToken = async ({ params: { token } }, res) => {
       return badRequest(res, 'The reset link is invalid or has expired');
 
     okResponse(res, { email: user[0].email });
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  } finally {
+    // db.release();
+  }
+};
+export const updateUserPassword = async ({ body, params }, res) => {
+  try {
+    const errors = Joi.validate(body, signinSchema);
+    if (errors.error) return badRequest(res, errors.error, 400);
+
+    let user = await db.query('SELECT * FROM users WHERE reset_password_token=$1 AND email=$2', [
+      params.token,
+      body.email
+    ]);
+
+    if (!user.rows[0]) return badRequest(res, 'The profile account does not exists');
+
+    const validOldPass = await bcrypt.compare(body.old_password, user.rows[0].password);
+
+    if (!validOldPass) {
+      const salt = await bcrypt.genSalt(10);
+      const password = await bcrypt.hash(body.password, salt);
+      const strQuery = 'UPDATE users SET password=$1, reset_password_token=null, '
+        + ' reset_password_expires=null WHERE id=$2 RETURNING *';
+      user = await db.query(strQuery, [password, user.rows[0].id]);
+    }
+
+    const data = await generateUserToken(user.rows[0]);
+    return okResponse(res, data);
   } catch (error) {
     badRequest(res, 'An unexpected error has occour', 500);
   } finally {
