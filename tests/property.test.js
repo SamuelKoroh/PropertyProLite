@@ -8,6 +8,7 @@ describe('/api/v1/property', () => {
   const filePath = `${__dirname}/testdata/house.png`;
   let user = '';
   let agent = '';
+  let agent2 = '';
   let property1 = '';
   before(async () => {
     user = await request(app)
@@ -17,6 +18,10 @@ describe('/api/v1/property', () => {
     agent = await request(app)
       .post('/api/v1/auth/signup')
       .send({ ...validUser, email: 'agent@gmail.com', user_type: 'agent' });
+
+    agent2 = await request(app)
+      .post('/api/v1/auth/signup')
+      .send({ ...validUser, email: 'agent2@gmail.com', user_type: 'agent' });
 
     property1 = await request(app)
       .post('/api/v1/property')
@@ -114,6 +119,43 @@ describe('/api/v1/property', () => {
     it('it should return 200 if property is  found', async () => {
       const result = await request(app).get(`/api/v1/property/${property1.body.data.id}`);
       expect(result.status).to.equal(200);
+    });
+  });
+  describe('PATCH /:propertyId', () => {
+    let property;
+    before(async () => {
+      property = await request(app)
+        .post('/api/v1/property')
+        .set('x-auth-token', agent.body.data.token)
+        .send({ ...validProperty, title: '5 room duplex in abuja' });
+    });
+    it('should return 404 if the property does not exist', async () => {
+      const result = await request(app)
+        .patch('/api/v1/property/100')
+        .set('x-auth-token', agent.body.data.token)
+        .send({ price: 200 });
+      expect(result.status).to.equal(404);
+    });
+    it('should return 403 if the property does not belong to the user', async () => {
+      const result = await request(app)
+        .patch(`/api/v1/property/${property.body.data.id}`)
+        .set('x-auth-token', agent2.body.data.token)
+        .send({ price: 200 });
+      expect(result.status).to.equal(403);
+    });
+    it('should return 200 if the property does exist and belong to the user and was updated', async () => {
+      const res = await request(app)
+        .patch(`/api/v1/property/${property.body.data.id}`)
+        .set('x-auth-token', agent.body.data.token)
+        .field('price', 200000);
+      expect(res.status).to.equal(200);
+    });
+    it('should return 200 if the property does exist and belong to the user and its image was updated', async () => {
+      const res = await request(app)
+        .patch(`/api/v1/property/${property.body.data.id}`)
+        .set('x-auth-token', agent.body.data.token)
+        .attach('images', filePath);
+      expect(res.status).to.equal(200);
     });
   });
 });
