@@ -42,13 +42,27 @@ export const getUserProfile = async ({ user: { id } }, res) => {
     badRequest(res, 'An unexpected error has occour', 500);
   }
 };
-
 /*
 @@ Route          /api/v1/users/:userId
 @@ Method         GET
 @@ Description    Get a single user and the advert he/she uploaded .
 */
-export const getUserProperties = async ({ params: { userId } }, res) => {};
+export const getUserProperties = async ({ params: { userId } }, res) => {
+  try {
+    let strQuery = 'SELECT id, first_name, last_name, email, phone_number, address, image, user_type,'
+      + ' is_admin,is_active,created_on  FROM users WHERE id=$1';
+    const { rows } = await db.query(strQuery, [userId]);
+
+    if (!rows[0]) return badRequest(res, 'The user does not exist');
+
+    strQuery = 'SELECT * FROM properties WHERE owner = $1';
+    const result = await db.query(strQuery, [userId]);
+
+    okResponse(res, { user: rows[0], userAdverts: result.rows });
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  }
+};
 
 /*
 @@ Route          /api/v1/users/:userId

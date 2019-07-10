@@ -67,4 +67,18 @@ describe('/api/v1/user', () => {
       expect(result.status).to.equal(200);
     });
   });
+  describe('GET  /:userId', () => {
+    it('should return 404 if the user is not found', async () => {
+      const result = await request(app)
+        .get('/api/v1/users/1000000000')
+        .set('x-auth-token', admin.body.data.token);
+      expect(result.status).to.equal(404);
+    });
+    it('should return 200 if the user and he/her properties upload was retrieved', async () => {
+      const result = await request(app)
+        .get(`/api/v1/users/${testUser1.body.data.id}`)
+        .set('x-auth-token', admin.body.data.token);
+      expect(result.status).to.equal(200);
+    });
+  });
 });
