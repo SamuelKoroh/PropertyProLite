@@ -120,4 +120,18 @@ describe('/api/v1/user', () => {
       expect(result.status).to.equal(200);
     });
   });
+  describe('PATCH  /:userId/set-admin', () => {
+    it('should return 404 if the user is not found', async () => {
+      const result = await request(app)
+        .patch('/api/v1/users/1000000/set-admin')
+        .set('x-auth-token', admin.body.data.token);
+      expect(result.status).to.equal(404);
+    });
+    it('should return 200 if the user is_admin field is set to true', async () => {
+      const result = await request(app)
+        .patch(`/api/v1/users/${testUser1.body.data.id}/set-admin`)
+        .set('x-auth-token', admin.body.data.token);
+      expect(result.status).to.equal(200);
+    });
+  });
 });

@@ -117,7 +117,20 @@ export const activateDeactivateUserProfile = async ({ params: { userId } }, res)
 @@ Method         PATCH
 @@ Description    Make or remove user as an admin
 */
-export const makeRemoveUserAdmin = async ({ params: { userId } }, res) => {};
+export const makeRemoveUserAdmin = async ({ params: { userId } }, res) => {
+  try {
+    const strQuery = 'UPDATE users SET is_admin = NOT is_admin WHERE id=$1 RETURNING *';
+    const { rows } = await db.query(strQuery, [userId]);
+    if (!rows[0]) return badRequest(res, 'The operation was not successful');
+    okResponse(
+      res,
+      _.omit(rows[0], ['password', 'reset-password-token', 'reset_password_expires'])
+    );
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  }
+};
+/*
 /*
 @@ Route          /api/v1/users/:userId
 @@ Method         DELETE
