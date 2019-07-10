@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import _ from 'lodash';
 import db from '../config/db';
 import { okResponse, badRequest, setUserImage } from '../utils/refractory';
-import { signupSchema } from '../middlewares/validators';
+import { signupSchema, signinSchema } from '../middlewares/validators';
 
 // const db = new Database();
 const jwtSecret = process.env.JWT_SECRET;
@@ -60,4 +60,30 @@ export const signUp = async ({ body, file }, res) => {
 @@ Method         POST
 @@ Description    Login a user
 */
-export const signIn = async ({ body }, res) => {};
+export const signIn = async ({ body }, res) => {
+  try {
+    const errors = Joi.validate(body, signinSchema);
+    if (errors.error) return badRequest(res, errors.error.details[0].message, 400);
+
+    const { rows: user } = await db.query(
+      'SELECT * FROM users WHERE email = $1 AND is_active=true',
+      [body.email]
+    );
+    if (!user[0]) return badRequest(res, 'Invalid username and password', 400);
+
+    const validPassword = await bcrypt.compare(body.password, user[0].password);
+    if (!validPassword) return badRequest(res, 'Invalid username and password', 400);
+
+    const token = await jwt.sign(_.pick(user[0], ['id', 'is_admin', 'user_type']), jwtSecret, {
+      expiresIn: 36000
+    });
+    const data = {
+      ..._.omit(user[0], ['password', 'reset_password_token', 'reset_password_expires'])
+    };
+    return okResponse(res, { token, ...data });
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  } finally {
+    // db.release();
+  }
+};

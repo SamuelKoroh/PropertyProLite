@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { expect } from 'chai';
 import app from '../server/app';
-import { validUser } from './testdata/auth';
+import { validUser, validLogin } from './testdata/auth';
 
 let user = '';
 describe('/api/v1/auth', () => {
@@ -52,6 +52,36 @@ describe('/api/v1/auth', () => {
       const result = await request(app)
         .post('/api/v1/auth/signup')
         .send(validUser);
+      expect(result.status).to.equal(400);
+    });
+  });
+  describe('POST /signin', () => {
+    it('should return 200 if successful login', async () => {
+      const result = await request(app)
+        .post('/api/v1/auth/signin')
+        .set('Content-Type', 'application/json')
+        .send(validLogin);
+      expect(result.status).to.equal(200);
+    });
+    it('should return 400 if provided with no values', async () => {
+      const result = await request(app)
+        .post('/api/v1/auth/signin')
+        .set('Content-Type', 'application/json')
+        .send({});
+      expect(result.status).to.equal(400);
+    });
+    it('should return 400 if provided with invalid credential', async () => {
+      const result = await request(app)
+        .post('/api/v1/auth/signin')
+        .set('Content-Type', 'application/json')
+        .send({ email: 'demo@demo.com', password: 'demopassword' });
+      expect(result.status).to.equal(400);
+    });
+    it('should return 400 if provided with valid email but wrong password', async () => {
+      const result = await request(app)
+        .post('/api/v1/auth/signin')
+        .set('Content-Type', 'application/json')
+        .send({ ...validLogin, password: 'secret45' });
       expect(result.status).to.equal(400);
     });
   });
