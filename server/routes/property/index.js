@@ -6,7 +6,8 @@ import {
   getProperties,
   getProperty,
   updateProperty,
-  markPropertySold
+  markPropertySold,
+  deleteProperty
 } from '../../controllers/property';
 
 const router = express.Router();
@@ -16,5 +17,6 @@ router.get('/:propertyId', getProperty);
 router.post('/', [authenticate, isAgent, multer.array('images')], createAdvert);
 router.patch('/:propertyId', [authenticate, isAgent, multer.array('images')], updateProperty);
 router.patch('/:propertyId/sold', [authenticate, isAgent], markPropertySold);
+router.delete('/:propertyId', [authenticate, isAgent], deleteProperty);
 
 export default router;

@@ -140,3 +140,19 @@ export const markPropertySold = async ({ params: { propertyId }, user: { id } },
     badRequest(res, 'An unexpected error has occour', 500);
   }
 };
+/*
+@@ Route          /api/v1//property/:propertyId
+@@ Method         DELETE
+@@ Description    Delete a property advert.
+*/
+export const deleteProperty = async ({ params: { propertyId }, user: { id, is_admin } }, res) => {
+  try {
+    const strQuery = 'DELETE FROM properties WHERE id=$1 AND (owner=$2 OR $3=true) RETURNING *';
+    const { rows } = await db.query(strQuery, [propertyId, id, is_admin]);
+
+    if (!rows[0]) return badRequest(res, 'The operation was not successful');
+    okResponse(res, { message: 'The property has been removed' });
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  }
+};

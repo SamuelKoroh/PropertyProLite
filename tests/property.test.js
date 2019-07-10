@@ -172,4 +172,25 @@ describe('/api/v1/property', () => {
       expect(result.status).to.equal(200);
     });
   });
+  describe('DELETE /:propertyId', () => {
+    let property;
+    before(async () => {
+      property = await request(app)
+        .post('/api/v1/property')
+        .set('x-auth-token', agent.body.data.token)
+        .send({ ...validProperty, title: '12 room duplex in abuja' });
+    });
+    it('should return 404 if the property does not exist', async () => {
+      const result = await request(app)
+        .delete('/api/v1/property/100')
+        .set('x-auth-token', agent.body.data.token);
+      expect(result.status).to.equal(404);
+    });
+    it('should return 200 if the property to be delete does exist and belong to the user', async () => {
+      const result = await request(app)
+        .delete(`/api/v1/property/${property.body.data.id}`)
+        .set('x-auth-token', agent.body.data.token);
+      expect(result.status).to.equal(200);
+    });
+  });
 });
