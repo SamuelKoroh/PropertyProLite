@@ -1,39 +1,31 @@
 import Joi from 'joi';
+import { badRequest } from '../utils/refractory';
+import schema from '../utils/validationSchemas';
 
-export const signupSchema = {
-  email: Joi.string()
-    .email({ minDomainAtoms: 2 })
-    .required(),
-  password: Joi.string().required(),
-  first_name: Joi.string().required(),
-  last_name: Joi.string().required(),
-  phone_number: Joi.string().required(),
-  address: Joi.string().required(),
-  user_type: Joi.string().required(),
-  image: Joi.optional()
-};
-
-export const signinSchema = {
-  email: Joi.string()
-    .email({ minDomainAtoms: 2 })
-    .required(),
-  password: Joi.string().required(),
-  old_password: Joi.string().optional()
+const validator = (data, dataSchema, res, next) => {
+  const errors = Joi.validate(data, dataSchema);
+  if (errors.error) {
+    const errorMSG = [];
+    errors.error.details.forEach(err => errorMSG.push(err.message));
+    return badRequest(res, errorMSG, 400);
+  }
+  next();
 };
 
-export const emailSchema = {
-  email: Joi.string()
-    .email({ minDomainAtoms: 2 })
-    .required()
+const signUp = ({ body }, res, next) => {
+  validator(body, schema.signup, res, next);
 };
-export const propertySchema = {
-  title: Joi.string().required(),
-  price: Joi.number().required(),
-  state: Joi.string().required(),
-  city: Joi.string().required(),
-  address: Joi.string().required(),
-  type: Joi.string().required(),
-  billing_type: Joi.string().required(),
-  description: Joi.string().required(),
-  deal_type: Joi.string().required()
+
+const signIn = ({ body }, res, next) => {
+  validator(body, schema.signin, res, next);
 };
+
+const resetEmail = ({ params }, res, next) => {
+  validator(params, schema.email, res, next);
+};
+
+const postAdvert = ({ body }, res, next) => {
+  validator(body, schema.property, res, next);
+};
+
+export default { signUp, signIn, resetEmail, postAdvert };

@@ -1,19 +1,13 @@
-import Joi from 'joi';
 import uploadImages from '../utils/uploadFiles';
-import { propertySchema } from '../middlewares/validators';
 import { okResponse, badRequest, filterProperties } from '../utils/refractory';
 import db from '../config/db';
-
 /*
 @@ Route          /api/v1/property
 @@ Method         POST
 @@ Description    Create a property advert.
 */
-export const createAdvert = async ({ user: { id }, files, body }, res) => {
+const createAdvert = async ({ user: { id }, files, body }, res) => {
   try {
-    const errors = Joi.validate(body, propertySchema);
-    if (errors.error) return badRequest(res, errors, 400);
-
     const { title, price, state, city, address, type, deal_type, billing_type, description } = body;
 
     let result = await db.query('SELECT * FROM properties WHERE lower(title)=$1 AND owner=$2', [
@@ -58,7 +52,7 @@ export const createAdvert = async ({ user: { id }, files, body }, res) => {
 @@ Method         GET
 @@ Description    Get all property adverts.
 */
-export const getProperties = async ({ query }, res) => {
+const getProperties = async ({ query }, res) => {
   try {
     const { location, type, deal, price } = query;
 
@@ -80,7 +74,7 @@ export const getProperties = async ({ query }, res) => {
 @@ Method         GET
 @@ Description    Get all property adverts.
 */
-export const getProperty = async ({ params: { propertyId } }, res) => {
+const getProperty = async ({ params: { propertyId } }, res) => {
   try {
     const strQuery = 'SELECT A.*,B.id AS owner,B.email AS owner_Email,B.phone_number AS owner_Phone'
       + ' FROM properties A INNER JOIN users B on A.owner=B.id WHERE A.id=$1 AND A.status=$2 AND A.is_active=$3';
@@ -98,7 +92,7 @@ export const getProperty = async ({ params: { propertyId } }, res) => {
 @@ Method         PATCH
 @@ Description    Update a property advert.
 */
-export const updateProperty = async ({ params: { propertyId }, body, files, user }, res) => {
+const updateProperty = async ({ params: { propertyId }, body, files, user }, res) => {
   try {
     let strQuery = 'SELECT * FROM properties WHERE id=$1';
     const { rows } = await db.query(strQuery, [propertyId]);
@@ -129,7 +123,7 @@ export const updateProperty = async ({ params: { propertyId }, body, files, user
 @@ Method         PATCH
 @@ Description    Update a property advert mark status as sold.
 */
-export const markPropertySold = async ({ params: { propertyId }, user: { id } }, res) => {
+const markPropertySold = async ({ params: { propertyId }, user: { id } }, res) => {
   try {
     const strQuery = 'UPDATE properties SET status=$1 WHERE id=$2 AND owner=$3 RETURNING *';
     const { rows } = await db.query(strQuery, ['sold', propertyId, id]);
@@ -141,11 +135,26 @@ export const markPropertySold = async ({ params: { propertyId }, user: { id } },
   }
 };
 /*
+@@ Route          /api/v1/property/:propertyId/activate
+@@ Method         PATCH
+@@ Description    Activate user account
+*/
+const activateDeactivateAdvert = async ({ params: { propertyId } }, res) => {
+  try {
+    const strQuery = 'UPDATE properties SET is_active= NOT is_active WHERE id=$1 RETURNING *';
+    const { rows } = await db.query(strQuery, [propertyId]);
+    if (!rows[0]) return badRequest(res, 'The operation was not successful');
+    okResponse(res, rows[0]);
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  }
+};
+/*
 @@ Route          /api/v1//property/:propertyId
 @@ Method         DELETE
 @@ Description    Delete a property advert.
 */
-export const deleteProperty = async ({ params: { propertyId }, user: { id, is_admin } }, res) => {
+const deleteProperty = async ({ params: { propertyId }, user: { id, is_admin } }, res) => {
   try {
     const strQuery = 'DELETE FROM properties WHERE id=$1 AND (owner=$2 OR $3=true) RETURNING *';
     const { rows } = await db.query(strQuery, [propertyId, id, is_admin]);
@@ -155,4 +164,14 @@ export const deleteProperty = async ({ params: { propertyId }, user: { id, is_ad
   } catch (error) {
     badRequest(res, 'An unexpected error has occour', 500);
   }
+};
+
+export default {
+  createAdvert,
+  updateProperty,
+  deleteProperty,
+  getProperty,
+  getProperties,
+  activateDeactivateAdvert,
+  markPropertySold
 };

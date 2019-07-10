@@ -1,22 +1,28 @@
 import express from 'express';
-import authenticate, { isAgent } from '../../middlewares/authenticate';
+import authenticate, { isAgent, isAdmin } from '../../middlewares/authenticate';
 import multer from '../../middlewares/multer';
-import {
-  createAdvert,
-  getProperties,
-  getProperty,
-  updateProperty,
-  markPropertySold,
-  deleteProperty
-} from '../../controllers/property';
+import validate from '../../middlewares/validators';
+import property from '../../controllers/property';
 
 const router = express.Router();
 
-router.get('/', getProperties);
-router.get('/:propertyId', getProperty);
-router.post('/', [authenticate, isAgent, multer.array('images')], createAdvert);
-router.patch('/:propertyId', [authenticate, isAgent, multer.array('images')], updateProperty);
-router.patch('/:propertyId/sold', [authenticate, isAgent], markPropertySold);
-router.delete('/:propertyId', [authenticate, isAgent], deleteProperty);
+router.get('/', property.getProperties);
+router.get('/:propertyId', property.getProperty);
+
+router.post(
+  '/',
+  [authenticate, isAgent, multer.array('images'), validate.postAdvert],
+  property.createAdvert
+);
+
+router.patch(
+  '/:propertyId',
+  [authenticate, isAgent, multer.array('images')],
+  property.updateProperty
+);
+
+router.patch('/:propertyId/sold', [authenticate, isAgent], property.markPropertySold);
+router.patch('/:propertyId/activate', [authenticate, isAdmin], property.activateDeactivateAdvert);
+router.delete('/:propertyId', [authenticate, isAgent], property.deleteProperty);
 
 export default router;

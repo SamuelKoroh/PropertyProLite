@@ -1,10 +1,8 @@
-import Joi from 'joi';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import db from '../config/db';
 import mail from '../utils/mail';
 import { okResponse, badRequest, setUserImage, generateUserToken } from '../utils/refractory';
-import { signupSchema, signinSchema, emailSchema } from '../middlewares/validators';
 
 /*
 @@ Route          /api/v1/auth/signup
@@ -12,9 +10,6 @@ import { signupSchema, signinSchema, emailSchema } from '../middlewares/validato
 @@ Description    Create user account
 */
 export const signUp = async ({ body, file }, res) => {
-  const errors = Joi.validate(body, signupSchema);
-  if (errors.error) return badRequest(res, errors.error.details[0].message, 400);
-
   const user = await db.query('SELECT * FROM users WHERE email = $1', [body.email]);
   if (user.rowCount > 0) return badRequest(res, 'This email has been registered already', 400);
 
@@ -55,9 +50,6 @@ export const signUp = async ({ body, file }, res) => {
 */
 export const signIn = async ({ body }, res) => {
   try {
-    const errors = Joi.validate(body, signinSchema);
-    if (errors.error) return badRequest(res, errors.error.details[0].message, 400);
-
     const { rows: user } = await db.query(
       'SELECT * FROM users WHERE email = $1 AND is_active=true',
       [body.email]
@@ -76,18 +68,15 @@ export const signIn = async ({ body }, res) => {
   }
 };
 
-export const sendResetLink = async ({ params }, res) => {
+export const sendResetLink = async ({ params: { email } }, res) => {
   try {
-    const errors = Joi.validate(params, emailSchema);
-    if (errors.error) return badRequest(res, errors.error, 400);
-
-    const { rows: user } = await db.query('SELECT * FROM users WHERE email = $1', [params.email]);
+    const { rows: user } = await db.query('SELECT * FROM users WHERE email = $1', [email]);
     if (!user[0]) return badRequest(res, 'The account does not exist');
 
     const token = crypto.randomBytes(20).toString('hex');
 
     const strQuery = 'UPDATE users SET  reset_password_token=$1, reset_password_expires=$2 WHERE email=$3';
-    await db.query(strQuery, [token, Date.now() + 360000, params.email]);
+    await db.query(strQuery, [token, Date.now() + 360000, email]);
 
     const text = 'You are receiving this because you (or some else) have requested the reset of the password for your account.\n\n'
       + 'Please click on the following link, or paste this into your browser to complete the process within one hour of receiving it: \n\n'
@@ -128,9 +117,6 @@ export const validateUrlToken = async ({ params: { token } }, res) => {
 };
 export const updateUserPassword = async ({ body, params }, res) => {
   try {
-    const errors = Joi.validate(body, signinSchema);
-    if (errors.error) return badRequest(res, errors.error, 400);
-
     let user = await db.query('SELECT * FROM users WHERE reset_password_token=$1 AND email=$2', [
       params.token,
       body.email

@@ -172,6 +172,39 @@ describe('/api/v1/property', () => {
       expect(result.status).to.equal(200);
     });
   });
+  describe('PATCH /:propertyId/activate', () => {
+    let property;
+    let admin;
+    before(async () => {
+      property = await request(app)
+        .post('/api/v1/property')
+        .set('x-auth-token', agent.body.data.token)
+        .send({ ...validProperty, title: '54 room duplex in abuja' });
+      admin = await request(app)
+        .post('/api/v1/auth/signin')
+        .set('Content-Type', 'application/json')
+        .send({ email: 'admin@gmail.com', password: 'admin' });
+    });
+    it('should return 403 if the user is not an admin', async () => {
+      const result = await request(app)
+        .patch(`/api/v1/property/${property.body.data.id}/activate`)
+        .set('x-auth-token', agent2.body.data.token);
+      expect(result.status).to.equal(403);
+    });
+
+    it('should return 404 if the property does not exist', async () => {
+      const result = await request(app)
+        .patch('/api/v1/property/1000/activate')
+        .set('x-auth-token', admin.body.data.token);
+      expect(result.status).to.equal(404);
+    });
+    it('should return 200 if the property does exist and the operation was successful', async () => {
+      const result = await request(app)
+        .patch(`/api/v1/property/${property.body.data.id}/activate`)
+        .set('x-auth-token', admin.body.data.token);
+      expect(result.status).to.equal(200);
+    });
+  });
   describe('DELETE /:propertyId', () => {
     let property;
     before(async () => {
