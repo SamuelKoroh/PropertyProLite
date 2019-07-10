@@ -124,3 +124,19 @@ export const updateProperty = async ({ params: { propertyId }, body, files, user
     badRequest(res, 'An unexpected error has occour', 500);
   }
 };
+/*
+@@ Route          /api/v1//property/:propertyId/sold
+@@ Method         PATCH
+@@ Description    Update a property advert mark status as sold.
+*/
+export const markPropertySold = async ({ params: { propertyId }, user: { id } }, res) => {
+  try {
+    const strQuery = 'UPDATE properties SET status=$1 WHERE id=$2 AND owner=$3 RETURNING *';
+    const { rows } = await db.query(strQuery, ['sold', propertyId, id]);
+
+    if (!rows[0]) return badRequest(res, 'The operation was not successful');
+    okResponse(res, rows[0]);
+  } catch (error) {
+    badRequest(res, 'An unexpected error has occour', 500);
+  }
+};

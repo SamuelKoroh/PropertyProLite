@@ -158,4 +158,18 @@ describe('/api/v1/property', () => {
       expect(res.status).to.equal(200);
     });
   });
+  describe('PATCH /:propertyId/sold', () => {
+    it('should return 404 if the property does not exist', async () => {
+      const result = await request(app)
+        .patch('/api/v1/property/10000/sold')
+        .set('x-auth-token', agent.body.data.token);
+      expect(result.status).to.equal(404);
+    });
+    it('should return 200 if the property does exist and belong to the user and was marked as sold', async () => {
+      const result = await request(app)
+        .patch(`/api/v1/property/${property1.body.data.id}/sold`)
+        .set('x-auth-token', agent.body.data.token);
+      expect(result.status).to.equal(200);
+    });
+  });
 });
