@@ -4,9 +4,10 @@
   "description": "Property Pro Lite is a platform where people can create and/or search properties for sale or rent.",
   "main": "index.js",
   "scripts": {
-    "start": "node ./build-server/index.js",
     "testMigrate": "psql -U postgres -f server/models/travis.sql",
-    "build": "babel -d ./build-server ./server/*",
+    "start": "node ./build-server/index.js",
+    "clean": "rm -rf build-server && mkdir build-server",
+    "build": "npm run clean && babel ./server --out-dir ./build-server --copy-files",
     "dev": "nodemon --watch server --exec babel-node ./server/index.js",
     "test:server": "./node_modules/.bin/mocha --timeout 500000 --require @babel/register ./tests/",
     "test": "npm run testMigrate && cross-env NODE_ENV=test nyc npm run test:server && nyc report --reporter=lcov --reporter=text-lcov | coveralls"

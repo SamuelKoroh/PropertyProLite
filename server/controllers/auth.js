@@ -102,7 +102,7 @@ export const sendResetLink = async ({ params: { email } }, res) => {
 export const validateUrlToken = async ({ params: { token } }, res) => {
   try {
     const { rows: user } = await db.query('SELECT * FROM users WHERE reset_password_token=$1', [
-      token
+      token.trim()
     ]);
 
     if (!user[0] || parseInt(Date.now(), 10) > parseInt(user[0].reset_password_expires, 10))

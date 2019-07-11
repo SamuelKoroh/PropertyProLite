@@ -53,7 +53,7 @@ export const getFlagById = async ({ params: { flagId } }, res) => {
       + ' INNER JOIN properties B ON A.property_id = B.id INNER JOIN users C ON B.owner = C.id  WHERE A.id=$1';
 
     const { rows } = await db.query(strQuery, [flagId]);
-    if (!rows[0]) badRequest(res, 'There is no matching record');
+    if (!rows[0]) return badRequest(res, 'There is no matching record');
     okResponse(res, rows[0]);
   } catch (error) {
     badRequest(res, 'An unexpected error has occour', 500);
