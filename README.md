@@ -122,7 +122,7 @@ Password: admin
 
 # Online Resources
 
-Online API Documentation - https://sam-propertyproplite.herokuapp.com/api-docs/ 
+Online API Documentation - https://sam-propertyprolite.herokuapp.com/api-docs/ 
 
 Frontend - https://samuelkoroh.github.io/PropertyProLite/ui/index.html
 
