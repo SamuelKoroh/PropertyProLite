@@ -102,12 +102,12 @@ DATABASE_URL=prod_database_url</code></pre>
 ## Note
 The endpoints below reuires you to send data to server with Form-Data <br/>
 
-Set file as the name for the file upload control for these edpoint to upload profile image
+Set file as the name for the file upload control for these endpoint to upload profile image
 
 POST    / localhost:3500/api/v1/auth​/signup  
 PATCH / localhost:3500/api/v1/​users <br/>
 
-Set files as the name for the file upload control for these edpoint to upload advert images
+Set files as the name for the file upload control for these endpoint to upload advert images
 
 POST / localhost:3500/api/v1/property​ <br/>
 PATCH / localhost:3500/api/v1/property​/{propertyId}  <br/>
