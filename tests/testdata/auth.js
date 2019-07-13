@@ -4,8 +4,7 @@ export const validUser = {
   first_name: 'Steve',
   last_name: 'Okoro',
   phone_number: '08037545637',
-  address: '24 Oboro park PH',
-  user_type: 'regular'
+  address: '24 Oboro park PH'
 };
 
 export const validLogin = {

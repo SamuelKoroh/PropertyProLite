@@ -14,14 +14,14 @@ export const signUp = async ({ body, file }, res) => {
   if (user.rowCount > 0) return badRequest(res, 'This email has been registered already', 400);
 
   try {
-    const { first_name, last_name, email, phone_number, address, user_type } = body;
+    const { first_name, last_name, email, phone_number, address } = body;
 
     const image = await setUserImage(file, '');
     const salt = await bcrypt.genSalt(10);
     const password = await bcrypt.hash(body.password, salt);
 
-    const text = 'INSERT INTO users(first_name,last_name,email,password,phone_number,address,image,user_type)'
-      + ' VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *';
+    const text = 'INSERT INTO users(first_name,last_name,email,password,phone_number,address,image)'
+      + ' VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *';
 
     const { rows } = await db.query(text, [
       first_name,
@@ -30,8 +30,7 @@ export const signUp = async ({ body, file }, res) => {
       password,
       phone_number,
       address,
-      image,
-      user_type
+      image
     ]);
 
     const data = await generateUserToken(rows[0]);

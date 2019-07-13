@@ -50,11 +50,6 @@
             "required": true
           },
           {
-            "name": "user_type",
-            "in": "formData",
-            "required": true
-          },
-          {
             "name": "image",
             "in": "formData",
             "type": "file",
@@ -267,8 +262,7 @@
             "name": "billing_type",
             "in": "formData",
             "type": "string",
-            "description": "billing type include (e.g per year, one time payment)",
-            "required": true
+            "description": "billing type include (e.g per year, one time payment)"
           },
           {
             "name": "deal_type",
@@ -289,8 +283,7 @@
             "in": "formData",
             "type": "file",
             "multiple": true,
-            "description": "deal type include (e.g for sale, for rent)",
-            "required": true
+            "description": "deal type include (e.g for sale, for rent)"
           }
         ],
         "responses": {
@@ -1420,9 +1413,6 @@
         "image": {
           "type": "string"
         },
-        "user_type": {
-          "type": "string"
-        },
         "reset_password_token": {
           "type": "string"
         },
@@ -1564,9 +1554,6 @@
               "type": "string"
             },
             "image": {
-              "type": "string"
-            },
-            "user_type": {
               "type": "string"
             },
             "reset_password_token": {

@@ -20,9 +20,6 @@ const signup = {
   address: Joi.string()
     .required()
     .label('Address'),
-  user_type: Joi.string()
-    .required()
-    .label('User type'),
   image: Joi.optional()
 };
 
@@ -63,7 +60,7 @@ const property = {
     .required()
     .label('Propert type'),
   billing_type: Joi.string()
-    .required()
+    .optional()
     .label('Billing type'),
   description: Joi.string()
     .required()

@@ -11,10 +11,7 @@
     />
     <title>Welcome to Property Pro</title>
     <link rel="stylesheet" href="./css/style.css" />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
-    />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" />
   </head>
   <body>
     <header>
@@ -38,20 +35,12 @@
         <h1 class="large text-primary">
           Create Your Profile
         </h1>
-        <p class="lead">
-          <i class="fas fa-user"></i> Let's get some information to make your
-          profile stand out
-        </p>
+        <p class="lead"><i class="fas fa-user"></i> Let's get some information to make your profile stand out</p>
         <small>* = required field</small>
         <form class="form mt-30">
           <div class="form">
             <small class="form-text">Profile photo</small>
-            <img
-              class="image-preview"
-              width="200"
-              src="./img/placeholder-person.jpg"
-              alt="your image"
-            />
+            <img class="image-preview" width="200" src="./img/placeholder-person.jpg" alt="your image" />
             <input type="file" onchange="readURL(this);" />
           </div>
           <div class="form-group">
@@ -70,26 +59,13 @@
             <textarea placeholder="Address" name="address"></textarea>
           </div>
           <div class="form-group">
-            <input type="radio" name="usertype" value="user" /> Regular
-            <input type="radio" name="usertype" value="agent" /> Agent
-            <small class="form-text">Please select account type</small>
-          </div>
-          <div class="form-group">
             <input type="password" placeholder="Password" name="password" />
           </div>
           <div class="form-group">
-            <input
-              type="password"
-              placeholder="Confirm password"
-              name="password2"
-            />
+            <input type="password" placeholder="Confirm password" name="password2" />
           </div>
 
-          <input
-            type="submit"
-            id="btnSignUp"
-            class="btn btn-primary btn-block"
-          />
+          <input type="submit" id="btnSignUp" class="btn btn-primary btn-block" />
         </form>
       </div>
     </main>
@@ -98,10 +74,10 @@
     </footer>
     <script src="./js/main.js"></script>
     <script>
-      let btn = document.querySelector("#btnSignUp");
-      btnSignUp.addEventListener("click", e => {
+      let btn = document.querySelector('#btnSignUp');
+      btnSignUp.addEventListener('click', e => {
         e.preventDefault();
-        window.location.href = "signin.html";
+        window.location.href = 'signin.html';
       });
     </script>
   </body>

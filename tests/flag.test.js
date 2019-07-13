@@ -20,8 +20,7 @@ describe('/api/v1/flag', () => {
       .field('first_name', 'Ibadan')
       .field('last_name', 'Ojoo')
       .field('phone_number', '20 agodi oojoo')
-      .field('address', '45 rooms in a duples')
-      .field('user_type', 'agent');
+      .field('address', '45 rooms in a duples');
 
     await request(app)
       .post('/api/v1/property')
@@ -101,7 +100,6 @@ describe('/api/v1/flag', () => {
       expect(result.status).to.equal(404);
     });
     it('it should return 200 if there is matching record', async () => {
-      console.log(report);
       const result = await request(app)
         .get(`/api/v1/flag/${report.body.data.id}`)
         .set('x-auth-token', admin.body.data.token);

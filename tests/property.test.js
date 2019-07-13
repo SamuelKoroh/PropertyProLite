@@ -17,11 +17,11 @@ describe('/api/v1/property', () => {
 
     agent = await request(app)
       .post('/api/v1/auth/signup')
-      .send({ ...validUser, email: 'agent@gmail.com', user_type: 'agent' });
+      .send({ ...validUser, email: 'agent@gmail.com' });
 
     agent2 = await request(app)
       .post('/api/v1/auth/signup')
-      .send({ ...validUser, email: 'agent2@gmail.com', user_type: 'agent' });
+      .send({ ...validUser, email: 'agent2@gmail.com' });
 
     property1 = await request(app)
       .post('/api/v1/property')
@@ -60,14 +60,6 @@ describe('/api/v1/property', () => {
         .set('x-auth-token', 'invalidToken')
         .send(validProperty);
       expect(result.status).to.equal(400);
-    });
-
-    it('should return 403 if user is not an agent or admin', async () => {
-      const result = await request(app)
-        .post('/api/v1/property')
-        .set('x-auth-token', user.body.data.token)
-        .send(validProperty);
-      expect(result.status).to.equal(403);
     });
 
     it('should return 400 if the property details is not valid', async () => {

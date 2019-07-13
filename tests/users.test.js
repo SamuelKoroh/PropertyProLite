@@ -40,12 +40,6 @@ describe('/api/v1/user', () => {
         .set('x-auth-token', admin.body.data.token);
       expect(result.status).to.equal(200);
     });
-    it('should return 200 if there are records when filtered with user_type', async () => {
-      const result = await request(app)
-        .get('/api/v1/users?search=admin')
-        .set('x-auth-token', admin.body.data.token);
-      expect(result.status).to.equal(200);
-    });
     it('should return 200 if there are records when filtered with first_name', async () => {
       const result = await request(app)
         .get(`/api/v1/users?search=${testUser1.body.data.first_name}`)

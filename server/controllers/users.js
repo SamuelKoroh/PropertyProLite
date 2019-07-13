@@ -16,13 +16,13 @@ import db from '../config/db';
 export const getAllUser = async ({ query: { search } }, res) => {
   try {
     let result;
-    let strQuery = 'SELECT id, first_name, last_name, email, phone_number, address, image, user_type,'
+    let strQuery = 'SELECT id, first_name, last_name, email, phone_number, address, image,'
       + ' is_admin,is_active,created_on  FROM users ';
 
     if (search) {
       strQuery
         += ' WHERE first_name ILIKE $1 OR last_name ILIKE $1 OR email ILIKE $1 '
-        + 'OR user_type ILIKE $1 OR phone_number ILIKE $1';
+        + 'OR phone_number ILIKE $1';
       result = await db.query(strQuery, [`${search}%`]);
     } else result = await db.query(strQuery);
 
@@ -40,7 +40,7 @@ export const getAllUser = async ({ query: { search } }, res) => {
 */
 export const getUserProfile = async ({ user: { id } }, res) => {
   try {
-    const strQuery = 'SELECT id, first_name, last_name, email, phone_number, address, image, user_type,'
+    const strQuery = 'SELECT id, first_name, last_name, email, phone_number, address, image,'
       + ' is_admin,is_active,created_on  FROM users WHERE id=$1';
     const { rows } = await db.query(strQuery, [id]);
     okResponse(res, rows[0]);
@@ -55,7 +55,7 @@ export const getUserProfile = async ({ user: { id } }, res) => {
 */
 export const getUserProperties = async ({ params: { user_id } }, res) => {
   try {
-    let strQuery = 'SELECT id, first_name, last_name, email, phone_number, address, image, user_type,'
+    let strQuery = 'SELECT id, first_name, last_name, email, phone_number, address, image,'
       + ' is_admin,is_active,created_on  FROM users WHERE id=$1';
     const { rows } = await db.query(strQuery, [user_id]);
 

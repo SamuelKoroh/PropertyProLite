@@ -17,13 +17,12 @@ CREATE TABLE users
     phone_number VARCHAR (24) ,
     address VARCHAR,
     image VARCHAR,
-    user_type VARCHAR (8),
     is_admin boolean DEFAULT false,
     is_active boolean DEFAULT true,
     created_on date DEFAULT CURRENT_DATE,
     reset_password_token VARCHAR,
     reset_password_expires VARCHAR
-);
+ );
 CREATE TABLE properties
 (
     id SERIAL PRIMARY KEY,
@@ -74,5 +73,5 @@ CREATE TABLE types
     description character varying,
     CONSTRAINT types_pkey PRIMARY KEY (id)
 );
-INSERT INTO users(first_name, last_name, email, phone_number, is_admin, user_type, password) 
-VALUES('admin','admin','admin@gmail.com','0803',true,'agent','$2b$10$6MAXFQLCsGWW7JBvnwCks.y1NobKqvd2csveJYK6YWthyNoP2ig9i');
+INSERT INTO users(first_name, last_name, email, phone_number, is_admin, password) 
+VALUES('admin','admin','admin@gmail.com','0803',true,'$2b$10$6MAXFQLCsGWW7JBvnwCks.y1NobKqvd2csveJYK6YWthyNoP2ig9i');

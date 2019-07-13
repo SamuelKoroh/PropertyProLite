@@ -30,7 +30,6 @@ describe('/api/v1/auth', () => {
         .field('last_name', 'Ojoo')
         .field('phone_number', '20 agodi oojoo')
         .field('address', '45 rooms in a duples')
-        .field('user_type', 'per year')
         .attach('image', filePath);
       expect(result.status).to.equal(201);
     });
@@ -44,7 +43,6 @@ describe('/api/v1/auth', () => {
         .field('last_name', 'Ojoo')
         .field('phone_number', '20 agodi oojoo')
         .field('address', '45 rooms in a duples')
-        .field('user_type', 'per year')
         .attach('image', filePath);
       expect(result.status).to.equal(500);
     });

@@ -16,16 +16,10 @@ const authenticate = (req, res, next) => {
   }
 };
 
-const isAgent = (req, res, next) => {
-  if (req.user.user_type.toString() !== 'agent' && req.user.is_admin === false)
-    return badRequest(res, 'Access Forbidden', 403);
-  next();
-};
-
 const isAdmin = (req, res, next) => {
   if (req.user.is_admin === false) return badRequest(res, 'Access Forbidden', 403);
   next();
 };
 
-export { isAgent, isAdmin };
+export { isAdmin };
 export default authenticate;
