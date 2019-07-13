@@ -7,7 +7,7 @@ import property from '../../controllers/property';
 const router = express.Router();
 
 router.get('/', property.getProperties);
-router.get('/:propertyId', property.getProperty);
+router.get('/:property_id', property.getProperty);
 
 router.post(
   '/',
@@ -16,13 +16,13 @@ router.post(
 );
 
 router.patch(
-  '/:propertyId',
+  '/:property_id',
   [authenticate, isAgent, multer.array('images')],
   property.updateProperty
 );
 
-router.patch('/:propertyId/sold', [authenticate, isAgent], property.markPropertySold);
-router.patch('/:propertyId/activate', [authenticate, isAdmin], property.activateDeactivateAdvert);
-router.delete('/:propertyId', [authenticate, isAgent], property.deleteProperty);
+router.patch('/:property_id/sold', [authenticate, isAgent], property.markPropertySold);
+router.patch('/:property_id/activate', [authenticate, isAdmin], property.activateDeactivateAdvert);
+router.delete('/:property_id', [authenticate, isAgent], property.deleteProperty);
 
 export default router;

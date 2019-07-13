@@ -70,15 +70,15 @@ const getProperties = async ({ query }, res) => {
 };
 
 /*
-@@ Route          /api/v1//property/:propertyId
+@@ Route          /api/v1//property/:property_id
 @@ Method         GET
 @@ Description    Get all property adverts.
 */
-const getProperty = async ({ params: { propertyId } }, res) => {
+const getProperty = async ({ params: { property_id } }, res) => {
   try {
     const strQuery = 'SELECT A.*,B.id AS owner,B.email AS owner_Email,B.phone_number AS owner_Phone'
       + ' FROM properties A INNER JOIN users B on A.owner=B.id WHERE A.id=$1 AND A.status=$2 AND A.is_active=$3';
-    const { rows } = await db.query(strQuery, [propertyId, 'available', true]);
+    const { rows } = await db.query(strQuery, [property_id, 'available', true]);
 
     if (!rows[0]) return badRequest(res, 'The property does not exist');
 
@@ -88,14 +88,14 @@ const getProperty = async ({ params: { propertyId } }, res) => {
   }
 };
 /*
-@@ Route          /api/v1//property/:propertyId
+@@ Route          /api/v1//property/:property_id
 @@ Method         PATCH
 @@ Description    Update a property advert.
 */
-const updateProperty = async ({ params: { propertyId }, body, files, user }, res) => {
+const updateProperty = async ({ params: { property_id }, body, files, user }, res) => {
   try {
     let strQuery = 'SELECT * FROM properties WHERE id=$1';
-    const { rows } = await db.query(strQuery, [propertyId]);
+    const { rows } = await db.query(strQuery, [property_id]);
 
     if (!rows[0]) return badRequest(res, 'The advert does not exist', 404);
 
@@ -105,13 +105,13 @@ const updateProperty = async ({ params: { propertyId }, body, files, user }, res
     const keys = Object.keys(body);
     keys.forEach(async (key) => {
       strQuery = `UPDATE properties SET ${key}=$1 WHERE id=$2 AND owner=$3 RETURNING *`;
-      await db.query(strQuery, [body[key], propertyId, user.id]);
+      await db.query(strQuery, [body[key], property_id, user.id]);
     });
 
     if (files.length) {
       const response = await uploadImages(files);
       strQuery = 'UPDATE properties SET image_url = $1 WHERE id=$2 AND owner=$3 RETURNING *';
-      await db.query(strQuery, [response.images, propertyId, user.id]);
+      await db.query(strQuery, [response.images, property_id, user.id]);
     }
     okResponse(res, { ...rows[0], ...body });
   } catch (error) {
@@ -119,14 +119,14 @@ const updateProperty = async ({ params: { propertyId }, body, files, user }, res
   }
 };
 /*
-@@ Route          /api/v1//property/:propertyId/sold
+@@ Route          /api/v1//property/:property_id/sold
 @@ Method         PATCH
 @@ Description    Update a property advert mark status as sold.
 */
-const markPropertySold = async ({ params: { propertyId }, user: { id } }, res) => {
+const markPropertySold = async ({ params: { property_id }, user: { id } }, res) => {
   try {
     const strQuery = 'UPDATE properties SET status=$1 WHERE id=$2 AND owner=$3 RETURNING *';
-    const { rows } = await db.query(strQuery, ['sold', propertyId, id]);
+    const { rows } = await db.query(strQuery, ['sold', property_id, id]);
 
     if (!rows[0]) return badRequest(res, 'The operation was not successful');
     okResponse(res, rows[0]);
@@ -135,14 +135,14 @@ const markPropertySold = async ({ params: { propertyId }, user: { id } }, res) =
   }
 };
 /*
-@@ Route          /api/v1/property/:propertyId/activate
+@@ Route          /api/v1/property/:property_id/activate
 @@ Method         PATCH
 @@ Description    Activate user account
 */
-const activateDeactivateAdvert = async ({ params: { propertyId } }, res) => {
+const activateDeactivateAdvert = async ({ params: { property_id } }, res) => {
   try {
     const strQuery = 'UPDATE properties SET is_active= NOT is_active WHERE id=$1 RETURNING *';
-    const { rows } = await db.query(strQuery, [propertyId]);
+    const { rows } = await db.query(strQuery, [property_id]);
     if (!rows[0]) return badRequest(res, 'The operation was not successful');
     okResponse(res, rows[0]);
   } catch (error) {
@@ -150,14 +150,14 @@ const activateDeactivateAdvert = async ({ params: { propertyId } }, res) => {
   }
 };
 /*
-@@ Route          /api/v1//property/:propertyId
+@@ Route          /api/v1//property/:property_id
 @@ Method         DELETE
 @@ Description    Delete a property advert.
 */
-const deleteProperty = async ({ params: { propertyId }, user: { id, is_admin } }, res) => {
+const deleteProperty = async ({ params: { property_id }, user: { id, is_admin } }, res) => {
   try {
     const strQuery = 'DELETE FROM properties WHERE id=$1 AND (owner=$2 OR $3=true) RETURNING *';
-    const { rows } = await db.query(strQuery, [propertyId, id, is_admin]);
+    const { rows } = await db.query(strQuery, [property_id, id, is_admin]);
 
     if (!rows[0]) return badRequest(res, 'The operation was not successful');
     okResponse(res, { message: 'The property has been removed' });

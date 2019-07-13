@@ -6,6 +6,7 @@ import { validProperty } from './testdata/property';
 describe('/api/v1/flag', () => {
   let admin = '';
   let flager = '';
+  let report;
   before(async () => {
     admin = await request(app)
       .post('/api/v1/auth/signin')
@@ -41,7 +42,7 @@ describe('/api/v1/flag', () => {
       expect(result.status).to.equal(400);
     });
     it('should return 200 if the request body is valid', async () => {
-      const result = await request(app)
+      report = await request(app)
         .post('/api/v1/flag')
         .set('Content-Type', 'application/json')
         .send({
@@ -51,7 +52,7 @@ describe('/api/v1/flag', () => {
           description: 'wierd demand from agent',
           property_id: 2
         });
-      expect(result.status).to.equal(200);
+      expect(report.status).to.equal(200);
     });
   });
   describe('GET /', () => {
@@ -92,7 +93,7 @@ describe('/api/v1/flag', () => {
       expect(result.status).to.equal(200);
     });
   });
-  describe('GET /:flagId', () => {
+  describe('GET /:flag_id', () => {
     it('it should return 404 if there is no matching record', async () => {
       const result = await request(app)
         .get('/api/v1/flag/10000')
@@ -100,13 +101,14 @@ describe('/api/v1/flag', () => {
       expect(result.status).to.equal(404);
     });
     it('it should return 200 if there is matching record', async () => {
+      console.log(report);
       const result = await request(app)
-        .get('/api/v1/flag/1')
+        .get(`/api/v1/flag/${report.body.data.id}`)
         .set('x-auth-token', admin.body.data.token);
       expect(result.status).to.equal(200);
     });
   });
-  describe('DELETE /:flagId', () => {
+  describe('DELETE /:flag_id', () => {
     it('it should return 404 if there is no matching record', async () => {
       const result = await request(app)
         .delete('/api/v1/flag/10000')

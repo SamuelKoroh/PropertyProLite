@@ -16,9 +16,9 @@ const router = express.Router();
 router.get('/', [authenticate, isAdmin], getAllUser);
 router.patch('/', [authenticate, multer.single('image')], updateUserProfile);
 router.get('/me', authenticate, getUserProfile);
-router.get('/:userId', getUserProperties);
-router.delete('/:userId', [authenticate, isAdmin], deleteUserProfile);
-router.patch('/:userId/activate', [authenticate, isAdmin], activateDeactivateUserProfile);
-router.patch('/:userId/set-admin', [authenticate, isAdmin], makeRemoveUserAdmin);
+router.get('/:user_id', getUserProperties);
+router.delete('/:user_id', [authenticate, isAdmin], deleteUserProfile);
+router.patch('/:user_id/activate', [authenticate, isAdmin], activateDeactivateUserProfile);
+router.patch('/:user_id/set-admin', [authenticate, isAdmin], makeRemoveUserAdmin);
 
 export default router;

@@ -67,7 +67,7 @@ describe('/api/v1/user', () => {
       expect(result.status).to.equal(200);
     });
   });
-  describe('GET  /:userId', () => {
+  describe('GET  /:user_id', () => {
     it('should return 404 if the user is not found', async () => {
       const result = await request(app)
         .get('/api/v1/users/1000000000')
@@ -106,7 +106,7 @@ describe('/api/v1/user', () => {
       expect(result.status).to.equal(500);
     });
   });
-  describe('PATCH  /:userId/activate', () => {
+  describe('PATCH  /:user_id/activate', () => {
     it('should return 404 if the user is not found', async () => {
       const result = await request(app)
         .patch('/api/v1/users/1000000/activate')
@@ -120,7 +120,7 @@ describe('/api/v1/user', () => {
       expect(result.status).to.equal(200);
     });
   });
-  describe('PATCH  /:userId/set-admin', () => {
+  describe('PATCH  /:user_id/set-admin', () => {
     it('should return 404 if the user is not found', async () => {
       const result = await request(app)
         .patch('/api/v1/users/1000000/set-admin')
@@ -134,7 +134,7 @@ describe('/api/v1/user', () => {
       expect(result.status).to.equal(200);
     });
   });
-  describe('DELETE  /:userId', () => {
+  describe('DELETE  /:user_id', () => {
     it('should return 404 if the user is not found', async () => {
       const result = await request(app)
         .delete('/api/v1/users/100000')

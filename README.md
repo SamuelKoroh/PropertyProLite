@@ -35,44 +35,44 @@
 
 # API Endpoints
 
-| Method  | endpoint                          | description                             |
-| ------- | --------------------------------- | --------------------------------------- |
-| POST    | /auth​/signup                     | Register user                           |
-| POST    | /auth​/signin                     | User login                              |
-| POST    | /auth​/{email}​/reset-password    | Request password reset                  |
-| GET     | /auth​/{token}​/reset-password    | Validate user token                     |
-| PATCH   | /auth​/{token}​/reset-password    | Update profile password                 |
-| POST    | /property                         | Creating new property                   |
-| GET     | /property                         | Get all property adverts                |
-| GET ​   | /property​/{propertyId}           | Get a specific property advert.         |
-| PATCH   | ​/property​/{propertyId}          | Update property                         |
-| PATCH   | /property​/{propertyId}​/sold     | Mark a property as sold                 |
-| PATCH   | /property​/{propertyId}​/activate | Activate or                             | Deactivate suspicious advert |
-| DELETE  | /property​/{propertyId}           | Remove a specific property advert.      |
-| GET     | ​/users                           | Get all site users                      |
-| PATCH   | ​/users                           | Update user profile                     |
-| GET     | ​/users​/me                       | User profile                            |
-| GET     | ​/users​/{userId}                 | View user profile and adverts           |
-| PATCH   | ​/users​/{userId}​/activate       | Activate user profile                   |
-| PATCH   | ​/users​/{userId}​/set-admin      | Set user as admin                       |
-| DELETE  | /users​/{userId}                  | Delete user profile                     |
-| POST    | /flag                             | Flag property advert                    |
-| GET ​   | /flag                             | Get all flagged property                |
-| GET ​   | /flag​/{flagId}                   | Get flaged property                     |
-| DELETE  | /flag​/{flagId}                   | Delete flaged property                  |
-| GET     | /favourites                       | Get user favourite property             |
-| POST    | ​/favourites​/{propertyId}        | Add property to favourites              |
-| DELETE  | /favourites​/{favouriteId}        | Remove property from favourite list     |
-| POST    | /deals-types​/deals               | Add new deal                            |
-| GET     | /deals-types​/deals               | Retrieve all deals                      |
-| GET     | /deals-types​/deals​/{id}         | Retrieve single deal by its ID          |
-| PATCH ​ | /deals-types​/deals​/{id}         | Update deal details                     |
-| DELETE  | /deals-types​/deals​/{id}         | Remove a deal                           |
-| POST ​  | /deals-types​/types               | Add new property types                  |
-| GET     | /deals-types​/types               | Retrieve all property types             |
-| GET     | /deals-types​/types​/{id}         | Retrieve single property type by its ID |
-| PATCH   | /deals-types​/types​/{id}         | Update property type details            |
-| DELETE  | /deals-types​/types​/{id}         | Remove property type                    |
+| Method  | endpoint                           | description                             |
+| ------- | ---------------------------------- | --------------------------------------- |
+| POST    | /auth​/signup                      | Register user                           |
+| POST    | /auth​/signin                      | User login                              |
+| POST    | /auth​/{email}​/reset-password     | Request password reset                  |
+| GET     | /auth​/{token}​/reset-password     | Validate user token                     |
+| PATCH   | /auth​/{token}​/reset-password     | Update profile password                 |
+| POST    | /property                          | Creating new property                   |
+| GET     | /property                          | Get all property adverts                |
+| GET ​   | /property​/{property_id}           | Get a specific property advert.         |
+| PATCH   | ​/property​/{property_id}          | Update property                         |
+| PATCH   | /property​/{property_id}​/sold     | Mark a property as sold                 |
+| PATCH   | /property​/{property_id}​/activate | Activate or                             | Deactivate suspicious advert |
+| DELETE  | /property​/{property_id}           | Remove a specific property advert.      |
+| GET     | ​/users                            | Get all site users                      |
+| PATCH   | ​/users                            | Update user profile                     |
+| GET     | ​/users​/me                        | User profile                            |
+| GET     | ​/users​/{user_id}                 | View user profile and adverts           |
+| PATCH   | ​/users​/{user_id}​/activate       | Activate user profile                   |
+| PATCH   | ​/users​/{user_id}​/set-admin      | Set user as admin                       |
+| DELETE  | /users​/{user_id}                  | Delete user profile                     |
+| POST    | /flag                              | Flag property advert                    |
+| GET ​   | /flag                              | Get all flagged property                |
+| GET ​   | /flag​/{flagId}                    | Get flaged property                     |
+| DELETE  | /flag​/{flagId}                    | Delete flaged property                  |
+| GET     | /favourites                        | Get user favourite property             |
+| POST    | ​/favourites​/{property_id}        | Add property to favourites              |
+| DELETE  | /favourites​/{favourite_id}        | Remove property from favourite list     |
+| POST    | /deals-types​/deals                | Add new deal                            |
+| GET     | /deals-types​/deals                | Retrieve all deals                      |
+| GET     | /deals-types​/deals​/{id}          | Retrieve single deal by its ID          |
+| PATCH ​ | /deals-types​/deals​/{id}          | Update deal details                     |
+| DELETE  | /deals-types​/deals​/{id}          | Remove a deal                           |
+| POST ​  | /deals-types​/types                | Add new property types                  |
+| GET     | /deals-types​/types                | Retrieve all property types             |
+| GET     | /deals-types​/types​/{id}          | Retrieve single property type by its ID |
+| PATCH   | /deals-types​/types​/{id}          | Update property type details            |
+| DELETE  | /deals-types​/types​/{id}          | Remove property type                    |
 
 
 # System Testing 
@@ -110,7 +110,7 @@ PATCH / localhost:3500/api/v1/​users <br/>
 Set files as the name for the file upload control for these endpoint to upload advert images
 
 POST / localhost:3500/api/v1/property​ <br/>
-PATCH / localhost:3500/api/v1/property​/{propertyId}  <br/>
+PATCH / localhost:3500/api/v1/property​/{property_id}  <br/>
 
 User x-auth-token for sending valid token to protected endpoints
 

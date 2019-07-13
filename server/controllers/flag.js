@@ -42,17 +42,17 @@ export const getAllFlags = async ({ query: { search } }, res) => {
 };
 
 /*
-@@ Route          /api/v1/flag/:flagId
+@@ Route          /api/v1/flag/:flag_id
 @@ Method         GET
 @@ Description    Get a flaged property details.
 */
-export const getFlagById = async ({ params: { flagId } }, res) => {
+export const getFlagById = async ({ params: { flag_id } }, res) => {
   try {
     const strQuery = 'SELECT A.id, A.property_id, A.name, A.email, A.reason, A.description, B.title AS property,'
       + " C.id AS agent_id, CONCAT(C.first_name,' ', C.last_name) AS agent_name, A.created_on FROM flag A "
       + ' INNER JOIN properties B ON A.property_id = B.id INNER JOIN users C ON B.owner = C.id  WHERE A.id=$1';
 
-    const { rows } = await db.query(strQuery, [flagId]);
+    const { rows } = await db.query(strQuery, [flag_id]);
     if (!rows[0]) return badRequest(res, 'There is no matching record');
     okResponse(res, rows[0]);
   } catch (error) {
@@ -60,10 +60,10 @@ export const getFlagById = async ({ params: { flagId } }, res) => {
   }
 };
 /*
-@@ Route          /api/v1/flag/:flagId
+@@ Route          /api/v1/flag/:flag_id
 @@ Method         DELETE
 @@ Description    Remove a flag report
 */
-export const deleteFlag = async ({ params: { flagId } }, res) => {
-  deleteRow(res, 'flag', flagId);
+export const deleteFlag = async ({ params: { flag_id } }, res) => {
+  deleteRow(res, 'flag', flag_id);
 };

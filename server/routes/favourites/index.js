@@ -4,8 +4,8 @@ import authenticate from '../../middlewares/authenticate';
 
 const router = express.Router();
 
-router.post('/:propertyId', authenticate, saveFavourites);
+router.post('/:property_id', authenticate, saveFavourites);
 router.get('/', authenticate, getFavourites);
-router.delete('/:favouriteId', authenticate, deleteFavourite);
+router.delete('/:favourite_id', authenticate, deleteFavourite);
 
 export default router;

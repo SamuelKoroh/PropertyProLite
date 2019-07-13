@@ -357,14 +357,14 @@
         }
       }
     },
-    "/property/{propertyId}": {
+    "/property/{property_id}": {
       "get": {
         "tags": ["Properties"],
         "description": "Retrive single property advert by passing a url parameter",
         "summary": "Get a specific property advert.",
         "parameters": [
           {
-            "$ref": "#parameters/propertyId"
+            "$ref": "#parameters/property_id"
           }
         ],
         "responses": {
@@ -389,7 +389,7 @@
             "$ref": "#parameters/x-auth-token"
           },
           {
-            "$ref": "#parameters/propertyId"
+            "$ref": "#parameters/property_id"
           },
           {
             "name": "title",
@@ -477,7 +477,7 @@
             "$ref": "#parameters/x-auth-token"
           },
           {
-            "$ref": "#parameters/propertyId"
+            "$ref": "#parameters/property_id"
           }
         ],
         "responses": {
@@ -493,7 +493,7 @@
         }
       }
     },
-    "/property/{propertyId}/sold": {
+    "/property/{property_id}/sold": {
       "patch": {
         "tags": ["Properties"],
         "summary": "Mark a property as sold",
@@ -503,7 +503,7 @@
             "$ref": "#parameters/x-auth-token"
           },
           {
-            "$ref": "#parameters/propertyId"
+            "$ref": "#parameters/property_id"
           }
         ],
         "responses": {
@@ -528,7 +528,7 @@
         }
       }
     },
-    "/property/{propertyId}/activate": {
+    "/property/{property_id}/activate": {
       "patch": {
         "tags": ["Properties"],
         "summary": "Activate or Deactivate suspicious advert",
@@ -538,7 +538,7 @@
             "$ref": "#parameters/x-auth-token"
           },
           {
-            "$ref": "#parameters/propertyId"
+            "$ref": "#parameters/property_id"
           }
         ],
         "responses": {
@@ -692,14 +692,14 @@
         }
       }
     },
-    "/users/{userId}": {
+    "/users/{user_id}": {
       "get": {
         "tags": ["Users"],
         "summary": "View user profile and adverts",
         "description": "Simply view a particular users (especially agent) profile details and his/her uploaded property advert",
         "parameters": [
           {
-            "$ref": "#parameters/userId"
+            "$ref": "#parameters/user_id"
           }
         ],
         "responses": {
@@ -723,7 +723,7 @@
             "$ref": "#parameters/x-auth-token"
           },
           {
-            "$ref": "#parameters/userId"
+            "$ref": "#parameters/user_id"
           }
         ],
         "responses": {
@@ -745,7 +745,7 @@
         }
       }
     },
-    "/users/{userId}/activate": {
+    "/users/{user_id}/activate": {
       "patch": {
         "tags": ["Users"],
         "summary": "Activate user profile",
@@ -755,7 +755,7 @@
             "$ref": "#parameters/x-auth-token"
           },
           {
-            "$ref": "#parameters/userId"
+            "$ref": "#parameters/user_id"
           }
         ],
         "responses": {
@@ -780,7 +780,7 @@
         }
       }
     },
-    "/users/{userId}/set-admin": {
+    "/users/{user_id}/set-admin": {
       "patch": {
         "tags": ["Users"],
         "summary": "Set user as admin",
@@ -790,7 +790,7 @@
             "$ref": "#parameters/x-auth-token"
           },
           {
-            "$ref": "#parameters/userId"
+            "$ref": "#parameters/user_id"
           }
         ],
         "responses": {
@@ -872,7 +872,7 @@
         }
       }
     },
-    "/flag/{flagId}": {
+    "/flag/{flag_id}": {
       "get": {
         "tags": ["Flags"],
         "description": "Here an admin can retrieve details of a flagged property",
@@ -882,7 +882,7 @@
             "$ref": "#parameters/x-auth-token"
           },
           {
-            "name": "flagId",
+            "name": "flag_id",
             "in": "path",
             "required": true
           }
@@ -917,7 +917,7 @@
             "$ref": "#parameters/x-auth-token"
           },
           {
-            "name": "flagId",
+            "name": "flag_id",
             "in": "path",
             "required": true
           }
@@ -964,7 +964,7 @@
         }
       }
     },
-    "/favourites/{propertyId}": {
+    "/favourites/{property_id}": {
       "post": {
         "tags": ["Favourites"],
         "summary": "Add property to favourites",
@@ -974,7 +974,7 @@
             "$ref": "#parameters/x-auth-token"
           },
           {
-            "$ref": "#parameters/propertyId"
+            "$ref": "#parameters/property_id"
           }
         ],
         "responses": {
@@ -993,7 +993,7 @@
         }
       }
     },
-    "/favourites/{favouriteId}": {
+    "/favourites/{favourite_id}": {
       "delete": {
         "tags": ["Favourites"],
         "summary": "Remove property from favourite list",
@@ -1003,7 +1003,7 @@
             "$ref": "#parameters/x-auth-token"
           },
           {
-            "name": "favouriteId",
+            "name": "favourite_id",
             "in": "path",
             "type": "number",
             "required": true
@@ -1940,14 +1940,14 @@
       "type": "string",
       "required": true
     },
-    "propertyId": {
-      "name": "propertyId",
+    "property_id": {
+      "name": "property_id",
       "in": "path",
       "type": "integer",
       "required": true
     },
-    "userId": {
-      "name": "userId",
+    "user_id": {
+      "name": "user_id",
       "in": "path",
       "type": "integer",
       "required": true

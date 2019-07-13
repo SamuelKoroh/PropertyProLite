@@ -1,14 +1,14 @@
 import { okResponse, badRequest, deleteRow } from '../utils/refractory';
 import db from '../config/db';
 /*
-@@ Route          /api/v1/favourites/:userId
+@@ Route          /api/v1/favourites/:user_id
 @@ Method         POST
 @@ Description    Add - remove property from favourite
 */
-export const saveFavourites = async ({ params: { propertyId }, user: { id } }, res) => {
+export const saveFavourites = async ({ params: { property_id }, user: { id } }, res) => {
   try {
     const strQuery = 'INSERT INTO favourites (user_id, property_id) VALUES($1,$2)';
-    await db.query(strQuery, [id, propertyId]);
+    await db.query(strQuery, [id, property_id]);
     okResponse(res, { message: 'The property has been saved to your favourite list' });
   } catch (error) {
     badRequest(res, "It's like this property has been added already", 400);
@@ -35,10 +35,10 @@ export const getFavourites = async ({ user: { id } }, res) => {
 };
 
 /*
-@@ Route          /api/v1/favourites/:favouriteId
+@@ Route          /api/v1/favourites/:favourite_id
 @@ Method         DELETE
 @@ Description    Remove the property from user favourites
 */
-export const deleteFavourite = async ({ params: { favouriteId } }, res) => {
-  deleteRow(res, 'favourites', favouriteId);
+export const deleteFavourite = async ({ params: { favourite_id } }, res) => {
+  deleteRow(res, 'favourites', favourite_id);
 };

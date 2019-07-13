@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post('/', validate.flagAdvert, flagAdd);
 router.get('/', [authenticate, isAdmin], getAllFlags);
-router.get('/:flagId', [authenticate, isAdmin], getFlagById);
-router.delete('/:flagId', [authenticate, isAdmin], deleteFlag);
+router.get('/:flag_id', [authenticate, isAdmin], getFlagById);
+router.delete('/:flag_id', [authenticate, isAdmin], deleteFlag);
 
 export default router;

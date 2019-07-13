@@ -31,7 +31,7 @@ describe('/api/v1/favourites', () => {
       .send({ ...validProperty, title: '12 bedroom flat' });
   });
 
-  describe('POST /:propertyId', () => {
+  describe('POST /:property_id', () => {
     it('should return 200 if the property was added to his/her favourite list', async () => {
       const result = await request(app)
         .post(`/api/v1/favourites/${property1.body.data.id}`)
@@ -78,7 +78,7 @@ describe('/api/v1/favourites', () => {
       expect(result.status).to.equal(200);
     });
   });
-  describe('DELETE /:favouriteId', () => {
+  describe('DELETE /:favourite_id', () => {
     it('should return 404 if the property does not exist in the favourite list', async () => {
       const result = await request(app)
         .delete('/api/v1/favourites/10000000')

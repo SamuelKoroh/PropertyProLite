@@ -111,7 +111,7 @@ describe('/api/v1/property', () => {
       expect(result.status).to.equal(404);
     });
   });
-  describe('GET /:propertyId', () => {
+  describe('GET /:property_id', () => {
     it('it should return 404 if property is not found', async () => {
       const result = await request(app).get('/api/v1/property/50000');
       expect(result.status).to.equal(404);
@@ -121,7 +121,7 @@ describe('/api/v1/property', () => {
       expect(result.status).to.equal(200);
     });
   });
-  describe('PATCH /:propertyId', () => {
+  describe('PATCH /:property_id', () => {
     let property;
     before(async () => {
       property = await request(app)
@@ -158,7 +158,7 @@ describe('/api/v1/property', () => {
       expect(res.status).to.equal(200);
     });
   });
-  describe('PATCH /:propertyId/sold', () => {
+  describe('PATCH /:property_id/sold', () => {
     it('should return 404 if the property does not exist', async () => {
       const result = await request(app)
         .patch('/api/v1/property/10000/sold')
@@ -172,7 +172,7 @@ describe('/api/v1/property', () => {
       expect(result.status).to.equal(200);
     });
   });
-  describe('PATCH /:propertyId/activate', () => {
+  describe('PATCH /:property_id/activate', () => {
     let property;
     let admin;
     before(async () => {
@@ -205,7 +205,7 @@ describe('/api/v1/property', () => {
       expect(result.status).to.equal(200);
     });
   });
-  describe('DELETE /:propertyId', () => {
+  describe('DELETE /:property_id', () => {
     let property;
     before(async () => {
       property = await request(app)

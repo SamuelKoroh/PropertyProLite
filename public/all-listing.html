@@ -37,11 +37,7 @@
             <option value="sale">For Sale</option>
             <option value="rent">For Rent</option>
           </select>
-          <input
-            type="text"
-            placeholder="Enter location e.g state, city"
-            name="location"
-          />
+          <input type="text" placeholder="Enter location e.g state, city" name="location" />
         </div>
         <div class="search-fields bottom">
           <select name="status">
@@ -50,11 +46,7 @@
             <option value="3bedroom">3 Bedroom</option>
           </select>
           <input type="text" placeholder="Max price" name="price" />
-          <input
-            id="btnSearch"
-            type="submit"
-            class="btn btn-success mt-7 mb-10"
-          />
+          <input id="btnSearch" type="submit" class="btn btn-success mt-7 mb-10" />
         </div>
       </div>
     </section>
@@ -285,5 +277,11 @@
       <p>All right reserved PropertyPro &copy; 2019</p>
     </footer>
     <script src="./js/main.js"></script>
+    <script>
+      fetch('http://localhost:3500/api/v1/property')
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.log(error));
+    </script>
   </body>
 </html>

@@ -101,10 +101,10 @@ export const getRecord = async ({ params: { id } }, res, table) => {
   }
 };
 
-export const toggleboolUserField = async ({ params: { userId } }, res, field) => {
+export const toggleboolUserField = async ({ params: { user_id } }, res, field) => {
   try {
     const strQuery = `UPDATE users SET ${field} = NOT ${field} WHERE id=$1 RETURNING *`;
-    const { rows } = await db.query(strQuery, [userId]);
+    const { rows } = await db.query(strQuery, [user_id]);
     if (!rows[0]) return badRequest(res, 'The operation was not successful');
     const data = _.omit(rows[0], ['password', 'reset_password_token', 'reset_password_expires']);
     okResponse(res, data);
