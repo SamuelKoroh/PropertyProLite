@@ -11,10 +11,7 @@
     />
     <title>Welcome to Property Pro</title>
     <link rel="stylesheet" href="./css/style.css" />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
-    />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" />
   </head>
   <body>
     <header>
@@ -33,76 +30,7 @@
       </div>
     </header>
 
-    <main class="m-20">
-      <div class="container">
-        <h2 class="text-success mb-10">
-          3 Bed Duplex for Rent in Soteria Haven Estate , Chisco Bus-Stop, Ikate
-          Elegushi
-        </h2>
-        <div class="property-images">
-          <div class="mySlides fade">
-            <div class="numbertext">1/2</div>
-            <img src="./img/prop.jpg" />
-          </div>
-          <div class="mySlides fade">
-            <div class="numbertext">2/2</div>
-            <img src="./img/breadcrum.jpg" />
-          </div>
-          <div class="control"><i class="fa fa-camera"></i> 2</div>
-
-          <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-          <a class="next" onclick="plusSlides(1)">&#10095;</a>
-        </div>
-      </div>
-      <div class="container clearfix">
-        <div class="property-details">
-          <h2 class="text-success">Description</h2>
-          <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tenetur
-            quasi veniam nemo, earum ut dolores voluptatem ab. Id ipsa, animi
-            ullam blanditiis itaque temporibus perferendis amet, impedit,
-            ratione laudantium consequuntur.
-          </p>
-          <span class="icon-20"
-            ><i class="fa fa-heart"></i> add to favorite</span
-          >
-        </div>
-        <div class="property-agent ">
-          <h2 class="text-success">Contact Agent</h2>
-          <div class="mt-10">
-            <a href="user-profile.html" title="View Profile" class="agent-name"
-              >John Doe</a
-            >
-          </div>
-          <div class="mt-10 text-primary agent-contact">
-            <span title="Click to reveal number" class="contact-number"
-              ><i class="fa fa-phone icon-90deg icon-19 "></i
-              >+234803*******</span
-            >
-            <a
-              href="https://api.whatsapp.com/send?phone=2348037909699&text=I%27m%20interested%20in%20this%20property"
-              target="_blank"
-              rel="noreferrer"
-              ><span class="whatsapp"> <i class="fab fa-whatsapp"></i> </span
-            ></a>
-          </div>
-          <div class="mt-15">
-            <a href="" id="invoke-modal"
-              ><i class="fas fa-exclamation-triangle text-danger"></i>
-              <span class="text-danger">Report this Ads to Admin</span></a
-            >
-          </div>
-        </div>
-      </div>
-      <div class="container ">
-        <p class=" lead mt-15">
-          Simply find the location of the property on the map marked with red
-          balloon
-        </p>
-
-        <div id="googleMap" class="mt-10"></div>
-      </div>
-    </main>
+    <main class="m-20" id="mainContent"></main>
     <!-- Report Ads Modal-->
     <div class="modal" id="report-modal">
       <div class="modal-content">
@@ -119,11 +47,7 @@
               <input type="text" placeholder="Your name" name="name" />
             </div>
             <div class="form-group">
-              <input
-                type="text"
-                placeholder="Your email address"
-                name="address"
-              />
+              <input type="text" placeholder="Your email address" name="address" />
             </div>
             <div class="form-group pr-0">
               <select name="reason">
@@ -133,16 +57,10 @@
               </select>
             </div>
             <div class="form-group">
-              <textarea
-                name="description"
-                placeholder="Detail description"
-                rows="5"
-              ></textarea>
+              <textarea name="description" placeholder="Detail description" rows="5"></textarea>
             </div>
             <span class="modal-button">
-              <button class="btn btn-danger">
-                <i class="fa fa-paper-plane"></i> Send
-              </button>
+              <button class="btn btn-danger"><i class="fa fa-paper-plane"></i> Send</button>
             </span>
           </form>
         </div>
@@ -154,44 +72,128 @@
     <script src="./js/main.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBHdgVoSE1Ut89RigJmo9F3LWDPcXT2ZJ8"></script>
     <script>
-      var slideIndex = 1;
-      showSlides(slideIndex);
+      const token = localStorage.getItem('token');
+      if (!token) window.location.href = `${BASE_URL}/`;
 
-      function plusSlides(n) {
-        showSlides((slideIndex += n));
-      }
+      const mainContent = document.querySelector('#mainContent');
 
-      function currentSlide(n) {
-        showSlides((slideIndex = n));
-      }
+      const property_id = window.location.search.slice(13);
 
-      function showSlides(n) {
-        var i;
-        var slides = document.querySelectorAll('.mySlides');
+      fetch(`${API_URL}/api/v1/property/${property_id}`, {
+        method: 'GET',
+        headers: { token }
+      })
+        .then(response => response.json())
+        .then(response => {
+          const property = response.data;
+          mainContent.innerHTML += ` <div class="container">
+        <h2 class="text-success mb-10">
+            ${property.title}
+        </h2>
+        <div class="property-images">
+           ${(gallery = property.image_url.map(
+             img =>
+               `<div class='mySlides fade'>
+                <div class='numbertext'>1/2</div>
+                <img src=${img} />
+              </div>`
+           )).join(' ')}
 
-        if (n > slides.length) {
-          slideIndex = 1;
-        }
-        if (n < 1) {
-          slideIndex = slides.length;
-        }
-        for (i = 0; i < slides.length; i++) {
-          slides[i].style.display = 'none';
-        }
 
-        slides[slideIndex - 1].style.display = 'block';
-      }
-      let modal = document.querySelector('#report-modal');
-      let btn = document.querySelector('#invoke-modal');
-      let span = document.querySelector('span.close');
-      useModal(modal, btn, span);
-      myMap('Andela, Epic Tower 235 Ikorodu Rd Ilupeju Lagos Nigeria');
+          <div class="control"><i class="fa fa-camera"></i> 2</div>
 
-      let contactNumber = document.querySelector('span.contact-number');
-      contactNumber.addEventListener('click', ({ target }) => {
-        target.innerHTML =
-          '<i class="fa fa-phone icon-90deg icon-19 "></i>+2348037890083';
-      });
+          <a class="prev">&#10094;</a>
+          <a class="next">&#10095;</a>
+        </div>
+      </div>
+      <div class="container">
+        <div class="property-details">
+          <h2 class="text-success">Description</h2>
+          <p>
+            ${property.description}
+          </p>
+          <span class="icon-20"><i class="fa fa-heart"></i> add to favorite</span>
+        </div>
+        <div class="property-agent ">
+          <h2 class="text-success">Contact Agent</h2>
+          <div class="mt-10">
+            <a href="user-profile.html" title="View Profile" class="agent-name">${property.owner_name}</a>
+          </div>
+          <div class="mt-10 text-primary agent-contact">
+            <span title="Click to reveal number" class="contact-number"
+              ><i class="fa fa-phone icon-90deg icon-19 "></i>+${property.owner_phone.slice(0, -7)}*******</span
+            >
+            <a
+              href="https://api.whatsapp.com/send?phone=${
+                property.owner_phone
+              }&text=I%27m%20interested%20in%20this%20property"
+              target="_blank"
+              rel="noreferrer"
+              ><span class="whatsapp"> <i class="fab fa-whatsapp"></i> </span
+            ></a>
+          </div>
+          <div class="mt-15">
+            <a href="" id="invoke-modal"
+              ><i class="fas fa-exclamation-triangle text-danger"></i>
+              <span class="text-danger">Report this Ads to Admin</span></a
+            >
+          </div>
+        </div>
+      </div>
+      <div class="container ">
+        <p class=" lead mt-15">
+          Simply find the location of the property on the map marked with red balloon
+        </p>
+
+        <div id="googleMap" class="mt-10"></div>
+      </div>`;
+          console.log(property);
+          myMap(property.address);
+          var slideIndex = 1;
+
+          var prev = document.querySelector('a.prev');
+          var next = document.querySelector('a.next');
+
+          showSlides(slideIndex);
+
+          function plusSlides(n) {
+            showSlides((slideIndex += n));
+          }
+
+          function currentSlide(n) {
+            showSlides((slideIndex = n));
+          }
+
+          function showSlides(n) {
+            var i;
+            var slides = document.querySelectorAll('.mySlides');
+
+            if (n > slides.length) {
+              slideIndex = 1;
+            }
+            if (n < 1) {
+              slideIndex = slides.length;
+            }
+            for (i = 0; i < slides.length; i++) {
+              slides[i].style.display = 'none';
+            }
+
+            slides[slideIndex - 1].style.display = 'block';
+          }
+          prev.addEventListener('click', () => plusSlides(-1));
+          next.addEventListener('click', () => plusSlides(1));
+
+          let modal = document.querySelector('#report-modal');
+          let btn = document.querySelector('#invoke-modal');
+          let span = document.querySelector('span.close');
+          useModal(modal, btn, span);
+
+          let contactNumber = document.querySelector('span.contact-number');
+          contactNumber.addEventListener('click', ({ target }) => {
+            target.innerHTML = `<i class="fa fa-phone icon-90deg icon-19 "></i>+${property.owner_phone}`;
+          });
+        })
+        .catch(error => console.log(error));
     </script>
   </body>
 </html>

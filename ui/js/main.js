@@ -1,38 +1,38 @@
-const myMap = address => {
-  let geocoder = new google.maps.Geocoder();
+const BASE_URL = 'http://127.0.0.1:5500/public';
+const API_URL = 'http://localhost:3500';
+
+const myMap = (address) => {
+  const geocoder = new google.maps.Geocoder();
 
   geocoder.geocode({ address }, (results, status) => {
     if (status == google.maps.GeocoderStatus.OK) {
       const { lat, lng } = results[0].geometry.location;
-      let center = new google.maps.LatLng(lat(), lng());
-      let mapProp = {
+      const center = new google.maps.LatLng(lat(), lng());
+      const mapProp = {
         center,
         zoom: 16,
         mapTypeId: google.maps.MapTypeId.HYBRID
       };
 
-      let map = new google.maps.Map(
-        document.getElementById("googleMap"),
-        mapProp
-      );
+      const map = new google.maps.Map(document.getElementById('googleMap'), mapProp);
 
-      let marker = new google.maps.Marker({ position: center });
+      const marker = new google.maps.Marker({ position: center });
 
       marker.setMap(map);
     }
   });
 };
 const useModal = (modal, trigerButton, closeButton) => {
-  trigerButton.onclick = e => {
+  trigerButton.onclick = (e) => {
     e.preventDefault();
-    modal.style.display = "block";
+    modal.style.display = 'block';
   };
 
-  closeButton.onclick = e => {
-    modal.style.display = "none";
+  closeButton.onclick = (e) => {
+    modal.style.display = 'none';
   };
 
   window.onclick = ({ target }) => {
-    if (target == modal) modal.style.display = "none";
+    if (target == modal) modal.style.display = 'none';
   };
 };

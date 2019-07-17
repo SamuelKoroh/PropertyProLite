@@ -11,10 +11,7 @@
     />
     <title>Welcome to Property Pro</title>
     <link rel="stylesheet" href="./css/style.css" />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
-    />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" />
   </head>
   <body>
     <header>
@@ -48,43 +45,40 @@
         <h2 class="lead text-primary">
           New:- Property Listing
         </h2>
-        <p class="lead">
-          <i class="fas fa-user"></i> Please provide accurate information about
-          the property
-        </p>
+        <p class="lead"><i class="fas fa-user"></i> Please provide accurate information about the property</p>
         <small>* = required field</small>
-        <form class="form">
+        <form class="form" id="propertyForm">
           <div class="form-group">
-            <input type="text" placeholder="Title" name="title" />
+            <input type="text" placeholder="Title" class="input-control" name="title" />
           </div>
           <div class="form-group pr-0">
-            <select name="status">
+            <select name="type" class="input-control">
               <option disabled selected>Property Type</option>
               <option value="2bedroom">2 Bedroom</option>
               <option value="3bedroom">3 Bedroom</option>
             </select>
           </div>
           <div class="form-group pr-0">
-            <select name="status">
+            <select name="deal_type" class="input-control">
               <option disabled selected>Deal type</option>
               <option value="rent">For Rent</option>
               <option value="sale">For Sale</option>
             </select>
           </div>
           <div class="form-group">
-            <input type="text" placeholder="State" name="state" />
+            <input type="text" placeholder="State" class="input-control" name="state" />
           </div>
           <div class="form-group">
-            <input type="text" placeholder="City" name="city" />
+            <input type="text" placeholder="City" class="input-control" name="city" />
           </div>
           <div class="form-group">
-            <textarea placeholder="Address" name="address"></textarea>
+            <textarea placeholder="Address" class="input-control" name="address"></textarea>
           </div>
           <div class="form-group">
-            <input type="text" placeholder="Price" name="price" />
+            <input type="text" placeholder="Price" class="input-control" name="price" />
           </div>
           <div class="form-group pr-0">
-            <select name="status">
+            <select name="billing_type" class="input-control">
               <option disabled selected>Billing Type</option>
               <option value="rent">per month</option>
               <option value="rent">per quarterly</option>
@@ -93,20 +87,14 @@
             </select>
           </div>
           <div class="form-group">
-            <input
-              type="file"
-              id="property_image"
-              name="property_image"
-              multiple
-            />
-            <small class="form-text"
-              >Select one or more image(s) to upload</small
-            >
+            <input type="file" multiple />
+            <small class="form-text">Select one or more image(s) to upload</small>
           </div>
           <div class="form-group">
             <textarea
               placeholder="Please provide details of the property"
-              name="address"
+              class="input-control"
+              name="description"
               rows="7"
             ></textarea>
           </div>
@@ -120,11 +108,52 @@
     </footer>
     <script src="./js/main.js"></script>
     <script>
-      let imgPreview = document.querySelector('#img_preview');
-      let propertyImage = document.querySelector('#property_image');
-      propertyImage.addEventListener('change', async ({ target }) => {
-        console.log(target.files[0]);
-        await imgPreview.setAttribute('src', target.files[0]);
+      const token = localStorage.getItem('token');
+      if (!token) window.location.href = `${BASE_URL}/`;
+
+      const form = document.querySelector('#propertyForm');
+      const fileField = document.querySelector('input[type="file"]');
+      const controls = document.querySelectorAll('.input-control');
+      const data = {};
+
+      const onChange = ({ target }) => {
+        data[target.name] = target.value;
+      };
+
+      controls.forEach(control => {
+        control.addEventListener('change', e => onChange(e));
+      });
+
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        const { title, type, deal_type, state, city, address, price, billing_type, description } = data;
+
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('type', type);
+        formData.append('deal_type', deal_type);
+        formData.append('state', state);
+        formData.append('city', city);
+        formData.append('price', price);
+        formData.append('billing_type', billing_type);
+        formData.append('description', description);
+        formData.append('address', address);
+
+        for (let i = 0; i < fileField.files.length; i++) {
+          formData.append('image_url', fileField.files[i]);
+        }
+        fetch(`${API_URL}/api/v1/property`, {
+          method: 'POST',
+          body: formData,
+          headers: { token }
+        })
+          .then(response => response.json())
+          .catch(error => alert('Error:', error))
+          .then(response => {
+            const { error, data } = response;
+            if (error) return alert(error);
+            alert('The property advert was created successfully');
+          });
       });
     </script>
   </body>
