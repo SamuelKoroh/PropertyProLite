@@ -10,12 +10,12 @@ const createAdvert = async ({ user: { id }, files, body }, res) => {
   try {
     const { title, price, state, city, address, type, deal_type, billing_type, description } = body;
 
-    let result = await db.query('SELECT * FROM properties WHERE lower(title)=$1 AND owner=$2', [
-      title.toLowerCase(),
-      id
-    ]);
+    // let result = await db.query('SELECT * FROM properties WHERE lower(title)=$1 AND owner=$2', [
+    //   title.toLowerCase(),
+    //   id
+    // ]);
 
-    if (result.rowCount > 0) return badRequest(res, 'This property already exists', 400);
+    // if (result.rowCount > 0) return badRequest(res, 'This property already exists', 400);
 
     const strQuery = 'INSERT INTO properties (title,owner,price,state,city,address,type,deal_type, '
       + 'billing_type,image_url,description) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING *';
@@ -26,7 +26,7 @@ const createAdvert = async ({ user: { id }, files, body }, res) => {
       imageUrl = response.images;
     }
 
-    result = await db.query(strQuery, [
+    const result = await db.query(strQuery, [
       title,
       id,
       price,
@@ -94,26 +94,29 @@ const getProperty = async ({ params: { property_id } }, res) => {
 */
 const updateProperty = async ({ params: { property_id }, body, files, user }, res) => {
   try {
-    let strQuery = 'SELECT * FROM properties WHERE id=$1';
-    const { rows } = await db.query(strQuery, [property_id]);
+    const { price, state, city, address, type } = body;
 
-    if (!rows[0]) return badRequest(res, 'The advert does not exist', 404);
+    let strQuery = 'UPDATE properties SET price=$1, state=$2, city=$3, address=$4, type=$5 '
+      + ' WHERE id=$6 AND owner=$7 RETURNING *';
 
-    if (parseInt(rows[0].owner, 10) !== parseInt(user.id, 10))
-      return badRequest(res, 'Access Denied - Authorize access', 403);
+    let result = await db.query(strQuery, [
+      price,
+      state,
+      city,
+      address,
+      type,
+      property_id,
+      user.id
+    ]);
 
-    const keys = Object.keys(body);
-    keys.forEach(async (key) => {
-      strQuery = `UPDATE properties SET ${key}=$1 WHERE id=$2 AND owner=$3 RETURNING *`;
-      await db.query(strQuery, [body[key], property_id, user.id]);
-    });
-
-    if (files.length) {
+    if (files) {
       const response = await uploadImages(files);
       strQuery = 'UPDATE properties SET image_url = $1 WHERE id=$2 AND owner=$3 RETURNING *';
-      await db.query(strQuery, [response.images, property_id, user.id]);
+      result = await db.query(strQuery, [response.images, property_id, user.id]);
     }
-    okResponse(res, { ...rows[0], ...body });
+    if (!result.rows[0]) return badRequest(res, 'The advert does not exist', 404);
+
+    okResponse(res, result.rows[0]);
   } catch (error) {
     badRequest(res, 'An unexpected error has occour', 500);
   }

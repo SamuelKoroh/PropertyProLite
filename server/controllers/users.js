@@ -16,7 +16,7 @@ import db from '../config/db';
 export const getAllUser = async ({ query: { search } }, res) => {
   try {
     let result;
-    let strQuery = 'SELECT id, first_name, last_name, email, phone_number, address, image,'
+    let strQuery = 'SELECT id, first_name, last_name, email, phone_number, address, image_url,'
       + ' is_admin,is_active,created_on  FROM users ';
 
     if (search) {
@@ -40,7 +40,7 @@ export const getAllUser = async ({ query: { search } }, res) => {
 */
 export const getUserProfile = async ({ user: { id } }, res) => {
   try {
-    const strQuery = 'SELECT id, first_name, last_name, email, phone_number, address, image,'
+    const strQuery = 'SELECT id, first_name, last_name, email, phone_number, address, image_url,'
       + ' is_admin,is_active,created_on  FROM users WHERE id=$1';
     const { rows } = await db.query(strQuery, [id]);
     okResponse(res, rows[0]);
@@ -55,7 +55,7 @@ export const getUserProfile = async ({ user: { id } }, res) => {
 */
 export const getUserProperties = async ({ params: { user_id } }, res) => {
   try {
-    let strQuery = 'SELECT id, first_name, last_name, email, phone_number, address, image,'
+    let strQuery = 'SELECT id, first_name, last_name, email, phone_number, address, image_url,'
       + ' is_admin,is_active,created_on  FROM users WHERE id=$1';
     const { rows } = await db.query(strQuery, [user_id]);
 
@@ -78,22 +78,23 @@ export const getUserProperties = async ({ params: { user_id } }, res) => {
 export const updateUserProfile = async ({ user: { id }, file, body }, res) => {
   try {
     const { rows } = await db.query('SELECT * FROM users WHERE id=$1', [id]);
-    let { image } = rows[0];
+    let { image_url } = rows[0];
 
-    const keys = Object.keys(body);
-    keys.forEach(async (key) => {
-      const strQuery = `UPDATE users SET ${key}=$1 WHERE id=$2 `;
-      await db.query(strQuery, [body[key], id]);
-    });
+    const { first_name, last_name, phone_number, address } = body;
+
+    let strQuery = 'UPDATE users SET first_name=$1, last_name=$2, '
+      + ' phone_number=$3, address=$4 WHERE id=$5 RETURNING * ';
+    let result = await db.query(strQuery, [first_name, last_name, phone_number, address, id]);
 
     if (file) {
-      image = await setUserImage(file, image);
-      await db.query('UPDATE users SET image=$1 WHERE id=$2', [image, id]);
+      image_url = await setUserImage(file, image_url);
+      strQuery = 'UPDATE users SET image_url=$1 WHERE id=$2 RETURNING *';
+      result = await db.query(strQuery, [image_url, id]);
     }
     const data = {
-      ..._.omit(rows[0], ['password', 'reset_password_token', 'reset_password_expires'])
+      ..._.omit(result.rows[0], ['password', 'reset_password_token', 'reset_password_expires'])
     };
-    return okResponse(res, { ...data, ...body, image });
+    return okResponse(res, data);
   } catch (error) {
     badRequest(res, 'Image not valid', 500);
   }

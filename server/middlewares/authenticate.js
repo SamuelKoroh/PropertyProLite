@@ -5,7 +5,7 @@ const jwtSecret = process.env.JWT_SECRET;
 
 const authenticate = (req, res, next) => {
   try {
-    const token = req.header('x-auth-token');
+    const token = req.header('token');
 
     if (!token) return badRequest(res, 'Access Denied - No token provided', 401);
 

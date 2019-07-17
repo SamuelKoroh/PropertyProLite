@@ -16,7 +16,7 @@ CREATE TABLE users
     password VARCHAR NOT NULL,
     phone_number VARCHAR (24) ,
     address VARCHAR,
-    image VARCHAR,
+    image_url VARCHAR,
     is_admin boolean DEFAULT false,
     is_active boolean DEFAULT true,
     created_on date DEFAULT CURRENT_DATE,

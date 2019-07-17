@@ -41,9 +41,7 @@ const email = {
     .label('Email')
 };
 const property = {
-  title: Joi.string()
-    .required()
-    .label('Title'),
+  title: Joi.string().optional(),
   price: Joi.number()
     .required()
     .label('Price'),
@@ -59,15 +57,9 @@ const property = {
   type: Joi.string()
     .required()
     .label('Propert type'),
-  billing_type: Joi.string()
-    .optional()
-    .label('Billing type'),
-  description: Joi.string()
-    .required()
-    .label('Description'),
-  deal_type: Joi.string()
-    .required()
-    .label('Deal type')
+  billing_type: Joi.string().optional(),
+  description: Joi.string().optional(),
+  deal_type: Joi.string().optional()
 };
 
 const flagAdvert = {

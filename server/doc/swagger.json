@@ -50,7 +50,7 @@
             "required": true
           },
           {
-            "name": "image",
+            "name": "image_url",
             "in": "formData",
             "type": "file",
             "required": false
@@ -219,7 +219,7 @@
         "consumes": ["multipart/form-data"],
         "parameters": [
           {
-            "$ref": "#parameters/x-auth-token"
+            "$ref": "#parameters/token"
           },
           {
             "name": "title",
@@ -279,7 +279,7 @@
             "required": true
           },
           {
-            "name": "images",
+            "name": "image_url",
             "in": "formData",
             "type": "file",
             "multiple": true,
@@ -312,6 +312,9 @@
         "description": "Get all property adverts by sending request to this endpoint, so filter data by passing query string parameter (e.g price, location, type, deals)",
         "summary": "Get all property adverts",
         "parameters": [
+          {
+            "$ref": "#parameters/token"
+          },
           {
             "name": "type",
             "in": "query",
@@ -357,6 +360,9 @@
         "summary": "Get a specific property advert.",
         "parameters": [
           {
+            "$ref": "#parameters/token"
+          },
+          {
             "$ref": "#parameters/property_id"
           }
         ],
@@ -379,7 +385,7 @@
         "consumes": ["multipart/form-data"],
         "parameters": [
           {
-            "$ref": "#parameters/x-auth-token"
+            "$ref": "#parameters/token"
           },
           {
             "$ref": "#parameters/property_id"
@@ -434,7 +440,7 @@
             "description": "details of the property"
           },
           {
-            "name": "images",
+            "name": "image_url",
             "in": "formData",
             "type": "file",
             "description": "deal type include (e.g for sale, for rent)"
@@ -467,7 +473,7 @@
         "summary": "Remove a specific property advert.",
         "parameters": [
           {
-            "$ref": "#parameters/x-auth-token"
+            "$ref": "#parameters/token"
           },
           {
             "$ref": "#parameters/property_id"
@@ -493,7 +499,7 @@
         "description": "This endpiont enables users to mark a single property as sold",
         "parameters": [
           {
-            "$ref": "#parameters/x-auth-token"
+            "$ref": "#parameters/token"
           },
           {
             "$ref": "#parameters/property_id"
@@ -528,7 +534,7 @@
         "description": "Admin can <span style='color:red'>activate</span> or <span style='color:red'>deactivate</span> an advert once reported by other users, and found suspicious by the admin",
         "parameters": [
           {
-            "$ref": "#parameters/x-auth-token"
+            "$ref": "#parameters/token"
           },
           {
             "$ref": "#parameters/property_id"
@@ -571,7 +577,7 @@
         "description": "This endpoint allows enables the site admin to manage all registered users",
         "parameters": [
           {
-            "$ref": "#parameters/x-auth-token"
+            "$ref": "#parameters/token"
           },
           {
             "name": "search",
@@ -607,7 +613,7 @@
         "description": "User can update their profile by making necessary changes",
         "parameters": [
           {
-            "$ref": "#parameters/x-auth-token"
+            "$ref": "#parameters/token"
           },
           {
             "name": "first_name",
@@ -626,7 +632,7 @@
             "in": "formData"
           },
           {
-            "name": "image",
+            "name": "image_url",
             "in": "formData",
             "type": "file"
           }
@@ -666,7 +672,7 @@
         "description": "This endpoint allows logged in users to get their personal profile details",
         "parameters": [
           {
-            "$ref": "#parameters/x-auth-token"
+            "$ref": "#parameters/token"
           }
         ],
         "responses": {
@@ -713,7 +719,7 @@
         "description": "This endpoint gives admin the access to remove user profile account permanently from the site database",
         "parameters": [
           {
-            "$ref": "#parameters/x-auth-token"
+            "$ref": "#parameters/token"
           },
           {
             "$ref": "#parameters/user_id"
@@ -745,7 +751,7 @@
         "description": "This endpoint allows the users with admin privelleges to activate or deactivate user profile",
         "parameters": [
           {
-            "$ref": "#parameters/x-auth-token"
+            "$ref": "#parameters/token"
           },
           {
             "$ref": "#parameters/user_id"
@@ -780,7 +786,7 @@
         "description": "This endpoint allow the users with admin privelleges to set and remove user as admin",
         "parameters": [
           {
-            "$ref": "#parameters/x-auth-token"
+            "$ref": "#parameters/token"
           },
           {
             "$ref": "#parameters/user_id"
@@ -815,6 +821,9 @@
         "summary": "Flag property advert",
         "parameters": [
           {
+            "$ref": "#parameters/token"
+          },
+          {
             "name": "body",
             "in": "body",
             "description": "Flag a property advert",
@@ -841,7 +850,7 @@
         "summary": "Get all flagged property",
         "parameters": [
           {
-            "$ref": "#parameters/x-auth-token"
+            "$ref": "#parameters/token"
           },
           {
             "name": "search",
@@ -872,7 +881,7 @@
         "summary": "Get flaged property",
         "parameters": [
           {
-            "$ref": "#parameters/x-auth-token"
+            "$ref": "#parameters/token"
           },
           {
             "name": "flag_id",
@@ -907,7 +916,7 @@
         "summary": "Delete flaged property",
         "parameters": [
           {
-            "$ref": "#parameters/x-auth-token"
+            "$ref": "#parameters/token"
           },
           {
             "name": "flag_id",
@@ -935,7 +944,7 @@
         "description": "Get the current login user favourites propertys advert",
         "parameters": [
           {
-            "$ref": "#parameters/x-auth-token"
+            "$ref": "#parameters/token"
           }
         ],
         "responses": {
@@ -964,7 +973,7 @@
         "description": "This endpoint enable logged in user to add property to his/her favourites list for easy access later",
         "parameters": [
           {
-            "$ref": "#parameters/x-auth-token"
+            "$ref": "#parameters/token"
           },
           {
             "$ref": "#parameters/property_id"
@@ -993,7 +1002,7 @@
         "description": "This endpoint enables logged in users to remove property from his/her favourites list",
         "parameters": [
           {
-            "$ref": "#parameters/x-auth-token"
+            "$ref": "#parameters/token"
           },
           {
             "name": "favourite_id",
@@ -1022,7 +1031,7 @@
         "description": "Add deals dynamically without bringing the site down when the need to add new one arise",
         "parameters": [
           {
-            "$ref": "#parameters/x-auth-token"
+            "$ref": "#parameters/token"
           },
           {
             "$ref": "#parameters/setupBody"
@@ -1059,7 +1068,7 @@
         "summary": "Retrieve all deals",
         "parameters": [
           {
-            "$ref": "#parameters/x-auth-token"
+            "$ref": "#parameters/token"
           }
         ],
         "responses": {
@@ -1097,7 +1106,7 @@
         "summary": "Retrieve single deal by its ID",
         "parameters": [
           {
-            "$ref": "#parameters/x-auth-token"
+            "$ref": "#parameters/token"
           },
           {
             "$ref": "#parameters/setupId"
@@ -1128,7 +1137,7 @@
         "summary": "Update deal details",
         "parameters": [
           {
-            "$ref": "#parameters/x-auth-token"
+            "$ref": "#parameters/token"
           },
           {
             "$ref": "#parameters/setupId"
@@ -1171,7 +1180,7 @@
         "summary": "Remove a deal",
         "parameters": [
           {
-            "$ref": "#parameters/x-auth-token"
+            "$ref": "#parameters/token"
           },
           {
             "$ref": "#parameters/setupId"
@@ -1203,7 +1212,7 @@
         "description": "Add property types dynamically without bringing the site down when the need to add new one arise",
         "parameters": [
           {
-            "$ref": "#parameters/x-auth-token"
+            "$ref": "#parameters/token"
           },
           {
             "$ref": "#parameters/setupBody"
@@ -1240,7 +1249,7 @@
         "summary": "Retrieve all property types",
         "parameters": [
           {
-            "$ref": "#parameters/x-auth-token"
+            "$ref": "#parameters/token"
           }
         ],
         "responses": {
@@ -1278,7 +1287,7 @@
         "summary": "Retrieve single property type by its ID",
         "parameters": [
           {
-            "$ref": "#parameters/x-auth-token"
+            "$ref": "#parameters/token"
           },
           {
             "$ref": "#parameters/setupId"
@@ -1318,7 +1327,7 @@
         "summary": "Update property type details",
         "parameters": [
           {
-            "$ref": "#parameters/x-auth-token"
+            "$ref": "#parameters/token"
           },
           {
             "$ref": "#parameters/setupId"
@@ -1361,7 +1370,7 @@
         "summary": "Remove property type",
         "parameters": [
           {
-            "$ref": "#parameters/x-auth-token"
+            "$ref": "#parameters/token"
           },
           {
             "$ref": "#parameters/setupId"
@@ -1410,7 +1419,7 @@
         "address": {
           "type": "string"
         },
-        "image": {
+        "image_url": {
           "type": "string"
         },
         "reset_password_token": {
@@ -1553,7 +1562,7 @@
             "address": {
               "type": "string"
             },
-            "image": {
+            "image_url": {
               "type": "string"
             },
             "reset_password_token": {
@@ -1921,8 +1930,8 @@
     }
   },
   "parameters": {
-    "x-auth-token": {
-      "name": "x-auth-token",
+    "token": {
+      "name": "token",
       "in": "header",
       "type": "string",
       "required": true

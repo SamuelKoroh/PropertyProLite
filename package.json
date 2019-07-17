@@ -4,13 +4,13 @@
   "description": "Property Pro Lite is a platform where people can create and/or search properties for sale or rent.",
   "main": "index.js",
   "scripts": {
-    "testMigrate": "psql -U postgres -f server/models/travis.sql",
+    "testdb-script": "psql -U postgres -f server/models/travis.sql",
     "start": "node ./build-server/index.js",
     "clean": "rm -rf build-server && mkdir build-server",
     "build": "npm run clean && babel ./server --out-dir ./build-server --copy-files",
     "dev": "nodemon --watch server --exec babel-node ./server/index.js",
     "test:server": "./node_modules/.bin/mocha --timeout 500000 --require @babel/register ./tests/",
-    "test": "npm run testMigrate && cross-env NODE_ENV=test nyc npm run test:server && nyc report --reporter=lcov --reporter=text-lcov | coveralls"
+    "test": "npm run testdb-script && cross-env NODE_ENV=test nyc npm run test:server && nyc report --reporter=lcov --reporter=text-lcov | coveralls"
   },
   "engines": {
     "node": "10.4.1"
@@ -54,7 +54,6 @@
     "cors": "^2.8.5",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
-    "express-validator": "^5.3.1",
     "helmet": "^3.18.0",
     "joi": "^14.3.1",
     "jsonwebtoken": "^8.5.1",
@@ -63,7 +62,6 @@
     "multer": "^1.4.1",
     "nodemailer": "^6.2.1",
     "pg": "^7.11.0",
-    "swagger-node-express": "^2.1.3",
     "swagger-ui-express": "^4.0.6"
   }
 }

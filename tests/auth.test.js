@@ -30,7 +30,7 @@ describe('/api/v1/auth', () => {
         .field('last_name', 'Ojoo')
         .field('phone_number', '20 agodi oojoo')
         .field('address', '45 rooms in a duples')
-        .attach('image', filePath);
+        .attach('image_url', filePath);
       expect(result.status).to.equal(201);
     });
     it('should return 500 if image is not valid', async () => {
@@ -43,13 +43,13 @@ describe('/api/v1/auth', () => {
         .field('last_name', 'Ojoo')
         .field('phone_number', '20 agodi oojoo')
         .field('address', '45 rooms in a duples')
-        .attach('image', filePath);
+        .attach('image_url', filePath);
       expect(result.status).to.equal(500);
     });
     it('should return 400 if provide with invalid data', async () => {
       const result = await request(app)
         .post('/api/v1/auth/signup')
-        .send({ email: 'john', password: 'password' });
+        .send({});
       expect(result.status).to.equal(400);
     });
     it('should return 400 if provided with already existing email', async () => {

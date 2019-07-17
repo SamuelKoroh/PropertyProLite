@@ -14,7 +14,7 @@ import {
 const router = express.Router();
 
 router.get('/', [authenticate, isAdmin], getAllUser);
-router.patch('/', [authenticate, multer.single('image')], updateUserProfile);
+router.patch('/', [authenticate, multer.single('image_url')], updateUserProfile);
 router.get('/me', authenticate, getUserProfile);
 router.get('/:user_id', getUserProperties);
 router.delete('/:user_id', [authenticate, isAdmin], deleteUserProfile);

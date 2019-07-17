@@ -24,12 +24,12 @@ describe('/api/v1/flag', () => {
 
     await request(app)
       .post('/api/v1/property')
-      .set('x-auth-token', flager.body.data.token)
+      .set('token', flager.body.data.token)
       .send({ ...validProperty, title: 'flaged property 1' });
 
     await request(app)
       .post('/api/v1/property')
-      .set('x-auth-token', flager.body.data.token)
+      .set('token', flager.body.data.token)
       .send({ ...validProperty, title: 'flaged property 2' });
   });
   describe('POST  /', () => {
@@ -58,37 +58,37 @@ describe('/api/v1/flag', () => {
     it('it should return 403 if the user acces is forbidden', async () => {
       const result = await request(app)
         .get('/api/v1/flag')
-        .set('x-auth-token', flager.body.data.token);
+        .set('token', flager.body.data.token);
       expect(result.status).to.equal(403);
     });
     it('it should return 404 if there are no record returned by using query parameter', async () => {
       const result = await request(app)
         .get('/api/v1/flag?search=hhhhhhhhhhhhhhhhhh')
-        .set('x-auth-token', admin.body.data.token);
+        .set('token', admin.body.data.token);
       expect(result.status).to.equal(404);
     });
     it('it should return 200 if there are one or more records by using name query string', async () => {
       const result = await request(app)
         .get('/api/v1/flag?search=sarah')
-        .set('x-auth-token', admin.body.data.token);
+        .set('token', admin.body.data.token);
       expect(result.status).to.equal(200);
     });
     it('it should return 200 if there are one or more records by using reason query string', async () => {
       const result = await request(app)
         .get('/api/v1/flag?search=wierd')
-        .set('x-auth-token', admin.body.data.token);
+        .set('token', admin.body.data.token);
       expect(result.status).to.equal(200);
     });
     it('it should return 200 if there are one or more records by using email query string', async () => {
       const result = await request(app)
         .get('/api/v1/flag?search=reporter')
-        .set('x-auth-token', admin.body.data.token);
+        .set('token', admin.body.data.token);
       expect(result.status).to.equal(200);
     });
     it('it should return 200 if there are one or more records', async () => {
       const result = await request(app)
         .get('/api/v1/flag')
-        .set('x-auth-token', admin.body.data.token);
+        .set('token', admin.body.data.token);
       expect(result.status).to.equal(200);
     });
   });
@@ -96,13 +96,13 @@ describe('/api/v1/flag', () => {
     it('it should return 404 if there is no matching record', async () => {
       const result = await request(app)
         .get('/api/v1/flag/10000')
-        .set('x-auth-token', admin.body.data.token);
+        .set('token', admin.body.data.token);
       expect(result.status).to.equal(404);
     });
     it('it should return 200 if there is matching record', async () => {
       const result = await request(app)
         .get(`/api/v1/flag/${report.body.data.id}`)
-        .set('x-auth-token', admin.body.data.token);
+        .set('token', admin.body.data.token);
       expect(result.status).to.equal(200);
     });
   });
@@ -110,14 +110,14 @@ describe('/api/v1/flag', () => {
     it('it should return 404 if there is no matching record', async () => {
       const result = await request(app)
         .delete('/api/v1/flag/10000')
-        .set('x-auth-token', admin.body.data.token);
+        .set('token', admin.body.data.token);
       expect(result.status).to.equal(404);
     });
 
     it('should return 200 successfully remove the flag', async () => {
       const result = await request(app)
         .delete('/api/v1/flag/1')
-        .set('x-auth-token', admin.body.data.token);
+        .set('token', admin.body.data.token);
       expect(result.status).to.equal(200);
     });
   });
