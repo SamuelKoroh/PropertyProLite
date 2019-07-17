@@ -76,7 +76,7 @@ const getProperties = async ({ query }, res) => {
 */
 const getProperty = async ({ params: { property_id } }, res) => {
   try {
-    const strQuery = 'SELECT A.*,B.id AS owner,B.email AS owner_Email,B.phone_number AS owner_Phone'
+    const strQuery = "SELECT A.*,B.id AS owner,B.email AS owner_Email,B.phone_number AS owner_Phone, CONCAT(B.first_name, ' ', B.last_name) AS owner_name"
       + ' FROM properties A INNER JOIN users B on A.owner=B.id WHERE A.id=$1 AND A.status=$2 AND A.is_active=$3';
     const { rows } = await db.query(strQuery, [property_id, 'available', true]);
 
