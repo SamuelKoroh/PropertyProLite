@@ -278,10 +278,10 @@
     </footer>
     <script src="./js/main.js"></script>
     <script>
-      // fetch('http://localhost:3500/api/v1/property')
-      //   .then(response => response.json())
-      //   .then(data => console.log(data))
-      //   .catch(error => console.log(error));
+      fetch('https://sam-propertyprolite.herokuapp.com/api/v1/property')
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.log(error));
     </script>
   </body>
 </html>
