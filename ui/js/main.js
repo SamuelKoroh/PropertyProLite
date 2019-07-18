@@ -1,4 +1,4 @@
-const BASE_URL = 'http://127.0.0.1:5500/public';
+const BASE_URL = 'http://127.0.0.1:5500/ui';
 const API_URL = 'http://localhost:3500';
 
 const myMap = (address) => {
