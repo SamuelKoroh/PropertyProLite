@@ -1,4 +1,4 @@
-const BASE_URL = 'http://127.0.0.1:5500/ui';
+const BASE_URL = 'http://samuelkoroh.github.io/PropertyProLite/ui';
 const API_URL = 'https://sam-propertyprolite.herokuapp.com';
 
 const myMap = address => {
