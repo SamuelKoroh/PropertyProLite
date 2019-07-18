@@ -50,7 +50,7 @@
       </div>
     </main>
 
-    <div class="container center">
+    <!-- <div class="container center">
       <div class="pagination">
         <a href="#">&laquo;</a>
         <a href="#">1</a>
@@ -61,16 +61,17 @@
         <a href="#">6</a>
         <a href="#">&raquo;</a>
       </div>
-    </div>
+    </div> -->
     <script src="./js/main.js"></script>
     <script>
       const token = localStorage.getItem('token');
+      const userId = localStorage.getItem('userId');
       if (!token) window.location.href = `${BASE_URL}/`;
 
       const mainContainer = document.querySelector('#mainContainer');
       const titleSpan = document.querySelector('#titleSpan');
 
-      fetch(`${API_URL}/api/v1/users/19`)
+      fetch(`${API_URL}/api/v1/users/${userId}`)
         .then(response => response.json())
         .then(response => {
           const properties = response.data.userAdverts;
