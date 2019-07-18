@@ -80,6 +80,7 @@
             const { error, data } = response;
             if (error) return alert(error);
             localStorage.setItem('token', data.token);
+            localStorage.setItem('userId', data.id);
             window.location.href = `${BASE_URL}/dashboard.html`;
           })
           .catch(error => console.log(error));

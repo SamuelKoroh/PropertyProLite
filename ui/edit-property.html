@@ -11,10 +11,7 @@
     />
     <title>Welcome to Property Pro</title>
     <link rel="stylesheet" href="./css/style.css" />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
-    />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" />
   </head>
   <body>
     <header>
@@ -48,63 +45,58 @@
         <h1 class="large text-primary">
           Edit:- Property Listing
         </h1>
-        <p class="lead">
-          <i class="fas fa-user"></i> Please provide accurate information about
-          the property
-        </p>
+        <p class="lead"><i class="fas fa-user"></i> Please provide accurate information about the property</p>
         <small>* = required field</small>
-        <form class="form">
+        <form class="form" id="updatePropForm">
           <div class="form-group">
-            <input type="text" placeholder="Title" name="title" />
+            <input type="text" placeholder="Title" id="title" name="title" />
           </div>
           <div class="form-group pr-0">
-            <select name="status">
+            <select name="type" id="type">
               <option disabled selected>Property Type</option>
               <option value="2bedroom">2 Bedroom</option>
               <option value="3bedroom">3 Bedroom</option>
             </select>
           </div>
           <div class="form-group pr-0">
-            <select name="status">
+            <select name="deal_type" id="deal_type">
               <option disabled selected>Deal type</option>
               <option value="rent">For Rent</option>
               <option value="sale">For Sale</option>
             </select>
           </div>
           <div class="form-group">
-            <input type="text" placeholder="State" name="state" />
+            <input type="text" placeholder="State" id="state" name="state" />
           </div>
           <div class="form-group">
-            <input type="text" placeholder="City" name="city" />
+            <input type="text" placeholder="City" id="city" name="city" />
           </div>
           <div class="form-group">
-            <textarea placeholder="Address" name="address"></textarea>
+            <textarea placeholder="Address" id="address" name="address"></textarea>
           </div>
           <div class="form-group">
-            <input type="text" placeholder="Price" name="price" />
+            <input type="text" placeholder="Price" id="price" name="price" />
+          </div>
+          <div class="form-group pr-0">
+            <select name="billing_type" id="billing_type" class="input-control">
+              <option disabled selected>Billing Type</option>
+              <option value="rent">per month</option>
+              <option value="rent">per quarterly</option>
+              <option value="rent">per year</option>
+              <option value="sale">one time payment</option>
+            </select>
           </div>
           <div class="form-group">
-            <input
-              type="file"
-              id="property_image"
-              name="property_image"
-              multiple
-            />
-            <small class="form-text"
-              >Select one or more image(s) to upload</small
-            >
+            <input type="file" id="image_url" name="image_url" multiple />
+            <small class="form-text">Select one or more image(s) to upload</small>
           </div>
           <div class="form-group">
             <textarea
               placeholder="Please provide details of the property"
-              name="address"
+              id="description"
+              name="description"
               rows="7"
             ></textarea>
-          </div>
-          <div class="form-group">
-            <label>
-              <input type="checkbox" name="status" /> Mark this property as sold
-            </label>
           </div>
           <input type="submit" class="btn btn-primary my-1" />
         </form>
@@ -114,5 +106,74 @@
       <p>All right reserved PropertyPro &copy; 2019</p>
     </footer>
     <script src="./js/main.js"></script>
+    <script>
+      const token = localStorage.getItem('token');
+      if (!token) window.location.href = `${BASE_URL}/`;
+
+      const property_id = window.location.search.slice(13);
+
+      const updatePropForm = document.querySelector('#updatePropForm');
+      const title = document.querySelector('#title');
+      const type = document.querySelector('#type');
+      const deal_type = document.querySelector('#deal_type');
+      const state = document.querySelector('#state');
+      const city = document.querySelector('#city');
+      const address = document.querySelector('#address');
+      const price = document.querySelector('#price');
+      const billing_type = document.querySelector('#billing_type');
+      const description = document.querySelector('#description');
+      const fileField = document.querySelector('input[type="file"]');
+
+      fetch(`${API_URL}/api/v1/property/${property_id}`, {
+        headers: { token }
+      })
+        .then(response => response.json())
+        .then(response => {
+          const { error, data } = response;
+          console.log(data);
+          if (error) return alert(error);
+          //const { title, type, deal_type, state, city, address, price, billing_type, description } = data;
+
+          title.value = data.title;
+          type.value = data.type;
+          deal_type.value = data.deal_type;
+          state.value = data.state;
+          city.value = data.city;
+          address.value = data.address;
+          price.value = data.price;
+          billing_type.value = data.billing_type;
+          description.value = data.description;
+        });
+
+      updatePropForm.addEventListener('submit', e => {
+        e.preventDefault();
+        const formData = new FormData();
+        // formData.append('title', title.value);
+        formData.append('type', type.value);
+        formData.append('deal_type', deal_type.value);
+        formData.append('state', state.value);
+        formData.append('city', city.value);
+        formData.append('price', price.value);
+        // formData.append('billing_type', billing_type.value);
+        // formData.append('description', description.value);
+        formData.append('address', address.value);
+
+        // for (let i = 0; i < fileField.files.length; i++) {
+        //   formData.append('image_url', fileField.files[i]);
+        // }
+        fetch(`${API_URL}/api/v1/property/${property_id}`, {
+          method: 'PATCH',
+          body: formData,
+          headers: { token }
+        })
+          .then(response => response.json())
+          .catch(error => alert('Error:', error))
+          .then(response => {
+            const { error, data } = response;
+            if (error) return alert(error);
+            alert('The property advert has been updated successfully');
+          });
+      });
+    </script>
   </body>
 </html>
