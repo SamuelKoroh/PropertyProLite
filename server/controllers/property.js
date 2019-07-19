@@ -122,7 +122,6 @@ const updateProperty = async ({ params: { property_id }, body, files, user }, re
 
     okResponse(res, result.rows[0]);
   } catch (error) {
-    console.log(error);
     badRequest(res, 'An unexpected error has occour', 500);
   }
 };
