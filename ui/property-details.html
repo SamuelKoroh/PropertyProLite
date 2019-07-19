@@ -92,15 +92,15 @@
         </h2>
         <div class="property-images">
            ${(gallery = property.image_url.map(
-             img =>
+             (img, i, arr) =>
                `<div class='mySlides fade'>
-                <div class='numbertext'>1/2</div>
+                <div class='numbertext'>${i + 1}/${arr.length}</div>
                 <img src=${img} />
               </div>`
            )).join(' ')}
 
 
-          <div class="control"><i class="fa fa-camera"></i> 2</div>
+          <div class="control"><i class="fa fa-camera"></i> ${property.image_url.length}</div>
 
           <a class="prev">&#10094;</a>
           <a class="next">&#10095;</a>
@@ -147,7 +147,6 @@
 
         <div id="googleMap" class="mt-10"></div>
       </div>`;
-          console.log(property);
           myMap(property.address);
           var slideIndex = 1;
 

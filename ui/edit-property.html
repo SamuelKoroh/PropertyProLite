@@ -148,19 +148,19 @@
       updatePropForm.addEventListener('submit', e => {
         e.preventDefault();
         const formData = new FormData();
-        // formData.append('title', title.value);
+        formData.append('title', title.value);
         formData.append('type', type.value);
         formData.append('deal_type', deal_type.value);
         formData.append('state', state.value);
         formData.append('city', city.value);
         formData.append('price', price.value);
-        // formData.append('billing_type', billing_type.value);
-        // formData.append('description', description.value);
+        formData.append('billing_type', billing_type.value);
+        formData.append('description', description.value);
         formData.append('address', address.value);
 
-        // for (let i = 0; i < fileField.files.length; i++) {
-        //   formData.append('image_url', fileField.files[i]);
-        // }
+        for (let i = 0; i < fileField.files.length; i++) {
+          formData.append('image_url', fileField.files[i]);
+        }
         fetch(`${API_URL}/api/v1/property/${property_id}`, {
           method: 'PATCH',
           body: formData,
@@ -172,6 +172,7 @@
             const { error, data } = response;
             if (error) return alert(error);
             alert('The property advert has been updated successfully');
+            window.location.href = `${BASE_URL}/dashboard.html`;
           });
       });
     </script>
