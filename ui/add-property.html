@@ -153,6 +153,7 @@
             const { error, data } = response;
             if (error) return alert(error);
             alert('The property advert was created successfully');
+            window.location.href = `${BASE_URL}/dashboard.html`;
           });
       });
     </script>

@@ -120,6 +120,8 @@
             const { error, data } = response;
             if (error) return alert(error);
             localStorage.setItem('token', data.token);
+            localStorage.setItem('userId', data.id);
+            localStorage.setItem('userName', data.first_name + ' ' + data.last_name);
             window.location.href = `${BASE_URL}/dashboard.html`;
           });
       });
