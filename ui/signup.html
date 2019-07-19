@@ -57,14 +57,10 @@
             <input type="text" placeholder="Phone Number" class="input-control" name="phone_number" required />
           </div>
           <div class="form-group">
-<<<<<<< HEAD
             <textarea placeholder="Address" class="input-control" name="address"></textarea>
           </div>
           <div class="form-group">
             <input type="password" placeholder="Password" class="input-control" name="password" required />
-=======
-            <input type="password" placeholder="Password" name="password" />
->>>>>>> 8e6cdb5cb7868b4f1df0f305b09c08df287beefc
           </div>
           <div class="form-group">
             <input type="password" placeholder="Confirm password" class="input-control" name="password2" required />
@@ -124,7 +120,6 @@
             const { error, data } = response;
             if (error) return alert(error);
             localStorage.setItem('token', data.token);
-            localStorage.setItem('userId', data.id);
             window.location.href = `${BASE_URL}/dashboard.html`;
           });
       });
