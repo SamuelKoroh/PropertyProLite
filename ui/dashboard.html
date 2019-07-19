@@ -43,7 +43,6 @@
     <main class="m-20">
       <div class="container" id="mainContainer">
         <p class=" lead text-success" id="welcomeUser"></p>
-
         <div class="mb-10 mt-30">
           <span class="lead text-primary" id="titleSpan">Manage Properties</span>
         </div>
@@ -63,15 +62,10 @@
       </div>
     </div> -->
     <script src="./js/main.js"></script>
+    <script src="./js/welcome.js"></script>
     <script src="./js/authEvent.js"></script>
     <script>
       if (!token) window.location.href = `${BASE_URL}/`;
-
-      const mainContainer = document.querySelector('#mainContainer');
-      const titleSpan = document.querySelector('#titleSpan');
-      const welcomeUser = document.querySelector('#welcomeUser');
-
-      welcomeUser.innerHTML = `<i class="fas fa-user" ></i> Welcome ${localStorage.getItem('userName')}`;
 
       fetch(`${API_URL}/api/v1/users/19`)
         .then(response => response.json())

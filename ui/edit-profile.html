@@ -47,26 +47,23 @@
         </h2>
         <p class="lead"><i class="fas fa-user"></i> Let's get some information to make your profile stand out</p>
         <small class="mb-">* = required field</small>
-        <form class="form mt-30">
+        <form class="form mt-30" id="userForm">
           <div class="form">
             <small class="form-text">update your profile photo</small>
-            <img class="image-preview" width="200" src="./img/placeholder-person.jpg" alt="your image" />
-            <input type="file" onchange="readURL(this);" />
+            <img class="image-preview" id="photo" width="200" src="./img/placeholder-person.jpg" alt="your image" />
+            <input type="file" />
           </div>
           <div class="form-group">
-            <input type="text" placeholder="Email" name="email" />
+            <input type="text" placeholder="First Name" id="first_name" name="first_name" />
           </div>
           <div class="form-group">
-            <input type="text" placeholder="First Name" name="first_name" />
+            <input type="text" placeholder="Last Name" id="last_name" name="last_name" />
           </div>
           <div class="form-group">
-            <input type="text" placeholder="Last Name" name="last_name" />
+            <input type="text" placeholder="Phone Number" id="phone_number" name="phone_number" />
           </div>
           <div class="form-group">
-            <input type="text" placeholder="Phone Number" name="phone_number" />
-          </div>
-          <div class="form-group">
-            <textarea placeholder="Address" name="address"></textarea>
+            <textarea placeholder="Address" id="address" name="address"></textarea>
           </div>
 
           <input type="submit" class="btn btn-primary btn-block mr-10" />
@@ -77,6 +74,55 @@
     <footer>
       <p>All right reserved PropertyPro &copy; 2019</p>
     </footer>
+    <script src="./js/authEvent.js"></script>
     <script src="./js/main.js"></script>
+    <script>
+      if (!token) window.location.href = `${BASE_URL}/`;
+
+      const form = document.querySelector('#userForm');
+      const fileField = document.querySelector('input[type="file"]');
+      const photo = document.querySelector('#photo');
+      const firstName = document.querySelector('#first_name');
+      const lastName = document.querySelector('#last_name');
+      const phoneNumber = document.querySelector('#phone_number');
+      const contactAddress = document.querySelector('#address');
+      const data = {};
+
+      fetch(`${API_URL}/api/v1/users/me`, {
+        headers: { token }
+      })
+        .then(response => response.json())
+        .then(response => {
+          const { first_name, last_name, phone_number, address, image_url } = response.data;
+          firstName.value = first_name;
+          lastName.value = last_name;
+          phoneNumber.value = phone_number;
+          contactAddress.value = address;
+          photo.src = image_url;
+          photo.setAttribute('alt', first_name);
+        });
+
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+
+        const formData = new FormData();
+        formData.append('first_name', firstName.value);
+        formData.append('last_name', lastName.value);
+        formData.append('phone_number', phoneNumber.value);
+        formData.append('address', contactAddress.value);
+
+        if (fileField.files[0]) formData.append('image_url', fileField.files[0]);
+
+        fetch(`${API_URL}/api/v1/users`, {
+          method: 'PATCH',
+          body: formData,
+          headers: { token }
+        })
+          .then(response => response.json())
+          .then(response =>
+            response.error ? alert(response.error) : (window.location.href = `${BASE_URL}/dashboard.html`)
+          );
+      });
+    </script>
   </body>
 </html>
