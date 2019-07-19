@@ -1,7 +1,7 @@
 const BASE_URL = 'https://samuelkoroh.github.io/PropertyProLite/ui';
 const API_URL = 'https://sam-propertyprolite.herokuapp.com';
 
-const myMap = (address) => {
+const myMap = address => {
   const geocoder = new google.maps.Geocoder();
 
   geocoder.geocode({ address }, (results, status) => {
@@ -23,12 +23,12 @@ const myMap = (address) => {
   });
 };
 const useModal = (modal, trigerButton, closeButton) => {
-  trigerButton.onclick = (e) => {
+  trigerButton.onclick = e => {
     e.preventDefault();
     modal.style.display = 'block';
   };
 
-  closeButton.onclick = (e) => {
+  closeButton.onclick = e => {
     modal.style.display = 'none';
   };
 

@@ -114,5 +114,75 @@
       <p>All right reserved PropertyPro &copy; 2019</p>
     </footer>
     <script src="./js/main.js"></script>
+    <script>
+      const token = localStorage.getItem('token');
+      if (!token) window.location.href = `${BASE_URL}/`;
+
+      const property_id = window.location.search.slice(13);
+
+      const updatePropForm = document.querySelector('#updatePropForm');
+      const title = document.querySelector('#title');
+      const type = document.querySelector('#type');
+      const deal_type = document.querySelector('#deal_type');
+      const state = document.querySelector('#state');
+      const city = document.querySelector('#city');
+      const address = document.querySelector('#address');
+      const price = document.querySelector('#price');
+      const billing_type = document.querySelector('#billing_type');
+      const description = document.querySelector('#description');
+      const fileField = document.querySelector('input[type="file"]');
+
+      fetch(`${API_URL}/api/v1/property/${property_id}`, {
+        headers: { token }
+      })
+        .then(response => response.json())
+        .then(response => {
+          const { error, data } = response;
+          console.log(data);
+          if (error) return alert(error);
+          //const { title, type, deal_type, state, city, address, price, billing_type, description } = data;
+
+          title.value = data.title;
+          type.value = data.type;
+          deal_type.value = data.deal_type;
+          state.value = data.state;
+          city.value = data.city;
+          address.value = data.address;
+          price.value = data.price;
+          billing_type.value = data.billing_type;
+          description.value = data.description;
+        });
+
+      updatePropForm.addEventListener('submit', e => {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append('title', title.value);
+        formData.append('type', type.value);
+        formData.append('deal_type', deal_type.value);
+        formData.append('state', state.value);
+        formData.append('city', city.value);
+        formData.append('price', price.value);
+        formData.append('billing_type', billing_type.value);
+        formData.append('description', description.value);
+        formData.append('address', address.value);
+
+        for (let i = 0; i < fileField.files.length; i++) {
+          formData.append('image_url', fileField.files[i]);
+        }
+        fetch(`${API_URL}/api/v1/property/${property_id}`, {
+          method: 'PATCH',
+          body: formData,
+          headers: { token }
+        })
+          .then(response => response.json())
+          .catch(error => alert('Error:', error))
+          .then(response => {
+            const { error, data } = response;
+            if (error) return alert(error);
+            alert('The property advert has been updated successfully');
+            window.location.href = `${BASE_URL}/dashboard.html`;
+          });
+      });
+    </script>
   </body>
 </html>
