@@ -22,8 +22,9 @@
           <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="all-listing.html">Listing</a></li>
-            <li><a href="signup.html">Sign up</a></li>
-            <li><a href="signin.html">Sign in</a></li>
+            <li class="guest"><a href="signup.html">Sign up</a></li>
+            <li class="guest"><a href="signin.html">Sign in</a></li>
+            <li id="signOut" class="hide-link"><a href="index.html">Sign Out</a></li>
           </ul>
         </nav>
       </div>
@@ -69,8 +70,8 @@
       <p>All right reserved PropertyPro &copy; 2019</p>
     </footer>
     <script src="./js/main.js"></script>
+    <script src="./js/authEvent.js"></script>
     <script>
-      const token = localStorage.getItem('token');
       if (!token) window.location.href = `${BASE_URL}/`;
 
       const controls = document.querySelectorAll('.search-control');

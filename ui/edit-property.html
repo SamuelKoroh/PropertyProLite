@@ -11,10 +11,7 @@
     />
     <title>Welcome to Property Pro</title>
     <link rel="stylesheet" href="./css/style.css" />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
-    />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" />
   </head>
   <body>
     <header>
@@ -37,7 +34,7 @@
                 <a href="manage-report.html">Reported Issues</a>
               </div>
             </li>
-            <li><a href="signin.html">Sign Out</a></li>
+            <li id="signOut"><a href="index.html">Sign Out</a></li>
           </ul>
         </nav>
       </div>
@@ -48,10 +45,7 @@
         <h1 class="large text-primary">
           Edit:- Property Listing
         </h1>
-        <p class="lead">
-          <i class="fas fa-user"></i> Please provide accurate information about
-          the property
-        </p>
+        <p class="lead"><i class="fas fa-user"></i> Please provide accurate information about the property</p>
         <small>* = required field</small>
         <form class="form">
           <div class="form-group">
@@ -84,27 +78,14 @@
             <input type="text" placeholder="Price" name="price" />
           </div>
           <div class="form-group">
-            <input
-              type="file"
-              id="property_image"
-              name="property_image"
-              multiple
-            />
-            <small class="form-text"
-              >Select one or more image(s) to upload</small
-            >
+            <input type="file" id="property_image" name="property_image" multiple />
+            <small class="form-text">Select one or more image(s) to upload</small>
           </div>
           <div class="form-group">
-            <textarea
-              placeholder="Please provide details of the property"
-              name="address"
-              rows="7"
-            ></textarea>
+            <textarea placeholder="Please provide details of the property" name="address" rows="7"></textarea>
           </div>
           <div class="form-group">
-            <label>
-              <input type="checkbox" name="status" /> Mark this property as sold
-            </label>
+            <label> <input type="checkbox" name="status" /> Mark this property as sold </label>
           </div>
           <input type="submit" class="btn btn-primary my-1" />
         </form>
@@ -114,8 +95,8 @@
       <p>All right reserved PropertyPro &copy; 2019</p>
     </footer>
     <script src="./js/main.js"></script>
+    <script src="./js/authEvent.js"></script>
     <script>
-      const token = localStorage.getItem('token');
       if (!token) window.location.href = `${BASE_URL}/`;
 
       const property_id = window.location.search.slice(13);
@@ -138,9 +119,7 @@
         .then(response => response.json())
         .then(response => {
           const { error, data } = response;
-          console.log(data);
           if (error) return alert(error);
-          //const { title, type, deal_type, state, city, address, price, billing_type, description } = data;
 
           title.value = data.title;
           type.value = data.type;

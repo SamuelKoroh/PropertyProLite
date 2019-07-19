@@ -34,7 +34,7 @@
                 <a href="manage-report.html">Reported Issues</a>
               </div>
             </li>
-            <li id="signOut"><a href="signin.html">Sign Out</a></li>
+            <li id="signOut"><a href="index.html">Sign Out</a></li>
           </ul>
         </nav>
       </div>
@@ -50,7 +50,7 @@
       </div>
     </main>
 
-    <div class="container center">
+    <!-- <div class="container center">
       <div class="pagination">
         <a href="#">&laquo;</a>
         <a href="#">1</a>
@@ -61,16 +61,15 @@
         <a href="#">6</a>
         <a href="#">&raquo;</a>
       </div>
-    </div>
+    </div> -->
     <script src="./js/main.js"></script>
+    <script src="./js/authEvent.js"></script>
     <script>
-      const token = localStorage.getItem('token');
       if (!token) window.location.href = `${BASE_URL}/`;
 
       const mainContainer = document.querySelector('#mainContainer');
       const titleSpan = document.querySelector('#titleSpan');
       const welcomeUser = document.querySelector('#welcomeUser');
-      const signOut = document.querySelector('#signOut');
 
       welcomeUser.innerHTML = `<i class="fas fa-user" ></i> Welcome ${localStorage.getItem('userName')}`;
 
@@ -161,12 +160,6 @@
           });
         })
         .catch(error => console.log(error));
-
-        signOut.addEventListener('click',()=>{
-          localStorage.removeItem('token');
-          localStorage.removeItem('userName');
-          localStorage.removeItem('userId');
-        })
     </script>
     <footer>
       <p>All right reserved PropertyPro &copy; 2019</p>

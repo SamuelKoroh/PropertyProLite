@@ -1,6 +1,9 @@
 const BASE_URL = 'https://samuelkoroh.github.io/PropertyProLite/ui';
 const API_URL = 'https://sam-propertyprolite.herokuapp.com';
 
+const token = localStorage.getItem('token');
+const questLink = document.querySelectorAll('li.guest');
+
 const myMap = address => {
   const geocoder = new google.maps.Geocoder();
 
@@ -36,3 +39,17 @@ const useModal = (modal, trigerButton, closeButton) => {
     if (target == modal) modal.style.display = 'none';
   };
 };
+
+(() => {
+  try {
+    if (token) {
+      questLink[0].classList.add('hide-link');
+      questLink[1].classList.add('hide-link');
+      signOut.classList.remove('hide-link');
+    } else {
+      questLink[0].classList.remove('hide-link');
+      questLink[1].classList.remove('hide-link');
+      signOut.classList.add('hide-link');
+    }
+  } catch (error) {}
+})();

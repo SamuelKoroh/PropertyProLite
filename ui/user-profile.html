@@ -11,10 +11,7 @@
     />
     <title>Welcome to Property Pro</title>
     <link rel="stylesheet" href="./css/style.css" />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
-    />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" />
   </head>
   <body>
     <header>
@@ -26,8 +23,9 @@
           <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="all-listing.html">Listing</a></li>
-            <li><a href="signup.html">Sign up</a></li>
-            <li><a href="signin.html">Sign in</a></li>
+            <li class="guest"><a href="signup.html">Sign up</a></li>
+            <li class="guest"><a href="signin.html">Sign in</a></li>
+            <li id="signOut"><a href="index.html">Sign Out</a></li>
           </ul>
         </nav>
       </div>
@@ -47,12 +45,7 @@
           <tbody>
             <tr>
               <td colspan="2">
-                <img
-                  class="image-preview"
-                  height="120"
-                  src="./img/placeholder-person.jpg"
-                  alt="your image"
-                />
+                <img class="image-preview" height="120" src="./img/placeholder-person.jpg" alt="your image" />
               </td>
             </tr>
             <tr>

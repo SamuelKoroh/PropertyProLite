@@ -899,3 +899,7 @@ footer {
     padding: 4px 8px;
   }
 }
+
+.hide-link {
+  display: none;
+}

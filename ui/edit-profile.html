@@ -11,10 +11,7 @@
     />
     <title>Welcome to Property Pro</title>
     <link rel="stylesheet" href="./css/style.css" />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
-    />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" />
   </head>
   <body>
     <header>
@@ -37,7 +34,7 @@
                 <a href="manage-report.html">Reported Issues</a>
               </div>
             </li>
-            <li><a href="signin.html">Sign Out</a></li>
+            <li id="signOut"><a href="index.html">Sign Out</a></li>
           </ul>
         </nav>
       </div>
@@ -48,20 +45,12 @@
         <h2 class="lead text-primary">
           Edit Your Profile
         </h2>
-        <p class="lead">
-          <i class="fas fa-user"></i> Let's get some information to make your
-          profile stand out
-        </p>
+        <p class="lead"><i class="fas fa-user"></i> Let's get some information to make your profile stand out</p>
         <small class="mb-">* = required field</small>
         <form class="form mt-30">
           <div class="form">
             <small class="form-text">update your profile photo</small>
-            <img
-              class="image-preview"
-              width="200"
-              src="./img/placeholder-person.jpg"
-              alt="your image"
-            />
+            <img class="image-preview" width="200" src="./img/placeholder-person.jpg" alt="your image" />
             <input type="file" onchange="readURL(this);" />
           </div>
           <div class="form-group">

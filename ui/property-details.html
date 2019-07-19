@@ -23,8 +23,9 @@
           <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="all-listing.html">Listing</a></li>
-            <li><a href="signup.html">Sign up</a></li>
-            <li><a href="signin.html">Sign in</a></li>
+            <li class="guest"><a href="signup.html">Sign up</a></li>
+            <li class="guest"><a href="signin.html">Sign in</a></li>
+            <li id="signOut" class="hide-link"><a href="index.html">Sign Out</a></li>
           </ul>
         </nav>
       </div>
@@ -42,22 +43,22 @@
           </h3>
         </div>
         <div class="modal-body">
-          <form class="form">
+          <form class="form" id="reportForm">
             <div class="form-group">
-              <input type="text" placeholder="Your name" name="name" />
+              <input type="text" placeholder="Your name" id="name" name="name" />
             </div>
             <div class="form-group">
-              <input type="text" placeholder="Your email address" name="address" />
+              <input type="text" placeholder="Your email address" id="email" name="email" />
             </div>
             <div class="form-group pr-0">
-              <select name="reason">
+              <select name="reason" id="reason">
                 <option disabled selected>Reason</option>
                 <option value="pricing">Pricing</option>
                 <option value="weird">Wierd demand</option>
               </select>
             </div>
             <div class="form-group">
-              <textarea name="description" placeholder="Detail description" rows="5"></textarea>
+              <textarea name="description" id="description" placeholder="Detail description" rows="5"></textarea>
             </div>
             <span class="modal-button">
               <button class="btn btn-danger"><i class="fa fa-paper-plane"></i> Send</button>
@@ -70,12 +71,17 @@
       <p>All right reserved PropertyPro &copy; 2019</p>
     </footer>
     <script src="./js/main.js"></script>
+    <script src="./js/authEvent.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBHdgVoSE1Ut89RigJmo9F3LWDPcXT2ZJ8"></script>
     <script>
-      const token = localStorage.getItem('token');
       if (!token) window.location.href = `${BASE_URL}/`;
 
       const mainContent = document.querySelector('#mainContent');
+      const reportForm = document.querySelector('#reportForm');
+      const name = document.querySelector('#name');
+      const email = document.querySelector('#email');
+      const reason = document.querySelector('#reason');
+      const description = document.querySelector('#description');
 
       const property_id = window.location.search.slice(13);
 
@@ -87,67 +93,80 @@
         .then(response => {
           const property = response.data;
           mainContent.innerHTML += ` <div class="container">
-        <h2 class="text-success mb-10">
-            ${property.title}
-        </h2>
-        <div class="property-images">
-           ${(gallery = property.image_url.map(
-             (img, i, arr) =>
-               `<div class='mySlides fade'>
-                <div class='numbertext'>${i + 1}/${arr.length}</div>
-                <img src=${img} />
-              </div>`
-           )).join(' ')}
+              <h2 class="text-success mb-10">
+                  ${property.title}
+              </h2>
+              <div class="property-images">
+                 ${(gallery = property.image_url.map(
+                   (img, i, arr) =>
+                     `<div class='mySlides fade'>
+                      <div class='numbertext'>${i + 1}/${arr.length}</div>
+                      <img src=${img} />
+                    </div>`
+                 )).join(' ')}
 
 
-          <div class="control"><i class="fa fa-camera"></i> ${property.image_url.length}</div>
+                <div class="control"><i class="fa fa-camera"></i> ${property.image_url.length}</div>
 
-          <a class="prev">&#10094;</a>
-          <a class="next">&#10095;</a>
-        </div>
-      </div>
-      <div class="container">
-        <div class="property-details">
-          <h2 class="text-success">Description</h2>
-          <p>
-            ${property.description}
-          </p>
-          <span class="icon-20"><i class="fa fa-heart"></i> add to favorite</span>
-        </div>
-        <div class="property-agent ">
-          <h2 class="text-success">Contact Agent</h2>
-          <div class="mt-10">
-            <a href="user-profile.html" title="View Profile" class="agent-name">${property.owner_name}</a>
-          </div>
-          <div class="mt-10 text-primary agent-contact">
-            <span title="Click to reveal number" class="contact-number"
-              ><i class="fa fa-phone icon-90deg icon-19 "></i>+${property.owner_phone.slice(0, -7)}*******</span
-            >
-            <a
-              href="https://api.whatsapp.com/send?phone=${
-                property.owner_phone
-              }&text=I%27m%20interested%20in%20this%20property"
-              target="_blank"
-              rel="noreferrer"
-              ><span class="whatsapp"> <i class="fab fa-whatsapp"></i> </span
-            ></a>
-          </div>
-          <div class="mt-15">
-            <a href="" id="invoke-modal"
-              ><i class="fas fa-exclamation-triangle text-danger"></i>
-              <span class="text-danger">Report this Ads to Admin</span></a
-            >
-          </div>
-        </div>
-      </div>
-      <div class="container ">
-        <p class=" lead mt-15">
-          Simply find the location of the property on the map marked with red balloon
-        </p>
+                <a class="prev">&#10094;</a>
+                <a class="next">&#10095;</a>
+              </div>
+            </div>
+            <div class="container">
+              <div class="property-details">
+                <h2 class="text-success">Description</h2>
+                <p>
+                  ${property.description}
+                </p>
+                <span class="icon-20" id="addFavoutite"><i class="fa fa-heart"></i> add to favorite</span>
+              </div>
+              <div class="property-agent ">
+                <h2 class="text-success">Contact Agent</h2>
+                <div class="mt-10">
+                  <a href="user-profile.html?userId=${property.owner}" 
+                  title="View Profile" class="agent-name">${property.owner_name}</a>
+                </div>
+                <div class="mt-10 text-primary agent-contact">
+                  <span title="Click to reveal number" class="contact-number"
+                    ><i class="fa fa-phone icon-90deg icon-19 "></i>+${property.owner_phone.slice(0, -7)}*******</span
+                  >
+                  <a
+                    href="https://api.whatsapp.com/send?phone=${
+                      property.owner_phone
+                    }&text=I%27m%20interested%20in%20this%20property"
+                    target="_blank"
+                    rel="noreferrer"
+                    ><span class="whatsapp"> <i class="fab fa-whatsapp"></i> </span
+                  ></a>
+                </div>
+                <div class="mt-15">
+                  <a href="" id="invoke-modal"
+                    ><i class="fas fa-exclamation-triangle text-danger"></i>
+                    <span class="text-danger">Report this Ads to Admin</span></a
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="container ">
+              <p class=" lead mt-15">
+                Simply find the location of the property on the map marked with red balloon
+              </p>
 
-        <div id="googleMap" class="mt-10"></div>
-      </div>`;
+              <div id="googleMap" class="mt-10"></div>
+            </div>`;
           myMap(property.address);
+
+          const addFavoutite = document.querySelector('#addFavoutite');
+          addFavoutite.addEventListener('click', () => {
+            fetch(`${API_URL}/api/v1//favourites/${property_id}`, {
+              method: 'POST',
+              headers: { token }
+            })
+              .then(response => response.json())
+              .then(response => (response.error ? alert(response.error) : alert(response.data.message)))
+              .catch(error => console.log(error));
+          });
+
           var slideIndex = 1;
 
           var prev = document.querySelector('a.prev');
@@ -190,6 +209,26 @@
           let contactNumber = document.querySelector('span.contact-number');
           contactNumber.addEventListener('click', ({ target }) => {
             target.innerHTML = `<i class="fa fa-phone icon-90deg icon-19 "></i>+${property.owner_phone}`;
+          });
+
+          reportForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const data = {
+              property_id: property_id,
+              name: name.value,
+              email: email.value,
+              reason: reason.value,
+              description: description.value
+            };
+            modal.style.display = 'none';
+            fetch(`${API_URL}/api/v1/flag`, {
+              method: 'POST',
+              body: JSON.stringify(data),
+              headers: { 'Content-Type': 'application/json', token }
+            })
+              .then(response => response.json())
+              .then(response => (response.error ? alert(response.error) : alert('Your report has been received')))
+              .catch(error => console.log(error));
           });
         })
         .catch(error => console.log(error));

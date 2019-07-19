@@ -34,7 +34,7 @@
                 <a href="manage-report.html">Reported Issues</a>
               </div>
             </li>
-            <li><a href="signin.html">Sign Out</a></li>
+            <li id="signOut"><a href="index.html">Sign Out</a></li>
           </ul>
         </nav>
       </div>
@@ -107,8 +107,8 @@
       <p>All right reserved PropertyPro &copy; 2019</p>
     </footer>
     <script src="./js/main.js"></script>
+    <script src="./js/authEvent.js"></script>
     <script>
-      const token = localStorage.getItem('token');
       if (!token) window.location.href = `${BASE_URL}/`;
 
       const form = document.querySelector('#propertyForm');
