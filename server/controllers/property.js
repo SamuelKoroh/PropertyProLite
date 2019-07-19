@@ -94,10 +94,10 @@ const getProperty = async ({ params: { property_id } }, res) => {
 */
 const updateProperty = async ({ params: { property_id }, body, files, user }, res) => {
   try {
-    const { price, state, city, address, type } = body;
+    const { price, state, city, address, type, title, deal_type, billing_type, description } = body;
 
-    let strQuery = 'UPDATE properties SET price=$1, state=$2, city=$3, address=$4, type=$5 '
-      + ' WHERE id=$6 AND owner=$7 RETURNING *';
+    let strQuery = 'UPDATE properties SET price=$1, state=$2, city=$3, address=$4, type=$5, '
+      + 'title=$6 , deal_type=$7, billing_type=$8, description=$9 WHERE id=$10 AND owner=$11 RETURNING *';
 
     let result = await db.query(strQuery, [
       price,
@@ -105,6 +105,10 @@ const updateProperty = async ({ params: { property_id }, body, files, user }, re
       city,
       address,
       type,
+      title,
+      deal_type,
+      billing_type,
+      description,
       property_id,
       user.id
     ]);
@@ -118,6 +122,7 @@ const updateProperty = async ({ params: { property_id }, body, files, user }, re
 
     okResponse(res, result.rows[0]);
   } catch (error) {
+    console.log(error);
     badRequest(res, 'An unexpected error has occour', 500);
   }
 };
